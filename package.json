@@ -1,0 +1,52 @@
+{
+    "name": "n8n-nodes-renderwolf",
+    "version": "0.1.0",
+    "description": "n8n community node for Renderwolf - screenshots, PDFs and templated OG images from one rendering API",
+    "keywords": [
+        "n8n-community-node-package",
+        "renderwolf",
+        "screenshot",
+        "pdf",
+        "og-image",
+        "rendering"
+    ],
+    "license": "MIT",
+    "homepage": "https://ironfang.uk/renderwolf",
+    "author": {
+        "name": "Ironfang Ltd",
+        "email": "rick@ironfang.uk"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ironfang-ltd/n8n-nodes-renderwolf.git"
+    },
+    "engines": {
+        "node": ">=20"
+    },
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc && node scripts/copy-assets.mjs",
+        "dev": "tsc --watch",
+        "lint": "tsc --noEmit"
+    },
+    "files": [
+        "dist"
+    ],
+    "n8n": {
+        "n8nNodesApiVersion": 1,
+        "credentials": [
+            "dist/credentials/RenderwolfApi.credentials.js"
+        ],
+        "nodes": [
+            "dist/nodes/Renderwolf/Renderwolf.node.js"
+        ]
+    },
+    "devDependencies": {
+        "@types/node": "^26.2.0",
+        "n8n-workflow": "^1.70.0",
+        "typescript": "^5.6.0"
+    },
+    "peerDependencies": {
+        "n8n-workflow": "*"
+    }
+}
