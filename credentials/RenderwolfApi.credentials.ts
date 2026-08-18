@@ -2,11 +2,14 @@ import type {
     IAuthenticateGeneric,
     ICredentialTestRequest,
     ICredentialType,
+    Icon,
     INodeProperties,
 } from 'n8n-workflow';
 
 export class RenderwolfApi implements ICredentialType {
     name = 'renderwolfApi';
+
+    icon: Icon = { light: 'file:renderwolf.svg', dark: 'file:renderwolf.dark.svg' };
 
     displayName = 'Renderwolf API';
 

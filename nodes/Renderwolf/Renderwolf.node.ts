@@ -1,12 +1,12 @@
 import type {
     IExecuteFunctions,
     IDataObject,
+    JsonObject,
     INodeExecutionData,
     INodeType,
     INodeTypeDescription,
 } from 'n8n-workflow';
-import type { NodeConnectionType } from 'n8n-workflow';
-import { NodeOperationError } from 'n8n-workflow';
+import { NodeApiError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 /**
  * Renderwolf node: screenshots, PDFs and templated images from the
@@ -17,14 +17,15 @@ export class Renderwolf implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Renderwolf',
         name: 'renderwolf',
-        icon: 'file:renderwolf.png',
+        icon: { light: 'file:renderwolf.svg', dark: 'file:renderwolf.dark.svg' },
+        usableAsTool: true,
         group: ['transform'],
         version: 1,
         subtitle: '={{$parameter["operation"]}}',
         description: 'Render screenshots, PDFs and templated images',
         defaults: { name: 'Renderwolf' },
-        inputs: ['main' as NodeConnectionType],
-        outputs: ['main' as NodeConnectionType],
+        inputs: [NodeConnectionTypes.Main],
+        outputs: [NodeConnectionTypes.Main],
         credentials: [{ name: 'renderwolfApi', required: true }],
         properties: [
             {
@@ -35,28 +36,28 @@ export class Renderwolf implements INodeType {
                 default: 'screenshot',
                 options: [
                     {
-                        name: 'Screenshot',
-                        value: 'screenshot',
-                        description: 'Capture a URL or raw HTML as an image',
-                        action: 'Take a screenshot',
-                    },
-                    {
                         name: 'PDF',
                         value: 'pdf',
                         description: 'Print a URL or raw HTML to PDF',
                         action: 'Render a PDF',
                     },
                     {
-                        name: 'Template Image',
-                        value: 'image',
-                        description: 'Render a stored template with variables (OG images)',
-                        action: 'Render a template image',
+                        name: 'Screenshot',
+                        value: 'screenshot',
+                        description: 'Capture a URL or raw HTML as an image',
+                        action: 'Take a screenshot',
                     },
                     {
                         name: 'Signed URL',
                         value: 'sign',
-                        description: 'Mint a stable render URL for <img> tags',
+                        description: 'Mint a stable render URL for &lt;img&gt; tags',
                         action: 'Create a signed URL',
+                    },
+                    {
+                        name: 'Template Image',
+                        value: 'image',
+                        description: 'Render a stored template with variables (OG images)',
+                        action: 'Render a template image',
                     },
                     {
                         name: 'Usage',
@@ -107,17 +108,14 @@ export class Renderwolf implements INodeType {
                 default: {},
                 displayOptions: { show: { operation: ['screenshot'] } },
                 options: [
-                    { displayName: 'Width', name: 'width', type: 'number', default: 1280 },
-                    { displayName: 'Height', name: 'height', type: 'number', default: 800 },
-                    { displayName: 'Full Page', name: 'full_page', type: 'boolean', default: false },
-                    {
-                        displayName: 'Selector',
-                        name: 'selector',
-                        type: 'string',
-                        default: '',
-                        description: 'CSS selector - capture just that element',
-                    },
                     { displayName: 'Dark Mode', name: 'dark_mode', type: 'boolean', default: false },
+                    {
+                        displayName: 'Delay (Ms)',
+                        name: 'delay_ms',
+                        type: 'number',
+                        default: 0,
+                        description: 'Extra settle time after load for late-painting pages',
+                    },
                     {
                         displayName: 'Format',
                         name: 'format',
@@ -128,6 +126,8 @@ export class Renderwolf implements INodeType {
                             { name: 'JPEG', value: 'jpeg' },
                         ],
                     },
+                    { displayName: 'Full Page', name: 'full_page', type: 'boolean', default: false },
+                    { displayName: 'Height', name: 'height', type: 'number', default: 800 },
                     {
                         displayName: 'JPEG Quality',
                         name: 'quality',
@@ -136,12 +136,13 @@ export class Renderwolf implements INodeType {
                         typeOptions: { minValue: 1, maxValue: 100 },
                     },
                     {
-                        displayName: 'Delay (ms)',
-                        name: 'delay_ms',
-                        type: 'number',
-                        default: 0,
-                        description: 'Extra settle time after load for late-painting pages',
+                        displayName: 'Selector',
+                        name: 'selector',
+                        type: 'string',
+                        default: '',
+                        description: 'CSS selector - capture just that element',
                     },
+                    { displayName: 'Width', name: 'width', type: 'number', default: 1280 },
                 ],
             },
 
@@ -154,6 +155,8 @@ export class Renderwolf implements INodeType {
                 default: {},
                 displayOptions: { show: { operation: ['pdf'] } },
                 options: [
+                    { displayName: 'Footer HTML', name: 'footer_html', type: 'string', default: '' },
+                    { displayName: 'Header HTML', name: 'header_html', type: 'string', default: '' },
                     { displayName: 'Landscape', name: 'landscape', type: 'boolean', default: false },
                     {
                         displayName: 'Print Background',
@@ -161,8 +164,6 @@ export class Renderwolf implements INodeType {
                         type: 'boolean',
                         default: true,
                     },
-                    { displayName: 'Header HTML', name: 'header_html', type: 'string', default: '' },
-                    { displayName: 'Footer HTML', name: 'footer_html', type: 'string', default: '' },
                     {
                         displayName: 'Scale',
                         name: 'scale',
@@ -268,7 +269,7 @@ export class Renderwolf implements INodeType {
                 ],
             },
             {
-                displayName: 'TTL (hours)',
+                displayName: 'TTL (Hours)',
                 name: 'ttlHours',
                 type: 'number',
                 default: 0,
@@ -404,7 +405,7 @@ export class Renderwolf implements INodeType {
                     });
                     continue;
                 }
-                throw error;
+                throw new NodeApiError(this.getNode(), error as JsonObject);
             }
         }
         return [out];
