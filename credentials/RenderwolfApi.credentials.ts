@@ -9,7 +9,7 @@ import type {
 export class RenderwolfApi implements ICredentialType {
     name = 'renderwolfApi';
 
-    icon: Icon = { light: 'file:renderwolf.svg', dark: 'file:renderwolf.dark.svg' };
+    icon: Icon = 'file:renderwolf.svg';
 
     displayName = 'Renderwolf API';
 

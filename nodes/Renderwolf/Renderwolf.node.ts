@@ -17,7 +17,7 @@ export class Renderwolf implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Renderwolf',
         name: 'renderwolf',
-        icon: { light: 'file:renderwolf.svg', dark: 'file:renderwolf.dark.svg' },
+        icon: 'file:renderwolf.svg',
         usableAsTool: true,
         group: ['transform'],
         version: 1,
