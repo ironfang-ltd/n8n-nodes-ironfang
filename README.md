@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="nodes/Renderwolf/renderwolf.dark.svg">
-    <img src="nodes/Renderwolf/renderwolf.svg" width="110" alt="Renderwolf">
-  </picture>
+  <img src="nodes/Renderwolf/renderwolf.svg" width="110" alt="Renderwolf">
 </p>
 
 # @ironfang/n8n-nodes-renderwolf
