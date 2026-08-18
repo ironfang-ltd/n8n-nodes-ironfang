@@ -1,8 +1,26 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="nodes/Renderwolf/renderwolf.dark.svg">
+    <img src="nodes/Renderwolf/renderwolf.svg" width="110" alt="Renderwolf">
+  </picture>
+</p>
+
 # @ironfang/n8n-nodes-renderwolf
 
 n8n community node for [Renderwolf](https://ironfang.uk/renderwolf) - one rendering
-API for screenshots, PDFs and templated social images, served by a warm Chromium
-fleet on Ironfang's own UK hardware.
+API for screenshots, PDFs and templated social images, hosted on infrastructure
+[Ironfang](https://ironfang.uk) operates in the UK.
+
+## Installation
+
+In n8n, go to **Settings → Community Nodes → Install** and enter:
+
+```
+@ironfang/n8n-nodes-renderwolf
+```
+
+Then add your `rw_live_` API key (from [portal.ironfang.uk](https://portal.ironfang.uk))
+as a **Renderwolf API** credential. The free tier needs no card.
 
 ## Operations
 
