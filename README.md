@@ -1,4 +1,4 @@
-# n8n-nodes-renderwolf
+# @ironfang/n8n-nodes-renderwolf
 
 n8n community node for [Renderwolf](https://ironfang.uk/renderwolf) - one rendering
 API for screenshots, PDFs and templated social images, served by a warm Chromium
