@@ -1,0 +1,26 @@
+# Publishes the package to npm with provenance (required for n8n's verified
+# community node checks - provenance can only be attached from CI).
+# Trigger: push a tag like v0.1.1. Needs the NPM_TOKEN repo secret
+# (npm granular access token with read/write on @ironfang packages).
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  id-token: write # OIDC token for npm provenance
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run build
+      - run: npm test --if-present
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
