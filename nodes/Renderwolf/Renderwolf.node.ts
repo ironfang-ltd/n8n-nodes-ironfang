@@ -136,6 +136,14 @@ export class Renderwolf implements INodeType {
                         typeOptions: { minValue: 1, maxValue: 100 },
                     },
                     {
+                        displayName: 'No Cache',
+                        name: 'no_cache',
+                        type: 'boolean',
+                        default: false,
+                        description:
+                            'Whether to force a live capture instead of reusing an identical recent render. Use when the page must be captured exactly as it is right now, such as evidence or change detection. Counts against your quota.',
+                    },
+                    {
                         displayName: 'Selector',
                         name: 'selector',
                         type: 'string',
@@ -158,6 +166,14 @@ export class Renderwolf implements INodeType {
                     { displayName: 'Footer HTML', name: 'footer_html', type: 'string', default: '' },
                     { displayName: 'Header HTML', name: 'header_html', type: 'string', default: '' },
                     { displayName: 'Landscape', name: 'landscape', type: 'boolean', default: false },
+                    {
+                        displayName: 'No Cache',
+                        name: 'no_cache',
+                        type: 'boolean',
+                        default: false,
+                        description:
+                            'Whether to force a live capture instead of reusing an identical recent render. Use when the page must be captured exactly as it is right now, such as evidence or change detection. Counts against your quota.',
+                    },
                     {
                         displayName: 'Print Background',
                         name: 'print_background',
