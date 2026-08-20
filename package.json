@@ -1,6 +1,6 @@
 {
     "name": "@ironfang/n8n-nodes-ironfang",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "n8n community node for Ironfang APIs - screenshots, PDFs and templated images from Renderwolf",
     "keywords": [
         "n8n-community-node-package",
