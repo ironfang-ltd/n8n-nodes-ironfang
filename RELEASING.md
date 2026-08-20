@@ -8,8 +8,8 @@ attached. Provenance is what n8n's verified-community-node scanner looks for.
 
 npm will only let you configure a trusted publisher on a package that already
 exists, so the very first publish of a new name has to use a token. That
-applies to `n8n-nodes-ironfang`, which is a new package rather than a rename of
-the old one.
+applies to `@ironfang/n8n-nodes-ironfang`, which is a new package rather than a
+rename of the old one.
 
 1. Build and publish once from a machine you're logged into:
 
@@ -31,7 +31,7 @@ the old one.
 4. Point the old package at the new one:
 
    ```
-   npm deprecate @ironfang/n8n-nodes-renderwolf "Renamed to n8n-nodes-ironfang"
+   npm deprecate @ironfang/n8n-nodes-renderwolf "Renamed to @ironfang/n8n-nodes-ironfang"
    ```
 
 Submit for verification only after a provenance-backed release exists; a

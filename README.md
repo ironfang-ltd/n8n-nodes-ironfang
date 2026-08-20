@@ -2,7 +2,7 @@
   <img src="nodes/Ironfang/ironfang.svg" width="110" alt="Ironfang">
 </p>
 
-# n8n-nodes-ironfang
+# @ironfang/n8n-nodes-ironfang
 
 Community node for using [Ironfang](https://ironfang.uk) APIs in n8n
 workflows. Pick a product under Resource, then an operation within it.
@@ -14,7 +14,7 @@ operates in the UK.
 ## Install
 
 In n8n, open Settings, then Community Nodes, choose Install and enter
-`n8n-nodes-ironfang`.
+`@ironfang/n8n-nodes-ironfang`.
 
 You'll need an API key from [portal.ironfang.uk](https://portal.ironfang.uk).
 The free plan gives 100 renders a month and doesn't ask for a card. Paste the
