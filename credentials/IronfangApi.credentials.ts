@@ -6,12 +6,12 @@ import type {
     INodeProperties,
 } from 'n8n-workflow';
 
-export class RenderwolfApi implements ICredentialType {
-    name = 'renderwolfApi';
+export class IronfangApi implements ICredentialType {
+    name = 'ironfangApi';
 
-    icon: Icon = 'file:renderwolf.svg';
+    icon: Icon = 'file:ironfang.svg';
 
-    displayName = 'Renderwolf API';
+    displayName = 'Ironfang API';
 
     documentationUrl = 'https://ironfang.uk/renderwolf/docs';
 

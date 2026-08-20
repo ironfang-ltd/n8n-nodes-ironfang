@@ -9,31 +9,49 @@ import type {
 import { NodeApiError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 /**
- * Renderwolf node: screenshots, PDFs and templated images from the
- * Renderwolf rendering API (https://ironfang.uk/renderwolf/docs).
- * Render operations return binary data; sign/usage return JSON.
+ * Ironfang node. One node per vendor: pick a product with Resource, then an
+ * operation within it. Renderwolf (https://ironfang.uk/renderwolf/docs) is the
+ * first product; later ones are added as further resources rather than as
+ * separate nodes.
+ *
+ * Render operations return binary data; sign and usage return JSON.
  */
-export class Renderwolf implements INodeType {
+export class Ironfang implements INodeType {
     description: INodeTypeDescription = {
-        displayName: 'Renderwolf',
-        name: 'renderwolf',
-        icon: 'file:renderwolf.svg',
+        displayName: 'Ironfang',
+        name: 'ironfang',
+        icon: 'file:ironfang.svg',
         usableAsTool: true,
         group: ['transform'],
         version: 1,
-        subtitle: '={{$parameter["operation"]}}',
-        description: 'Render screenshots, PDFs and templated images',
-        defaults: { name: 'Renderwolf' },
+        subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+        description: 'Rendering and developer APIs from Ironfang',
+        defaults: { name: 'Ironfang' },
         inputs: [NodeConnectionTypes.Main],
         outputs: [NodeConnectionTypes.Main],
-        credentials: [{ name: 'renderwolfApi', required: true }],
+        credentials: [{ name: 'ironfangApi', required: true }],
         properties: [
+            {
+                displayName: 'Resource',
+                name: 'resource',
+                type: 'options',
+                noDataExpression: true,
+                default: 'renderwolf',
+                options: [
+                    {
+                        name: 'Renderwolf',
+                        value: 'renderwolf',
+                        description: 'Screenshots, PDFs and templated images',
+                    },
+                ],
+            },
             {
                 displayName: 'Operation',
                 name: 'operation',
                 type: 'options',
                 noDataExpression: true,
                 default: 'screenshot',
+                displayOptions: { show: { resource: ['renderwolf'] } },
                 options: [
                     {
                         name: 'PDF',
@@ -319,7 +337,7 @@ export class Renderwolf implements INodeType {
 
         for (let i = 0; i < items.length; i++) {
             const operation = this.getNodeParameter('operation', i) as string;
-            const credentials = await this.getCredentials('renderwolfApi');
+            const credentials = await this.getCredentials('ironfangApi');
             const baseUrl = String(credentials.baseUrl || 'https://api.ironfang.uk').replace(/\/+$/, '');
 
             try {
@@ -336,7 +354,7 @@ export class Renderwolf implements INodeType {
                     }
                     const data = (await this.helpers.httpRequestWithAuthentication.call(
                         this,
-                        'renderwolfApi',
+                        'ironfangApi',
                         {
                             method: 'POST',
                             url: `${baseUrl}/v1/${operation}`,
@@ -363,7 +381,7 @@ export class Renderwolf implements INodeType {
                     const vars = collectVars(this.getNodeParameter('vars', i) as IDataObject);
                     const data = (await this.helpers.httpRequestWithAuthentication.call(
                         this,
-                        'renderwolfApi',
+                        'ironfangApi',
                         {
                             method: 'POST',
                             url: `${baseUrl}/v1/image/${templateId}`,
@@ -397,14 +415,14 @@ export class Renderwolf implements INodeType {
                     }
                     const resp = (await this.helpers.httpRequestWithAuthentication.call(
                         this,
-                        'renderwolfApi',
+                        'ironfangApi',
                         { method: 'POST', url: `${baseUrl}/v1/sign`, body, json: true },
                     )) as IDataObject;
                     out.push({ json: resp, pairedItem: { item: i } });
                 } else if (operation === 'usage') {
                     const resp = (await this.helpers.httpRequestWithAuthentication.call(
                         this,
-                        'renderwolfApi',
+                        'ironfangApi',
                         { method: 'GET', url: `${baseUrl}/v1/usage`, json: true },
                     )) as IDataObject;
                     out.push({ json: resp, pairedItem: { item: i } });

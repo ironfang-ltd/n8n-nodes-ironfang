@@ -1,9 +1,10 @@
 {
-    "name": "@ironfang/n8n-nodes-renderwolf",
-    "version": "0.1.6",
-    "description": "n8n community node for Renderwolf - screenshots, PDFs and templated OG images from one rendering API",
+    "name": "n8n-nodes-ironfang",
+    "version": "0.2.0",
+    "description": "n8n community node for Ironfang APIs - screenshots, PDFs and templated images from Renderwolf",
     "keywords": [
         "n8n-community-node-package",
+        "ironfang",
         "renderwolf",
         "screenshot",
         "pdf",
@@ -11,14 +12,14 @@
         "rendering"
     ],
     "license": "MIT",
-    "homepage": "https://ironfang.uk/renderwolf",
+    "homepage": "https://ironfang.uk",
     "author": {
         "name": "Ironfang Ltd",
         "email": "rick@ironfang.uk"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/ironfang-ltd/n8n-nodes-renderwolf.git"
+        "url": "https://github.com/ironfang-ltd/n8n-nodes-ironfang.git"
     },
     "engines": {
         "node": ">=20"
@@ -35,10 +36,10 @@
     "n8n": {
         "n8nNodesApiVersion": 1,
         "credentials": [
-            "dist/credentials/RenderwolfApi.credentials.js"
+            "dist/credentials/IronfangApi.credentials.js"
         ],
         "nodes": [
-            "dist/nodes/Renderwolf/Renderwolf.node.js"
+            "dist/nodes/Ironfang/Ironfang.node.js"
         ]
     },
     "devDependencies": {
