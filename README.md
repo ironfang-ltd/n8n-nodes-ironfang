@@ -45,14 +45,6 @@ Renders are capped at 120 a minute per account, and 60 a minute per site
 being rendered, counted across everyone. Bot protection is never bypassed:
 a challenge page is captured as a challenge page.
 
-## Coming from the Renderwolf package
-
-This replaces `@ironfang/n8n-nodes-renderwolf`, which is deprecated. n8n asks
-for one node per vendor, so the node is named after the company and
-Renderwolf sits inside it as a resource. Install this package, add an
-Ironfang API credential with the same key, and swap the node in your
-workflows. The operations and their fields are unchanged.
-
 ## Links
 
 - [API reference](https://ironfang.uk/renderwolf/docs)
