@@ -29,8 +29,9 @@ export class IronfangApi implements ICredentialType {
             displayName: 'Base URL',
             name: 'baseUrl',
             type: 'string',
-            default: 'https://api.ironfang.uk',
-            description: 'Only change this if you are pointing at a non-production instance',
+            default: 'https://api.ironfang.uk/renderwolf',
+            description:
+                'Only change this if you are pointing at a non-production instance. Credentials created before Renderwolf moved under /renderwolf still hold https://api.ironfang.uk and keep working - the API serves both.',
         },
     ];
 

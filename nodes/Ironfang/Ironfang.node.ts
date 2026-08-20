@@ -338,7 +338,7 @@ export class Ironfang implements INodeType {
         for (let i = 0; i < items.length; i++) {
             const operation = this.getNodeParameter('operation', i) as string;
             const credentials = await this.getCredentials('ironfangApi');
-            const baseUrl = String(credentials.baseUrl || 'https://api.ironfang.uk').replace(/\/+$/, '');
+            const baseUrl = String(credentials.baseUrl || 'https://api.ironfang.uk/renderwolf').replace(/\/+$/, '');
 
             try {
                 if (operation === 'screenshot' || operation === 'pdf') {
