@@ -78,6 +78,12 @@ export class Ironfang implements INodeType {
                         action: 'Render a template image',
                     },
                     {
+                        name: 'Video Clip',
+                        value: 'video',
+                        description: 'Render a short captioned MP4 from a background and caption cards',
+                        action: 'Create a video clip',
+                    },
+                    {
                         name: 'Usage',
                         value: 'usage',
                         description: 'Current period usage against your plan cap',
@@ -128,6 +134,19 @@ export class Ironfang implements INodeType {
                 options: [
                     { displayName: 'Dark Mode', name: 'dark_mode', type: 'boolean', default: false },
                     {
+                        displayName: 'Device',
+                        name: 'device',
+                        type: 'options',
+                        default: 'desktop',
+                        description:
+                            'Applies a viewport, pixel density, mobile flag and user agent together. Width and height still win if you set them.',
+                        options: [
+                            { name: 'Desktop', value: 'desktop' },
+                            { name: 'Mobile', value: 'mobile' },
+                            { name: 'Tablet', value: 'tablet' },
+                        ],
+                    },
+                    {
                         displayName: 'Delay (Ms)',
                         name: 'delay_ms',
                         type: 'number',
@@ -140,17 +159,19 @@ export class Ironfang implements INodeType {
                         type: 'options',
                         default: 'png',
                         options: [
-                            { name: 'PNG', value: 'png' },
                             { name: 'JPEG', value: 'jpeg' },
+                            { name: 'PNG', value: 'png' },
+                            { name: 'WebP', value: 'webp' },
                         ],
                     },
                     { displayName: 'Full Page', name: 'full_page', type: 'boolean', default: false },
                     { displayName: 'Height', name: 'height', type: 'number', default: 800 },
                     {
-                        displayName: 'JPEG Quality',
+                        displayName: 'Quality',
                         name: 'quality',
                         type: 'number',
                         default: 85,
+                        description: 'For JPEG and WebP. Ignored for PNG, which is lossless.',
                         typeOptions: { minValue: 1, maxValue: 100 },
                     },
                     {
@@ -243,8 +264,9 @@ export class Ironfang implements INodeType {
                 default: 'png',
                 displayOptions: { show: { operation: ['image'] } },
                 options: [
-                    { name: 'PNG', value: 'png' },
                     { name: 'JPEG', value: 'jpeg' },
+                    { name: 'PNG', value: 'png' },
+                    { name: 'WebP', value: 'webp' },
                 ],
             },
 
@@ -311,6 +333,102 @@ export class Ironfang implements INodeType {
                 displayOptions: { show: { operation: ['sign'] } },
             },
 
+            /* ------------------------- video clip ------------------------------- */
+            {
+                displayName: 'Size',
+                name: 'clipSize',
+                type: 'options',
+                default: 'vertical',
+                displayOptions: { show: { operation: ['video'] } },
+                description:
+                    'Credits scale with pixels and seconds, so the smaller sizes cost less per second',
+                options: [
+                    { name: '720p 1280x720', value: '720p' },
+                    { name: 'Landscape 1920x1080', value: 'landscape' },
+                    { name: 'Square 1080x1080', value: 'square' },
+                    { name: 'Vertical 1080x1920', value: 'vertical' },
+                ],
+            },
+            {
+                displayName: 'Duration (Seconds)',
+                name: 'clipDuration',
+                type: 'number',
+                default: 15,
+                typeOptions: { minValue: 1, maxValue: 60 },
+                displayOptions: { show: { operation: ['video'] } },
+            },
+            {
+                displayName: 'Captions',
+                name: 'captions',
+                type: 'fixedCollection',
+                typeOptions: { multipleValues: true },
+                default: {},
+                placeholder: 'Add caption',
+                description: 'Cards that appear and disappear on a schedule',
+                displayOptions: { show: { operation: ['video'] } },
+                options: [
+                    {
+                        name: 'values',
+                        displayName: 'Caption',
+                        values: [
+                            { displayName: 'Text', name: 'text', type: 'string', default: '' },
+                            {
+                                displayName: 'From (Seconds)',
+                                name: 'from',
+                                type: 'number',
+                                default: 0,
+                            },
+                            { displayName: 'To (Seconds)', name: 'to', type: 'number', default: 3 },
+                        ],
+                    },
+                ],
+            },
+            {
+                displayName: 'Options',
+                name: 'clipOptions',
+                type: 'collection',
+                placeholder: 'Add option',
+                default: {},
+                displayOptions: { show: { operation: ['video'] } },
+                options: [
+                    {
+                        displayName: 'Audio URL',
+                        name: 'audio',
+                        type: 'string',
+                        default: '',
+                        description: 'An audio track, trimmed to the clip length',
+                    },
+                    {
+                        displayName: 'Background URL',
+                        name: 'background',
+                        type: 'string',
+                        default: '',
+                        description: 'An image or video to fill the frame. Leave blank for a solid colour.',
+                    },
+                    {
+                        displayName: 'Colour',
+                        name: 'colour',
+                        type: 'color',
+                        default: '',
+                        description: 'Used when there is no background URL',
+                    },
+                    {
+                        displayName: 'Font Size',
+                        name: 'font_size',
+                        type: 'number',
+                        default: 0,
+                        description: 'Caption size. 0 scales it with the canvas.',
+                    },
+                    {
+                        displayName: 'Watermark URL',
+                        name: 'watermark',
+                        type: 'string',
+                        default: '',
+                        description: 'A PNG of your own, placed bottom right',
+                    },
+                ],
+            },
+
             /* ------------------------- binary output ---------------------------- */
             {
                 displayName: 'Put Output in Field',
@@ -318,7 +436,7 @@ export class Ironfang implements INodeType {
                 type: 'string',
                 default: 'data',
                 description: 'Name of the binary field to write the rendered file to',
-                displayOptions: { show: { operation: ['screenshot', 'pdf', 'image'] } },
+                displayOptions: { show: { operation: ['screenshot', 'pdf', 'image', 'video'] } },
             },
         ],
     };
@@ -397,6 +515,50 @@ export class Ironfang implements INodeType {
                     );
                     out.push({
                         json: { operation, template: templateId, bytes: binary.fileSize },
+                        binary: { [binaryProperty]: binary },
+                        pairedItem: { item: i },
+                    });
+                } else if (operation === 'video') {
+                    const captions = (
+                        (this.getNodeParameter('captions', i) as IDataObject)
+                            .values as IDataObject[] | undefined
+                    )?.map((c) => ({
+                        text: String(c.text),
+                        from: Number(c.from),
+                        to: Number(c.to),
+                    }));
+                    const body: IDataObject = {
+                        ...(this.getNodeParameter('clipOptions', i) as IDataObject),
+                        size: this.getNodeParameter('clipSize', i),
+                        duration: this.getNodeParameter('clipDuration', i),
+                    };
+                    if (captions?.length) {
+                        body.captions = captions;
+                    }
+                    // A blank font size means "scale it with the canvas", which
+                    // is what the API does when the field is absent - sending 0
+                    // would be a request for a zero-point font.
+                    if (!body.font_size) {
+                        delete body.font_size;
+                    }
+                    const data = (await this.helpers.httpRequestWithAuthentication.call(
+                        this,
+                        'ironfangApi',
+                        {
+                            method: 'POST',
+                            url: `${baseUrl}/v1/video`,
+                            body,
+                            encoding: 'arraybuffer',
+                        },
+                    )) as Buffer;
+                    const binaryProperty = this.getNodeParameter('binaryProperty', i) as string;
+                    const binary = await this.helpers.prepareBinaryData(
+                        Buffer.from(data),
+                        'clip.mp4',
+                        'video/mp4',
+                    );
+                    out.push({
+                        json: { operation, bytes: binary.fileSize },
                         binary: { [binaryProperty]: binary },
                         pairedItem: { item: i },
                     });

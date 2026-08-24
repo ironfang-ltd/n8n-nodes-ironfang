@@ -8,8 +8,8 @@ Community node for using [Ironfang](https://ironfang.uk) APIs in n8n
 workflows. Pick a product under Resource, then an operation within it.
 
 Renderwolf is the first product. It turns URLs, HTML and stored templates
-into screenshots, PDFs and social images, hosted on infrastructure Ironfang
-operates in the UK.
+into screenshots, PDFs, social images and short video clips, hosted on
+infrastructure Ironfang operates in the UK.
 
 ## Install
 
@@ -17,15 +17,19 @@ In n8n, open Settings, then Community Nodes, choose Install and enter
 `@ironfang/n8n-nodes-ironfang`.
 
 You'll need an API key from [portal.ironfang.uk](https://portal.ironfang.uk).
-The free plan gives 100 renders a month and doesn't ask for a card. Paste the
+The free plan gives 100 credits a month and doesn't ask for a card. Paste the
 key into a new Ironfang API credential; the credential test calls
-`/v1/usage`, so a bad key fails fast.
+`/v1/usage`, so a bad key fails fast. Free output carries a small Renderwolf
+badge in the corner, which any paid plan removes.
 
 ## Renderwolf operations
 
-Screenshot captures a URL or raw HTML as a PNG or JPEG. It supports viewport
-sizing, full-page capture, capturing a single element by CSS selector, dark
-mode and a settle delay for late-painting pages.
+Screenshot captures a URL or raw HTML as a PNG, JPEG or WebP. It supports
+viewport sizing, full-page capture, capturing a single element by CSS
+selector, dark mode and a settle delay for late-painting pages. The Device
+option applies a phone or tablet viewport, pixel density, mobile flag and
+user agent together, so a mobile capture is a mobile capture rather than a
+narrow desktop one.
 
 PDF prints a URL or raw HTML. Landscape, printed backgrounds, header and
 footer templates and page scale are all options.
@@ -33,7 +37,13 @@ footer templates and page scale are all options.
 Template Image renders a stored template with your variables, built for OG
 images and social cards.
 
-All three of the above put the rendered file on the item as binary data,
+Video Clip renders a short MP4: a background image, video or solid colour,
+caption cards that appear and disappear on a schedule, and optionally your
+own watermark and an audio bed. Clips run up to sixty seconds, and cost
+scales with length and canvas size - vertical for Reels and Shorts, square,
+landscape, or 720p when the pixels matter less than the price.
+
+All four of the above put the rendered file on the item as binary data,
 ready for the next node in the workflow.
 
 Signed URL mints a stable render URL you can drop straight into an `<img>`
