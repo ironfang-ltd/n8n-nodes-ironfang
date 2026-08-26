@@ -17,7 +17,7 @@ In n8n, open Settings, then Community Nodes, choose Install and enter
 `@ironfang/n8n-nodes-ironfang`.
 
 You'll need an API key from [portal.ironfang.uk](https://portal.ironfang.uk).
-The free plan gives 100 credits a month and doesn't ask for a card. Paste the
+The free plan gives 250 credits a month and doesn't ask for a card. Paste the
 key into a new Ironfang API credential; the credential test calls
 `/v1/usage`, so a bad key fails fast. Free output carries a small Renderwolf
 badge in the corner, which any paid plan removes.
