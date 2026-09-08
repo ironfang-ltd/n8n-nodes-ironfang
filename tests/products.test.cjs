@@ -147,3 +147,21 @@ test('missing identifiers never become literal undefined or null path segments',
  const context = setup({}).context;
  for (const value of [undefined, null, {}, false]) assert.throws(() => identifier(context, value, 0));
 });
+test('legacy Renderwolf operations accept credentials based at another product', async () => {
+ const { run } = require('./context.cjs');
+ for (const product of ['financewolf', 'auditwolf', 'tools']) {
+  const { ctx } = await run([{}], { baseUrl: `https://gateway.example/prefix/${product}/` });
+  assert.equal(ctx.requests[0].url, 'https://gateway.example/prefix/renderwolf/v1/screenshot');
+ }
+});
+test('invalid array filters are rejected before they can silently broaden a query', async () => {
+ for (const state of ['{"open":true}', '[1]', '"open"']) {
+  const ctx = setup({ resource: 'auditwolf', operation: 'listFindings', query: { state } });
+  await assert.rejects(ctx.execute(), /array of strings/); assert.equal(ctx.requests.length, 0);
+ }
+});
+test('a network failure without an HTTP response does not invent a status code', () => {
+ const { errorDetails } = require('../dist/nodes/Ironfang/transport.js');
+ const error = new Error('Connection failed'); error.httpCode = null;
+ assert.equal(Object.hasOwn(errorDetails(error, 0), 'statusCode'), false);
+});

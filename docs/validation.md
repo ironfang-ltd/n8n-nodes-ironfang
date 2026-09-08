@@ -15,7 +15,7 @@ operation or paid render was used for these connector checks.
 ## Automated coverage
 
 - Real n8n lint rules, TypeScript and package entry-point/icon/version checks.
-- 146 unit/execution tests: every action dispatch, legacy formats, product
+- 149 unit/execution tests: every action dispatch, legacy formats, product
   routing, explicit public access, no anonymous fallback, traversal rejection,
   decimal strings, exact XML/hash checks, multipart files, pagination/repeated
   cursors, destination credentials, structured problems and item linking.

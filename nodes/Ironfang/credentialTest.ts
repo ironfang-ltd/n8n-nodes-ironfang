@@ -1,5 +1,5 @@
 import type { ICredentialTestFunctions, ICredentialsDecrypted, INodeCredentialTestResult } from 'n8n-workflow';
-import { apiBase, productBase } from './transport';
+import { renderwolfBase, productBase } from './transport';
 
 // n8n's credential-test context exposes request; execution uses the authenticated
 // httpRequest helper. A structured scope refusal proves authentication succeeded.
@@ -11,7 +11,7 @@ export async function credentialTest(this: ICredentialTestFunctions, credential:
     let lastStatus: number | undefined;
     try {
         for (const product of products) {
-            const base = product === 'renderwolf' && !/\/(financewolf|auditwolf|tools)\/?$/.test(String(data.baseUrl)) ? apiBase(data.baseUrl) : productBase(data.baseUrl, product);
+            const base = product === 'renderwolf' ? renderwolfBase(data.baseUrl) : productBase(data.baseUrl, product);
             const endpoint = product === 'renderwolf' ? '/v1/usage' : product === 'financewolf' ? '/v1/einvoices/results' : '/v1/sites';
             const response = await testRequest({
                 method: 'GET', uri: base + endpoint,

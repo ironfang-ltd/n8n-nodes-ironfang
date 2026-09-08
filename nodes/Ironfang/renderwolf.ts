@@ -8,7 +8,7 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
-import { request, binaryOutput, apiError, errorOutput, identifier, apiBase } from './transport';
+import { request, binaryOutput, apiError, errorOutput, identifier, renderwolfBase } from './transport';
 import { credentialTest } from './credentialTest';
 
 /**
@@ -461,7 +461,7 @@ export const renderwolf = {
         for (let i = 0; i < items.length; i++) {
             const operation = this.getNodeParameter('operation', i) as string;
             const credentials = await this.getCredentials('ironfangApi');
-            const baseUrl = apiBase(credentials.baseUrl);
+            const baseUrl = renderwolfBase(credentials.baseUrl);
 
             try {
                 const rawAdvanced = this.getNodeParameter('advancedRenderOptions', i, '{}');

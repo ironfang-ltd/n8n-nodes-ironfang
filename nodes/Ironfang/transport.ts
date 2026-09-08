@@ -78,7 +78,7 @@ export function errorDetails(error: unknown, itemIndex: number): IDataObject {
     const code = problem.code;
     if (typeof code === 'string') details.code = code;
     const status = response.status ?? response.statusCode ?? err.statusCode ?? err.httpCode;
-    if (Number.isFinite(Number(status))) details.statusCode = Number(status);
+    if (status != null && Number.isInteger(Number(status)) && Number(status) >= 100 && Number(status) <= 599) details.statusCode = Number(status);
     if (typeof headers['x-ironfang-request-id'] === 'string') details.requestId = headers['x-ironfang-request-id'];
     const retry = headers['retry-after'];
     if (typeof retry === 'string' && /^\d+$/.test(retry)) details.retryAfterSeconds = Number(retry);
@@ -110,4 +110,11 @@ export function errorOutput(context: IExecuteFunctions, error: unknown, itemInde
 export function productBase(value: unknown, product: string): string {
     const base = apiBase(value);
     return base.replace(/\/(renderwolf|financewolf|auditwolf|tools)$/, '') + '/' + product;
+}
+
+// Preserve historical Renderwolf bases while accepting credentials shared from
+// another product. New operations always use the partitioned productBase.
+export function renderwolfBase(value: unknown): string {
+    const base = apiBase(value);
+    return /\/(financewolf|auditwolf|tools)$/.test(base) ? productBase(base, 'renderwolf') : base;
 }

@@ -49,7 +49,10 @@ async function runOperation(context: IExecuteFunctions, item: number, op: Operat
             qs[q.name] = parameter(context, q.name, item) as string;
             if (qs[q.name] === '') throw new Error(`${q.label} is required`);
         }
-        if (q.type === 'array' && typeof qs[q.name] === 'string') qs[q.name] = JSON.parse(qs[q.name] as string);
+        if (q.type === 'array' && qs[q.name] !== undefined) {
+            if (typeof qs[q.name] === 'string') qs[q.name] = JSON.parse(qs[q.name] as string);
+            if (!Array.isArray(qs[q.name]) || !(qs[q.name] as unknown[]).every(value => typeof value === 'string')) throw new Error(`${q.label} must be a JSON array of strings`);
+        }
     }
     const headers: Record<string, string> = {};
     if (op.idempotency) {
