@@ -21,4 +21,10 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run check
       - if: matrix.node == 24
-        run: bash scripts/check-runtime.sh
+        run: |
+          if ! bash scripts/check-runtime.sh > /tmp/ironfang-runtime.log 2>&1; then
+            cat /tmp/ironfang-runtime.log
+            cat /tmp/ironfang-runtime.log >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          cat /tmp/ironfang-runtime.log
