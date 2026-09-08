@@ -1,0 +1,10 @@
+import { readFileSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import assert from 'node:assert/strict';
+const pkg=JSON.parse(readFileSync('package.json'));const lock=JSON.parse(readFileSync('package-lock.json'));
+assert.equal(pkg.name,lock.name);assert.equal(pkg.version,lock.version);assert.equal(pkg.version,lock.packages[''].version);assert.equal(pkg.name,lock.packages[''].name);
+if(process.env.GITHUB_REF_TYPE==='tag')assert.equal(process.env.GITHUB_REF_NAME,`v${pkg.version}`);
+const files=JSON.parse(execFileSync('npm',['pack','--dry-run','--ignore-scripts','--json'],{encoding:'utf8'}))[0].files.map(f=>f.path);
+for(const file of [...pkg.n8n.nodes,...pkg.n8n.credentials,'dist/nodes/Ironfang/ironfang.dark.svg','dist/credentials/ironfang.dark.svg'])assert(files.includes(file)&&existsSync(file),file);
+assert(!files.some(f=>f.includes('node_modules/')));assert(!pkg.dependencies);
+console.log(`Package ${pkg.name}@${pkg.version}: metadata, entry points and icons verified`);

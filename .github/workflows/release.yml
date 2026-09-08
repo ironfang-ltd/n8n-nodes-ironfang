@@ -1,25 +1,26 @@
-# Publishes to npm via Trusted Publishing (OIDC - no token secret): npmjs.com
-# package settings must list this repo + workflow file as a trusted publisher.
-# Provenance is attached automatically, which n8n's verified-community-node
-# scanner requires. Trigger: push a tag like v0.1.1.
 name: Release
 on:
   push:
     tags: ['v*']
 permissions:
   contents: read
-  id-token: write # OIDC exchange with npm
 jobs:
+  check:
+    uses: ./.github/workflows/check.yml
   publish:
+    needs: check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@latest # trusted publishing needs npm >= 11.5.1
-      - run: npm ci
+      - run: npm install -g npm@11.11.0
+      - run: npm ci --ignore-scripts
       - run: npm run build
-      - run: npm test --if-present
-      - run: npm publish --access public
+      - run: node scripts/check-package.mjs
+      - run: npm publish --access public --provenance

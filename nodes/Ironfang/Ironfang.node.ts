@@ -1,12 +1,14 @@
 import type {
     IExecuteFunctions,
     IDataObject,
-    JsonObject,
     INodeExecutionData,
     INodeType,
     INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeApiError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+
+import { request, binaryOutput, apiError, errorOutput, identifier, apiBase } from './transport';
+import { credentialTest } from './credentialTest';
 
 /**
  * Ironfang node. One node per vendor: pick a product with Resource, then an
@@ -20,16 +22,16 @@ export class Ironfang implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Ironfang',
         name: 'ironfang',
-        icon: 'file:ironfang.svg',
+        icon: { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' },
         usableAsTool: true,
         group: ['transform'],
-        version: 1,
+        version: [1, 1.1],
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
         description: 'Rendering and developer APIs from Ironfang',
         defaults: { name: 'Ironfang' },
         inputs: [NodeConnectionTypes.Main],
         outputs: [NodeConnectionTypes.Main],
-        credentials: [{ name: 'ironfangApi', required: true }],
+        credentials: [{ name: 'ironfangApi', required: true, testedBy: 'ironfangApiTest' }],
         properties: [
             {
                 displayName: 'Resource',
@@ -78,17 +80,17 @@ export class Ironfang implements INodeType {
                         action: 'Render a template image',
                     },
                     {
+                        name: 'Usage',
+                        value: 'usage',
+                        description: 'Current period usage against your plan cap',
+                        action: 'Get usage',
+                    },                    {
                         name: 'Video Clip',
                         value: 'video',
                         description: 'Render a short captioned MP4 from a background and caption cards',
                         action: 'Create a video clip',
                     },
-                    {
-                        name: 'Usage',
-                        value: 'usage',
-                        description: 'Current period usage against your plan cap',
-                        action: 'Get usage',
-                    },
+
                 ],
             },
 
@@ -134,6 +136,13 @@ export class Ironfang implements INodeType {
                 options: [
                     { displayName: 'Dark Mode', name: 'dark_mode', type: 'boolean', default: false },
                     {
+                        displayName: 'Delay (Ms)',
+                        name: 'delay_ms',
+                        type: 'number',
+                        default: 0,
+                        description: 'Extra settle time after load for late-painting pages',
+                    },
+                    {
                         displayName: 'Device',
                         name: 'device',
                         type: 'options',
@@ -145,13 +154,6 @@ export class Ironfang implements INodeType {
                             { name: 'Mobile', value: 'mobile' },
                             { name: 'Tablet', value: 'tablet' },
                         ],
-                    },
-                    {
-                        displayName: 'Delay (Ms)',
-                        name: 'delay_ms',
-                        type: 'number',
-                        default: 0,
-                        description: 'Extra settle time after load for late-painting pages',
                     },
                     {
                         displayName: 'Format',
@@ -167,20 +169,20 @@ export class Ironfang implements INodeType {
                     { displayName: 'Full Page', name: 'full_page', type: 'boolean', default: false },
                     { displayName: 'Height', name: 'height', type: 'number', default: 800 },
                     {
-                        displayName: 'Quality',
-                        name: 'quality',
-                        type: 'number',
-                        default: 85,
-                        description: 'For JPEG and WebP. Ignored for PNG, which is lossless.',
-                        typeOptions: { minValue: 1, maxValue: 100 },
-                    },
-                    {
                         displayName: 'No Cache',
                         name: 'no_cache',
                         type: 'boolean',
                         default: false,
                         description:
                             'Whether to force a live capture instead of reusing an identical recent render. Use when the page must be captured exactly as it is right now, such as evidence or change detection. Counts against your quota.',
+                    },
+                    {
+                        displayName: 'Quality',
+                        name: 'quality',
+                        type: 'number',
+                        default: 85,
+                        description: 'For JPEG and WebP. Ignored for PNG, which is lossless.',
+                        typeOptions: { minValue: 1, maxValue: 100 },
                     },
                     {
                         displayName: 'Selector',
@@ -441,6 +443,8 @@ export class Ironfang implements INodeType {
         ],
     };
 
+    methods = { credentialTest: { ironfangApiTest: credentialTest } };
+
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
         const items = this.getInputData();
         const out: INodeExecutionData[] = [];
@@ -456,7 +460,7 @@ export class Ironfang implements INodeType {
         for (let i = 0; i < items.length; i++) {
             const operation = this.getNodeParameter('operation', i) as string;
             const credentials = await this.getCredentials('ironfangApi');
-            const baseUrl = String(credentials.baseUrl || 'https://api.ironfang.uk/renderwolf').replace(/\/+$/, '');
+            const baseUrl = apiBase(credentials.baseUrl);
 
             try {
                 if (operation === 'screenshot' || operation === 'pdf') {
@@ -470,54 +474,38 @@ export class Ironfang implements INodeType {
                     } else {
                         body.html = this.getNodeParameter('html', i);
                     }
-                    const data = (await this.helpers.httpRequestWithAuthentication.call(
-                        this,
-                        'ironfangApi',
-                        {
+                    const data = await request.call(this, {
                             method: 'POST',
                             url: `${baseUrl}/v1/${operation}`,
                             body,
                             encoding: 'arraybuffer',
-                        },
-                    )) as Buffer;
+                        });
                     const binaryProperty = this.getNodeParameter('binaryProperty', i) as string;
                     const isPdf = operation === 'pdf';
                     const format = isPdf ? 'pdf' : ((body.format as string) || 'png');
                     const binary = await this.helpers.prepareBinaryData(
-                        Buffer.from(data),
+                        data.body as Buffer,
                         `render.${format}`,
                         isPdf ? 'application/pdf' : `image/${format}`,
                     );
-                    out.push({
-                        json: { operation, bytes: binary.fileSize },
-                        binary: { [binaryProperty]: binary },
-                        pairedItem: { item: i },
-                    });
+                    out.push(binaryOutput(this, i, binaryProperty, binary, data, { operation }));
                 } else if (operation === 'image') {
-                    const templateId = this.getNodeParameter('templateId', i) as string;
+                    const templateId = identifier(this, this.getNodeParameter('templateId', i), i);
                     const format = this.getNodeParameter('imageFormat', i) as string;
                     const vars = collectVars(this.getNodeParameter('vars', i) as IDataObject);
-                    const data = (await this.helpers.httpRequestWithAuthentication.call(
-                        this,
-                        'ironfangApi',
-                        {
+                    const data = await request.call(this, {
                             method: 'POST',
                             url: `${baseUrl}/v1/image/${templateId}`,
                             body: { vars, format },
                             encoding: 'arraybuffer',
-                        },
-                    )) as Buffer;
+                        });
                     const binaryProperty = this.getNodeParameter('binaryProperty', i) as string;
                     const binary = await this.helpers.prepareBinaryData(
-                        Buffer.from(data),
+                        data.body as Buffer,
                         `render.${format}`,
                         `image/${format}`,
                     );
-                    out.push({
-                        json: { operation, template: templateId, bytes: binary.fileSize },
-                        binary: { [binaryProperty]: binary },
-                        pairedItem: { item: i },
-                    });
+                    out.push(binaryOutput(this, i, binaryProperty, binary, data, { operation, template: templateId }));
                 } else if (operation === 'video') {
                     const captions = (
                         (this.getNodeParameter('captions', i) as IDataObject)
@@ -541,27 +529,19 @@ export class Ironfang implements INodeType {
                     if (!body.font_size) {
                         delete body.font_size;
                     }
-                    const data = (await this.helpers.httpRequestWithAuthentication.call(
-                        this,
-                        'ironfangApi',
-                        {
+                    const data = await request.call(this, {
                             method: 'POST',
                             url: `${baseUrl}/v1/video`,
                             body,
                             encoding: 'arraybuffer',
-                        },
-                    )) as Buffer;
+                        });
                     const binaryProperty = this.getNodeParameter('binaryProperty', i) as string;
                     const binary = await this.helpers.prepareBinaryData(
-                        Buffer.from(data),
+                        data.body as Buffer,
                         'clip.mp4',
                         'video/mp4',
                     );
-                    out.push({
-                        json: { operation, bytes: binary.fileSize },
-                        binary: { [binaryProperty]: binary },
-                        pairedItem: { item: i },
-                    });
+                    out.push(binaryOutput(this, i, binaryProperty, binary, data, { operation }));
                 } else if (operation === 'sign') {
                     const kind = this.getNodeParameter('signKind', i) as string;
                     const body: IDataObject = {
@@ -572,22 +552,14 @@ export class Ironfang implements INodeType {
                         body.url = this.getNodeParameter('signUrl', i);
                         body.full_page = this.getNodeParameter('signFullPage', i);
                     } else {
-                        body.template = this.getNodeParameter('signTemplateId', i);
+                        body.template = identifier(this, this.getNodeParameter('signTemplateId', i), i);
                         body.vars = collectVars(this.getNodeParameter('signVars', i) as IDataObject);
                     }
-                    const resp = (await this.helpers.httpRequestWithAuthentication.call(
-                        this,
-                        'ironfangApi',
-                        { method: 'POST', url: `${baseUrl}/v1/sign`, body, json: true },
-                    )) as IDataObject;
-                    out.push({ json: resp, pairedItem: { item: i } });
+                    const resp = await request.call(this, { method: 'POST', url: `${baseUrl}/v1/sign`, body, json: true });
+                    out.push({ json: { ...(resp.body as IDataObject), _ironfang: resp.metadata }, pairedItem: { item: i } });
                 } else if (operation === 'usage') {
-                    const resp = (await this.helpers.httpRequestWithAuthentication.call(
-                        this,
-                        'ironfangApi',
-                        { method: 'GET', url: `${baseUrl}/v1/usage`, json: true },
-                    )) as IDataObject;
-                    out.push({ json: resp, pairedItem: { item: i } });
+                    const resp = await request.call(this, { method: 'GET', url: `${baseUrl}/v1/usage`, json: true });
+                    out.push({ json: { ...(resp.body as IDataObject), _ironfang: resp.metadata }, pairedItem: { item: i } });
                 } else {
                     throw new NodeOperationError(this.getNode(), `Unknown operation ${operation}`, {
                         itemIndex: i,
@@ -595,13 +567,10 @@ export class Ironfang implements INodeType {
                 }
             } catch (error) {
                 if (this.continueOnFail()) {
-                    out.push({
-                        json: { error: error instanceof Error ? error.message : String(error) },
-                        pairedItem: { item: i },
-                    });
+                    out.push(errorOutput(this, error, i));
                     continue;
                 }
-                throw new NodeApiError(this.getNode(), error as JsonObject);
+                throw apiError(this, error, i);
             }
         }
         return [out];

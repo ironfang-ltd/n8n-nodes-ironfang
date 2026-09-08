@@ -1,0 +1,56 @@
+{
+  "name": "Ironfang \u2014 template image",
+  "nodes": [
+    {
+      "id": "start",
+      "name": "Run workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "render",
+      "name": "Render template",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "renderwolf",
+        "operation": "image",
+        "templateId": "REPLACE_WITH_YOUR_TEMPLATE_ID",
+        "vars": {
+          "values": [
+            {
+              "name": "title",
+              "value": "Hello from n8n"
+            }
+          ]
+        },
+        "imageFormat": "png",
+        "binaryProperty": "data"
+      }
+    }
+  ],
+  "connections": {
+    "Run workflow": {
+      "main": [
+        [
+          {
+            "node": "Render template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "active": false
+}

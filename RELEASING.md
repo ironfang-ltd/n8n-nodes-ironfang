@@ -1,38 +1,21 @@
 # Releasing
 
-Normal releases are automatic: push a tag like `v0.2.1` and the Release
-workflow publishes to npm through trusted publishing, with provenance
-attached. Provenance is what n8n's verified-community-node scanner looks for.
+1. Update `package.json` and `package-lock.json` together, plus the changelog,
+   README operations/scopes and examples. Preserve saved node identifiers and
+   version old output contracts when changing their shape.
+2. Run `npm ci --ignore-scripts`, `npm run check` and the documented n8n runtime
+   smoke test. Run `npm audit` and review any development/runtime distinction.
+3. Commit to main, tag that exact commit `v<package version>` and push the tag.
+   The Release workflow requires the Node 22/24 checks, verifies the tag matches
+   package/lockfile versions, then publishes through npm trusted publishing with
+   provenance. Never overwrite a published version or move its tag.
+4. Check the npm version, packaged README, entry points and provenance after
+   publishing. Update the platform's channel/distribution record at the same time.
 
-## First publish of a new package name
+The trusted publisher is `ironfang-ltd/n8n-nodes-ironfang`, workflow `release.yml`.
+No publishing token belongs in this repository. The old Renderwolf-named package
+is already deprecated; leave its migration notice in place.
 
-npm will only let you configure a trusted publisher on a package that already
-exists, so the very first publish of a new name has to use a token. That
-applies to `@ironfang/n8n-nodes-ironfang`, which is a new package rather than a
-rename of the old one.
-
-1. Build and publish once from a machine you're logged into:
-
-   ```
-   npm run build
-   npm publish --access public
-   ```
-
-   This puts 0.2.0 on npm without provenance, which is expected.
-
-2. On npmjs.com, open the package settings and add a trusted publisher:
-
-   - Repository: `ironfang-ltd/n8n-nodes-ironfang`
-   - Workflow: `release.yml`
-
-3. Bump to 0.2.1, tag it and push the tag. That release goes out through the
-   workflow and carries provenance.
-
-4. Point the old package at the new one:
-
-   ```
-   npm deprecate @ironfang/n8n-nodes-renderwolf "Renamed to @ironfang/n8n-nodes-ironfang"
-   ```
-
-Submit for verification only after a provenance-backed release exists; a
-token publish alone won't pass the scanner.
+n8n manual verification is separate from npm publishing and automated scanning.
+Record the reviewed package/version and actual result; a scanner pass alone
+is not permission to advertise availability in the n8n Cloud picker.

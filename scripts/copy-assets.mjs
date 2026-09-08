@@ -1,5 +1,4 @@
-// Copy icons into dist (tsc only emits .js/.d.ts).
 import { cpSync } from 'node:fs';
-cpSync('nodes/Ironfang/ironfang.svg', 'dist/nodes/Ironfang/ironfang.svg');
-cpSync('credentials/ironfang.svg', 'dist/credentials/ironfang.svg');
-console.log('assets copied');
+for (const dir of ['nodes/Ironfang', 'credentials']) {
+  for (const icon of ['ironfang.svg', 'ironfang.dark.svg']) cpSync(`${dir}/${icon}`, `dist/${dir}/${icon}`);
+}

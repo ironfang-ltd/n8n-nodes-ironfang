@@ -1,53 +1,60 @@
 {
-    "name": "@ironfang/n8n-nodes-ironfang",
-    "version": "0.2.1",
-    "description": "n8n community node for Ironfang APIs - screenshots, PDFs and templated images from Renderwolf",
-    "keywords": [
-        "n8n-community-node-package",
-        "ironfang",
-        "renderwolf",
-        "screenshot",
-        "pdf",
-        "og-image",
-        "rendering"
+  "name": "@ironfang/n8n-nodes-ironfang",
+  "version": "0.2.2",
+  "description": "n8n community node for Ironfang: Renderwolf screenshots, PDFs, template images and video clips",
+  "keywords": [
+    "n8n-community-node-package",
+    "ironfang",
+    "renderwolf",
+    "screenshot",
+    "pdf",
+    "og-image",
+    "rendering"
+  ],
+  "license": "MIT",
+  "homepage": "https://ironfang.uk",
+  "author": {
+    "name": "Ironfang Ltd",
+    "email": "rick@ironfang.uk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ironfang-ltd/n8n-nodes-ironfang.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint nodes credentials package.json",
+    "test": "npm run build && node --test tests/*.test.cjs",
+    "check": "npm run typecheck && npm run lint && npm test && node scripts/check-package.mjs"
+  },
+  "files": [
+    "dist",
+    "examples"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/IronfangApi.credentials.js"
     ],
-    "license": "MIT",
-    "homepage": "https://ironfang.uk",
-    "author": {
-        "name": "Ironfang Ltd",
-        "email": "rick@ironfang.uk"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ironfang-ltd/n8n-nodes-ironfang.git"
-    },
-    "engines": {
-        "node": ">=20"
-    },
-    "main": "index.js",
-    "scripts": {
-        "build": "tsc && node scripts/copy-assets.mjs",
-        "dev": "tsc --watch",
-        "lint": "tsc --noEmit"
-    },
-    "files": [
-        "dist"
-    ],
-    "n8n": {
-        "n8nNodesApiVersion": 1,
-        "credentials": [
-            "dist/credentials/IronfangApi.credentials.js"
-        ],
-        "nodes": [
-            "dist/nodes/Ironfang/Ironfang.node.js"
-        ]
-    },
-    "devDependencies": {
-        "@types/node": "^26.2.0",
-        "n8n-workflow": "^1.70.0",
-        "typescript": "^5.6.0"
-    },
-    "peerDependencies": {
-        "n8n-workflow": "*"
-    }
+    "nodes": [
+      "dist/nodes/Ironfang/Ironfang.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/eslint-plugin-community-nodes": "0.32.0",
+    "@types/node": "24.10.1",
+    "@typescript-eslint/parser": "8.70.0",
+    "eslint": "9.29.0",
+    "eslint-plugin-n8n-nodes-base": "1.16.7",
+    "n8n-workflow": "2.39.0",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
 }

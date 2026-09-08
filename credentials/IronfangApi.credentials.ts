@@ -1,6 +1,5 @@
 import type {
     IAuthenticateGeneric,
-    ICredentialTestRequest,
     ICredentialType,
     Icon,
     INodeProperties,
@@ -9,7 +8,7 @@ import type {
 export class IronfangApi implements ICredentialType {
     name = 'ironfangApi';
 
-    icon: Icon = 'file:ironfang.svg';
+    icon: Icon = { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' };
 
     displayName = 'Ironfang API';
 
@@ -23,7 +22,7 @@ export class IronfangApi implements ICredentialType {
             typeOptions: { password: true },
             default: '',
             required: true,
-            description: 'An rw_live_ key from your Ironfang dashboard',
+            description: 'An if_live_ platform API key from the Ironfang portal. Existing rw_live_ Renderwolf keys remain supported.',
         },
         {
             displayName: 'Base URL',
@@ -44,10 +43,4 @@ export class IronfangApi implements ICredentialType {
         },
     };
 
-    test: ICredentialTestRequest = {
-        request: {
-            baseURL: '={{$credentials.baseUrl}}',
-            url: '/v1/usage',
-        },
-    };
 }
