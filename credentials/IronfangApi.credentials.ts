@@ -30,7 +30,12 @@ export class IronfangApi implements ICredentialType {
             type: 'string',
             default: 'https://api.ironfang.uk/renderwolf',
             description:
-                'Only change this if you are pointing at a non-production instance. Credentials created before Renderwolf moved under /renderwolf still hold https://api.ironfang.uk and keep working - the API serves both.',
+                'API origin or product base URL. Both legacy origin-only and /renderwolf credentials remain valid; the node selects the requested product path.',
+        },
+        {
+            displayName: 'Test Product', name: 'testProduct', type: 'options', default: 'auto',
+            options: [{ name: 'Auto', value: 'auto' }, { name: 'Auditwolf', value: 'auditwolf' }, { name: 'Financewolf', value: 'financewolf' }, { name: 'Renderwolf', value: 'renderwolf' }],
+            description: 'Choose a product for the read-only connection check, or discover which product accepts the key',
         },
     ];
 

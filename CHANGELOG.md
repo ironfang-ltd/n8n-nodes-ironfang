@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0 — Unreleased
+
+- Add 97 actions across Renderwolf, Financewolf, Auditwolf and public tools,
+  preserving the existing six operations and saved workflow identifiers.
+- Add product-aware credential testing, explicit public access, exact XML
+  artifact verification, filesystem binary uploads, pagination, validated signed
+  downloads, multipart previews and separate S3 destination credentials.
+- Add advanced render options and a paginated template picker.
+- Add a signed-event trigger with timestamp checks and bounded duplicate state;
+  endpoint registration and cleanup remain explicit customer actions.
+- Add invoice, storage and bounded audit-polling examples, an operation reference,
+  and execution/real-n8n checks covering the expanded flows and trigger restarts.
+- Clean compiled output before building so renamed modules cannot enter a package.
+
 ## 0.2.3 — 2026-09-08
 
 Includes the 0.2.2 maintenance changes below. The 0.2.2 tag was not published:

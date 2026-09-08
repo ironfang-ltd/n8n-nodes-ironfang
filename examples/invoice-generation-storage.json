@@ -1,0 +1,83 @@
+{
+  "name": "Generate validated invoice XML and upload it to S3",
+  "active": false,
+  "nodes": [
+    {
+      "id": "start",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "generate-invoice",
+      "name": "Generate Invoice",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "resource": "financewolf",
+        "operation": "generateEInvoice",
+        "authentication": "apiKey",
+        "ruleset": "latest",
+        "profile": "peppol-bis-billing-3",
+        "requestBody": "{\n  \"input_schema_version\": \"financewolf/einvoice/generation-input/v1\",\n  \"document_type\": \"invoice\",\n  \"id\": \"EXAMPLE-INV-001\",\n  \"issue_date\": \"2026-09-08\",\n  \"due_date\": \"2026-10-08\",\n  \"currency\": \"GBP\",\n  \"buyer_reference\": \"BUYER-REF-001\",\n  \"seller\": {\n    \"name\": \"Example Supplier Ltd\",\n    \"endpoint\": {\n      \"scheme\": \"0088\",\n      \"value\": \"7300010000001\"\n    },\n    \"legal_identifier\": {\n      \"value\": \"12345678\"\n    },\n    \"vat_identifier\": \"GB123456789\",\n    \"address\": {\n      \"street\": \"1 Example Street\",\n      \"city\": \"London\",\n      \"postal_code\": \"SW1A 1AA\",\n      \"country\": \"GB\"\n    }\n  },\n  \"buyer\": {\n    \"name\": \"Example Buyer Ltd\",\n    \"endpoint\": {\n      \"scheme\": \"0088\",\n      \"value\": \"7300010000001\"\n    },\n    \"legal_identifier\": {\n      \"value\": \"87654321\"\n    },\n    \"address\": {\n      \"street\": \"2 Example Street\",\n      \"city\": \"London\",\n      \"postal_code\": \"SW1A 2AA\",\n      \"country\": \"GB\"\n    }\n  },\n  \"lines\": [\n    {\n      \"id\": \"1\",\n      \"quantity\": \"2\",\n      \"unit\": \"C62\",\n      \"price_amount\": \"12.50\",\n      \"item\": {\n        \"name\": \"Example service\"\n      },\n      \"tax\": {\n        \"category\": \"S\",\n        \"rate\": \"20\"\n      }\n    }\n  ]\n}",
+        "idempotencyKey": "={{ 'n8n-invoice-' + $execution.id }}",
+        "outputBinaryField": "data"
+      }
+    },
+    {
+      "id": "store-xml",
+      "name": "Store XML",
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {
+        "resource": "file",
+        "operation": "upload",
+        "bucketName": "replace-with-your-bucket",
+        "fileName": "invoice.xml",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {}
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Generate Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Invoice": {
+      "main": [
+        [
+          {
+            "node": "Store XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

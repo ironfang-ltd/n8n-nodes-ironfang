@@ -1,0 +1,223 @@
+{
+  "name": "Run an audit and poll until terminal (bounded)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "start",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "run-audit",
+      "name": "Run Audit",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "resource": "auditwolf",
+        "operation": "createSitesBySiteIdAudits",
+        "siteId": "replace-site-id",
+        "requestBody": "{\"reason\":\"n8n scheduled check\",\"trigger_type\":\"api\"}",
+        "idempotencyKey": "={{ 'n8n-audit-' + $execution.id }}"
+      }
+    },
+    {
+      "id": "get-audit",
+      "name": "Get Audit",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {
+        "resource": "auditwolf",
+        "operation": "getAuditsByAuditId",
+        "auditId": "={{ $('Run Audit').first().json.id }}"
+      }
+    },
+    {
+      "id": "terminal",
+      "name": "Terminal",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        780,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "Terminal",
+              "leftValue": "={{ ['completed', 'failed', 'cancelled', 'partial', 'quota_blocked'].includes($json.status) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "within-poll-limit",
+      "name": "Within Poll Limit",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1020,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "Within Poll Limit",
+              "leftValue": "={{ $runIndex < 59 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "wait",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        380
+      ],
+      "parameters": {
+        "amount": 20,
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "polling-limit",
+      "name": "Polling Limit",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1270,
+        380
+      ],
+      "parameters": {
+        "errorMessage": "Audit has not reached a terminal state after 60 polls. Inspect its ID and continue polling deliberately."
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Run Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Audit": {
+      "main": [
+        [
+          {
+            "node": "Get Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Audit": {
+      "main": [
+        [
+          {
+            "node": "Terminal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminal": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Within Poll Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Within Poll Limit": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Polling Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

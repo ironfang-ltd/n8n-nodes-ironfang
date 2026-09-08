@@ -1,7 +1,7 @@
 {
   "name": "@ironfang/n8n-nodes-ironfang",
-  "version": "0.2.3",
-  "description": "n8n community node for Ironfang: Renderwolf screenshots, PDFs, template images and video clips",
+  "version": "0.3.0",
+  "description": "n8n nodes for Ironfang: Renderwolf, Financewolf, Auditwolf, public tools and signed events",
   "keywords": [
     "n8n-community-node-package",
     "ironfang",
@@ -9,7 +9,12 @@
     "screenshot",
     "pdf",
     "og-image",
-    "rendering"
+    "rendering",
+    "financewolf",
+    "auditwolf",
+    "einvoice",
+    "qr-code",
+    "webhook"
   ],
   "license": "MIT",
   "homepage": "https://ironfang.uk",
@@ -25,7 +30,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsc && node scripts/copy-assets.mjs",
+    "build": "node scripts/clean.mjs && tsc && node scripts/copy-assets.mjs",
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint nodes credentials package.json",
@@ -34,15 +39,19 @@
   },
   "files": [
     "dist",
-    "examples"
+    "examples",
+    "docs"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/IronfangApi.credentials.js"
+      "dist/credentials/IronfangApi.credentials.js",
+      "dist/credentials/IronfangS3.credentials.js",
+      "dist/credentials/IronfangWebhookApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/Ironfang/Ironfang.node.js"
+      "dist/nodes/Ironfang/Ironfang.node.js",
+      "dist/nodes/Ironfang/IronfangTrigger.node.js"
     ]
   },
   "devDependencies": {

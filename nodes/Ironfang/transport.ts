@@ -17,7 +17,7 @@ export function apiBase(value: unknown): string {
 }
 
 export function identifier(context: IExecuteFunctions, value: unknown, itemIndex: number): string {
-    const id = String(value);
+    const id = typeof value === 'string' ? value : '';
     if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,199}$/.test(id)) {
         throw new NodeOperationError(context.getNode(), 'Enter an identifier, without path separators or query parameters', { itemIndex });
     }
@@ -33,13 +33,16 @@ export function responseMetadata(headers: Record<string, string>, statusCode: nu
     return result;
 }
 
-export async function request(this: IExecuteFunctions, options: IHttpRequestOptions): Promise<Response> {
-    const response = await this.helpers.httpRequestWithAuthentication.call(this, 'ironfangApi', {
+export async function request(this: IExecuteFunctions, options: IHttpRequestOptions, authenticated = true): Promise<Response> {
+    const settings: IHttpRequestOptions = {
         timeout: options.encoding === 'arraybuffer' ? 120_000 : 30_000,
         ...options,
         returnFullResponse: true,
         disableFollowRedirect: true,
-    }) as { body: unknown; headers: Record<string, string>; statusCode: number };
+    };
+    const response = (authenticated
+        ? await this.helpers.httpRequestWithAuthentication.call(this, 'ironfangApi', settings)
+        : await this.helpers.httpRequest(settings)) as { body: unknown; headers: Record<string, string>; statusCode: number };
     const headers = Object.fromEntries(Object.entries(response.headers || {}).map(([key, value]) => [key.toLowerCase(), String(value)]));
     return { ...response, headers, metadata: responseMetadata(headers, response.statusCode) };
 }
@@ -102,4 +105,9 @@ export function errorOutput(context: IExecuteFunctions, error: unknown, itemInde
         },
         pairedItem: { item: itemIndex },
     };
+}
+
+export function productBase(value: unknown, product: string): string {
+    const base = apiBase(value);
+    return base.replace(/\/(renderwolf|financewolf|auditwolf|tools)$/, '') + '/' + product;
 }

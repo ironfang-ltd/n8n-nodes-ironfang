@@ -1,0 +1,6 @@
+import type { INodeProperties } from 'n8n-workflow';
+export const renderOptions: INodeProperties[] = [
+    { displayName: 'Advanced Render Options (JSON)', name: 'advancedRenderOptions', type: 'json', default: '{}', displayOptions: { show: { resource: ['renderwolf'], operation: ['screenshot', 'pdf', 'image'] } }, description: 'Additional API fields: wait_until, wait_for_selector, timeout_ms, block_ads, block_cookie_banners, hide_selectors, headers, cookies, authorization, user_agent, device_scale_factor; screenshot clip region; PDF paper_format and margin; template QR variables. Do not include the source or template variables here.' },
+    { displayName: 'Template Selection', name: 'templateSelection', type: 'options', default: 'id', displayOptions: { show: { resource: ['renderwolf'], operation: ['image'] } }, options: [{ name: 'By ID', value: 'id' }, { name: 'From List', value: 'list' }], description: 'Listing templates also requires renderwolf:templates:read' },
+    { displayName: 'Template', name: 'selectedTemplate', type: 'resourceLocator', default: { mode: 'list', value: '' }, displayOptions: { show: { resource: ['renderwolf'], operation: ['image'], templateSelection: ['list'] } }, modes: [{ displayName: 'From List', name: 'list', type: 'list', typeOptions: { searchListMethod: 'searchTemplates', searchable: false } }] },
+];

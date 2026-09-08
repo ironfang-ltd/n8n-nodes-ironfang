@@ -1,7 +1,7 @@
 name: Check
 on:
   push:
-    branches: [main]
+    branches: [main, 'feat/**']
   pull_request:
   workflow_call:
 permissions:
@@ -28,3 +28,11 @@ jobs:
             exit 1
           fi
           cat /tmp/ironfang-runtime.log
+      - if: matrix.node == 24
+        run: |
+          if ! bash scripts/check-webhook-runtime.sh > /tmp/ironfang-webhook-runtime.log 2>&1; then
+            cat /tmp/ironfang-webhook-runtime.log
+            cat /tmp/ironfang-webhook-runtime.log >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          cat /tmp/ironfang-webhook-runtime.log
