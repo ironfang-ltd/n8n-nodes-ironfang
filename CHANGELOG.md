@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.3 — 2026-09-08
+
+Includes the 0.2.2 maintenance changes below. The 0.2.2 tag was not published:
+the runtime release gate found that GitHub runner and container user IDs differ.
+Binary verification now runs inside the fixture container, and runtime failure
+logs are retained in the CI summary. Main CI passed on Node 22 and 24, including
+the real n8n workflow check, before this replacement maintenance tag.
+
 ## 0.2.2
 
 - Publish the 250-credit Renderwolf free-plan correction, Video Clip, device
