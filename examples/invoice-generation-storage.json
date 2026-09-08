@@ -46,7 +46,7 @@
         "resource": "file",
         "operation": "upload",
         "bucketName": "replace-with-your-bucket",
-        "fileName": "invoice.xml",
+        "fileName": "={{ 'invoices/' + $json.artifact.sha256 + '.xml' }}",
         "binaryData": true,
         "binaryPropertyName": "data",
         "additionalFields": {}

@@ -139,8 +139,8 @@ test('examples import inactive, contain no credentials, and reference existing n
 });
 test('legacy advanced render options remain body fields with unchanged binary output', async () => {
  const { run } = require('./context.cjs');
- const { ctx, output } = await run([{ operation: 'pdf', advancedRenderOptions: '{"paper_format":"a4","margin":{"top":"10mm"},"headers":{"X-Capture":"fixture"}}' }]);
- assert.equal(ctx.requests[0].body.paper_format, 'a4'); assert.equal(ctx.requests[0].body.headers['X-Capture'], 'fixture'); assert.equal(ctx.requests[0].headers, undefined); assert(output[0].binary.data);
+ const { ctx, output } = await run([{ operation: 'pdf', advancedRenderOptions: '{"paper_format":"a4","margin":{"top":0.4},"headers":{"X-Capture":"fixture"}}' }]);
+ assert.equal(ctx.requests[0].body.paper_format, 'a4'); assert.equal(ctx.requests[0].body.margin.top, 0.4); assert.equal(ctx.requests[0].body.headers['X-Capture'], 'fixture'); assert.equal(ctx.requests[0].headers, undefined); assert(output[0].binary.data);
 });
 test('missing identifiers never become literal undefined or null path segments', () => {
  const { identifier } = require('../dist/nodes/Ironfang/transport.js');

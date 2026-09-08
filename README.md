@@ -48,7 +48,7 @@ specifications: [Renderwolf](https://api.ironfang.uk/renderwolf/openapi.yaml),
 Screenshots support PNG/JPEG/WebP and phone/tablet device presets. Advanced
 Render Options accepts waits, blocking, selectors, request headers, cookies,
 user agent and pixel density. For PDFs it also accepts `paper_format` and
-`margin`; screenshot region capture uses `clip`. For template images it accepts
+`margin` (numeric inches); screenshot region capture uses `clip`. For template images it accepts
 inline `qr` variables. The source and template variables have their own fields.
 The template picker loads pages without HTML and requires template-read scope;
 entering a template ID directly needs only render scope.
