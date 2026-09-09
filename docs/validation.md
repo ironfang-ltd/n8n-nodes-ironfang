@@ -15,8 +15,9 @@ operation or paid render was used for these connector checks.
 The 0.3.1 submission patch passed `npm run check` (151 tests), both real n8n
 2.38.1 Docker checks and `npm audit` (zero reported vulnerabilities) locally on
 9 September. CI repeats the Node 22/24 and Docker gates before publication.
-The [re-review request](n8n-re-review-0.3.1.md) is prepared for the existing
-submission; manual approval is still pending.
+n8n automatically detects the new npm version for review; no manual re-review
+request is required. The [feedback resolution record](n8n-re-review-0.3.1.md)
+documents the three fixes. Review approval is still pending.
 
 ## Automated coverage
 

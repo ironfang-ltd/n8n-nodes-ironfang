@@ -1,8 +1,10 @@
-# n8n re-review request — 0.3.1
+# n8n review follow-up — 0.3.1
 
-Draft for the existing submission after npm publication is confirmed:
+n8n automatically detects new npm versions for review. No manual re-review
+request is required for the existing submission. Publication does not establish
+review approval; the review outcome remains pending.
 
-Please re-review `@ironfang/n8n-nodes-ironfang` version **0.3.1**
+`@ironfang/n8n-nodes-ironfang` version **0.3.1** was published on 9 September 2026
 ([source tag](https://github.com/ironfang-ltd/n8n-nodes-ironfang/tree/v0.3.1)).
 It addresses all three findings:
 

@@ -17,5 +17,7 @@ No publishing token belongs in this repository. The old Renderwolf-named package
 is already deprecated; leave its migration notice in place.
 
 n8n manual verification is separate from npm publishing and automated scanning.
+n8n automatically detects new npm versions for review of the existing submission;
+do not add a manual re-review request as a release step.
 Record the reviewed package/version and actual result; a scanner pass alone
 is not permission to advertise availability in the n8n Cloud picker.
