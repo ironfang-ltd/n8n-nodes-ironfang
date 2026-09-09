@@ -1,4 +1,3 @@
-/* eslint n8n-nodes-base/node-filename-against-convention: "off" -- Shared legacy implementation; Ironfang.node.ts is the public entry point. */
 import type {
     IExecuteFunctions,
     IDataObject,
@@ -8,8 +7,8 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
-import { request, binaryOutput, apiError, errorOutput, identifier, renderwolfBase } from './transport';
-import { credentialTest } from './credentialTest';
+import { request, binaryOutput, apiError, errorOutput, identifier, renderwolfBase } from '../nodes/Ironfang/transport';
+import { credentialTest } from '../nodes/Ironfang/credentialTest';
 
 /**
  * Ironfang node. One node per vendor: pick a product with Resource, then an

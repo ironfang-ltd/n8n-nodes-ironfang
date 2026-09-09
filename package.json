@@ -1,6 +1,6 @@
 {
   "name": "@ironfang/n8n-nodes-ironfang",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "n8n nodes for Ironfang: Renderwolf, Financewolf, Auditwolf, public tools and signed events",
   "keywords": [
     "n8n-community-node-package",
@@ -33,7 +33,7 @@
     "build": "node scripts/clean.mjs && tsc && node scripts/copy-assets.mjs",
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint nodes credentials package.json",
+    "lint": "eslint --no-inline-config nodes lib credentials package.json",
     "test": "npm run build && node --test tests/*.test.cjs",
     "check": "npm run typecheck && npm run lint && npm test && node scripts/check-package.mjs"
   },

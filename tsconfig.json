@@ -11,5 +11,5 @@
         "forceConsistentCasingInFileNames": true,
         "outDir": "dist"
     },
-    "include": ["credentials/**/*.ts", "nodes/**/*.ts"]
+    "include": ["credentials/**/*.ts", "nodes/**/*.ts", "lib/**/*.ts"]
 }

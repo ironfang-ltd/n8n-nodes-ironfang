@@ -6,10 +6,26 @@ const { operations } = require('../dist/nodes/Ironfang/catalog.js');
 const { productBase } = require('../dist/nodes/Ironfang/transport.js');
 const { credentialTest } = require('../dist/nodes/Ironfang/credentialTest.js');
 const { searchTemplates } = require('../dist/nodes/Ironfang/templates.js');
+const { NodeHelpers } = require('n8n-workflow');
 const { payload } = require('./context.cjs');
 const xml = Buffer.from('<?xml version="1.0"?><Invoice>£12.50</Invoice>');
 const generation = { artifact: { data_base64: xml.toString('base64'), bytes: xml.length, sha256: createHash('sha256').update(xml).digest('hex'), content_type: 'application/xml' }, validation: { outcome: 'valid' } };
 const preview = Buffer.concat([Buffer.from('--fixture\r\nContent-Disposition: form-data; name="poster"; filename="poster.jpg"\r\nContent-Type: image/jpeg\r\n\r\n'), payload, Buffer.from('\r\n--fixture\r\nContent-Disposition: form-data; name="video"; filename="preview.mp4"\r\nContent-Type: video/mp4\r\n\r\n'), payload, Buffer.from('\r\n--fixture--\r\n')]);
+test('each product exposes one operation selector with its existing default and complete options', () => {
+  const description = new Ironfang().description;
+  const defaults = { auditwolf: 'archiveMonitorsByMonitorId', financewolf: 'deleteValidationResult', renderwolf: 'screenshot', tools: 'convertImage' };
+  const legacy = ['pdf', 'screenshot', 'sign', 'image', 'usage', 'video'];
+  for (const [resource, expectedDefault] of Object.entries(defaults)) {
+    const selectors = description.properties.filter(p => p.name === 'operation' && NodeHelpers.displayParameter({ resource }, p, undefined, description));
+    assert.equal(selectors.length, 1, resource);
+    const [selector] = selectors;
+    assert.equal(selector.default, expectedDefault, resource);
+    const values = selector.options.map(o => o.value);
+    assert(values.includes(selector.default), resource);
+    const expected = operations.filter(o => o.product === resource).map(o => o.id).concat(resource === 'renderwolf' ? legacy : []);
+    assert.deepEqual(values.toSorted(), expected.toSorted(), resource);
+  }
+});
 function setup(params, reply, settings = {}) {
   const requests = [], credentials = [], binaryReads = [];
   const rows = Array.isArray(params) ? params : [params];

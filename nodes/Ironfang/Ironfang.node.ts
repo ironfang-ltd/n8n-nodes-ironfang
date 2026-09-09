@@ -1,23 +1,40 @@
 import type { IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription, INodeProperties } from 'n8n-workflow';
-import { renderwolf } from './renderwolf';
+import { renderwolf } from '../../lib/renderwolf';
 import { operations } from './catalog';
 import { productParameters } from './parameters';
 import { executeProducts } from './execute';
 import { renderOptions } from './renderOptions';
 import { searchTemplates } from './templates';
 import { destinationCredentialTest } from './destinationCredentialTest';
+import type { Product } from './types';
 
 const legacy = renderwolf;
 const legacyOperations = (legacy.description.properties[1].options ?? []) as Array<{ name: string; value: string; description: string; action: string }>;
-const products = ['auditwolf', 'financewolf', 'renderwolf', 'tools'];
-// Resource-specific defaults are selected from the checked-in catalogue.
-// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
-const operationParameters: INodeProperties[] = products.map(product => ({
-    displayName: 'Operation', name: 'operation', type: 'options', noDataExpression: true,
-    default: product === 'renderwolf' ? 'screenshot' : operations.find(op => op.product === product)!.id,
-    displayOptions: { show: { resource: [product] } },
-    options: [...(product === 'renderwolf' ? legacyOperations : []), ...operations.filter(op => op.product === product).map(op => ({ name: op.name, value: op.id, description: op.description, action: op.description }))].sort((a, b) => a.name.localeCompare(b.name)),
-}));
+function operationOptions(product: Product) {
+    return [...(product === 'renderwolf' ? legacyOperations : []), ...operations.filter(op => op.product === product).map(op => ({ name: op.name, value: op.id, description: op.description, action: op.description }))].sort((a, b) => a.name.localeCompare(b.name));
+}
+const operationParameters: INodeProperties[] = [
+    {
+        displayName: 'Operation', name: 'operation', type: 'options', noDataExpression: true,
+        default: 'archiveMonitorsByMonitorId', displayOptions: { show: { resource: ['auditwolf'] } },
+        options: operationOptions('auditwolf'),
+    },
+    {
+        displayName: 'Operation', name: 'operation', type: 'options', noDataExpression: true,
+        default: 'deleteValidationResult', displayOptions: { show: { resource: ['financewolf'] } },
+        options: operationOptions('financewolf'),
+    },
+    {
+        displayName: 'Operation', name: 'operation', type: 'options', noDataExpression: true,
+        default: 'screenshot', displayOptions: { show: { resource: ['renderwolf'] } },
+        options: operationOptions('renderwolf'),
+    },
+    {
+        displayName: 'Operation', name: 'operation', type: 'options', noDataExpression: true,
+        default: 'convertImage', displayOptions: { show: { resource: ['tools'] } },
+        options: operationOptions('tools'),
+    },
+];
 
 export class Ironfang implements INodeType {
     description: INodeTypeDescription = {

@@ -6,5 +6,7 @@ assert.equal(pkg.name,lock.name);assert.equal(pkg.version,lock.version);assert.e
 if(process.env.GITHUB_REF_TYPE==='tag')assert.equal(process.env.GITHUB_REF_NAME,`v${pkg.version}`);
 const files=JSON.parse(execFileSync('npm',['pack','--dry-run','--ignore-scripts','--json'],{encoding:'utf8'}))[0].files.map(f=>f.path);
 for(const file of [...pkg.n8n.nodes,...pkg.n8n.credentials,'dist/nodes/Ironfang/ironfang.dark.svg','dist/credentials/ironfang.dark.svg'])assert(files.includes(file)&&existsSync(file),file);
+assert(files.includes('dist/lib/renderwolf.js'), 'Shared Renderwolf implementation must be packaged');
+assert(!files.some(f => f.startsWith('dist/nodes/Ironfang/renderwolf.')), 'Shared implementation must remain outside nodes/');
 assert(!files.some(f=>f.includes('node_modules/')));assert(!pkg.dependencies);
 console.log(`Package ${pkg.name}@${pkg.version}: metadata, entry points and icons verified`);

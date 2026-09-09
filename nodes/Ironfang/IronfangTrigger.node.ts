@@ -1,9 +1,7 @@
-import type { INodeType, INodeTypeDescription, IWebhookFunctions, IWebhookResponseData } from 'n8n-workflow';
+import type { IHookFunctions, INodeType, INodeTypeDescription, IWebhookFunctions, IWebhookResponseData } from 'n8n-workflow';
 import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 import { verifyEvent, webhookCredentialTest } from './webhook';
 
-// Endpoints are registered explicitly and remain customer-owned; n8n owns its local route.
-// eslint-disable-next-line @n8n/community-nodes/webhook-lifecycle-complete
 export class IronfangTrigger implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Ironfang Trigger', name: 'ironfangTrigger', group: ['trigger'], version: 1,
@@ -17,6 +15,25 @@ export class IronfangTrigger implements INodeType {
         ],
     };
     methods = { credentialTest: { ironfangWebhookTest: webhookCredentialTest } };
+    webhookMethods = {
+        default: {
+            async checkExists(this: IHookFunctions): Promise<boolean> {
+                // External registration is required. True skips n8n-managed remote
+                // creation; it does not assert that a product endpoint exists.
+                return true;
+            },
+            async create(this: IHookFunctions): Promise<boolean> {
+                // The customer registers the URL and stores its signing secret.
+                // n8n creates the local route independently of this hook.
+                return true;
+            },
+            async delete(this: IHookFunctions): Promise<boolean> {
+                // n8n removes its local route. Leave customer-owned endpoints and
+                // duplicate state intact for later reactivation or shared use.
+                return true;
+            },
+        },
+    };
     async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
         const req = this.getRequestObject() as ReturnType<IWebhookFunctions['getRequestObject']> & { rawBody?: Buffer; readRawBody?: () => Promise<void> };
         const res = this.getResponseObject();

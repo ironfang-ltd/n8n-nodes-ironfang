@@ -6,8 +6,9 @@ Use Renderwolf, Financewolf, Auditwolf and Ironfang's public developer tools in
 n8n. The Ironfang action node has **103 operations**, grouped by product. Ironfang
 Trigger receives signed Auditwolf and Renderwolf events.
 
-**Release: 0.3.0.** This version includes the product expansion and signed event
-trigger described below, plus the maintenance fixes from 0.2.3.
+**Release: 0.3.1.** This patch addresses the n8n submission feedback on webhook
+lifecycle hooks, static operation defaults and the shared Renderwolf module.
+It includes the product expansion and signed event trigger from 0.3.0.
 
 ## Installation and credentials
 
@@ -136,6 +137,10 @@ deleting the n8n workflow removes its local listener; disable/delete the product
 endpoint separately to stop deliveries. Rotating an endpoint secret requires
 updating the n8n credential.
 
+The required `checkExists`, `create` and `delete` lifecycle hooks acknowledge
+this external setup. They do not call the product management API or verify
+remote registration. Use Test Webhook/Test Destination to check delivery.
+
 ## Outputs, examples and compatibility
 
 Existing Renderwolf version 1 workflows retain string `bytes` and `error`
@@ -168,6 +173,8 @@ Run `npm ci --ignore-scripts` and `npm run check`. With Docker, run
 `bash scripts/check-runtime.sh` and `bash scripts/check-webhook-runtime.sh`.
 These execute local fixtures, including multipart/file handling and signed
 webhooks; they make no paid API calls. CI requires both before release.
+Lint runs with inline configuration disabled, matching the submission scanner's
+handling of suppression comments. Shared code in `lib/` is also linted and packaged.
 
 To refresh the catalogue from an Ironfang source checkout, use
 `python3 scripts/sync-contracts.py /path/to/ironfang` (development-only PyYAML).

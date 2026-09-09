@@ -5,7 +5,7 @@ import parser from '@typescript-eslint/parser';
 export default [
     { ignores: ['dist/**', 'node_modules/**', 'tests/**', 'scripts/**'] },
     n8nCommunityNodesPlugin.configs.recommended,
-    { plugins: { 'n8n-nodes-base': n8n }, languageOptions: { parser } },
+    { files: ['**/*.ts', 'package.json'], plugins: { 'n8n-nodes-base': n8n }, languageOptions: { parser } },
     { files: ['package.json'], rules: n8n.configs.community.rules },
     { files: ['credentials/**/*.ts'], rules: {
         ...n8n.configs.credentials.rules,

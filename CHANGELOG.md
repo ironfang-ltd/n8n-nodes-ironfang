@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.1 — 2026-09-09
+
+- Implement all three trigger webhook lifecycle hooks while preserving external
+  endpoint management, signing credentials and duplicate detection state.
+- Give each product's operation selector a literal default, preserving the
+  existing defaults, operation IDs and available actions.
+- Move the shared Renderwolf implementation outside `nodes/` into `lib/` and
+  verify that the compiled helper is included in the npm package.
+- Remove the three scanner suppressions and run lint with inline configuration
+  disabled. Add operation-selector and webhook reactivation regression coverage.
+
 ## 0.3.0 — 2026-09-09
 
 - Add 97 actions across Renderwolf, Financewolf, Auditwolf and public tools,

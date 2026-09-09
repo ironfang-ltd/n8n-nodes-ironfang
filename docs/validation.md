@@ -12,13 +12,22 @@ routes and scopes were compared with the endpoint handlers (all 97 additional ro
 production OpenAPI YAML URLs returned HTTP 200. No live authenticated customer
 operation or paid render was used for these connector checks.
 
+The 0.3.1 submission patch passed `npm run check` (151 tests), both real n8n
+2.38.1 Docker checks and `npm audit` (zero reported vulnerabilities) locally on
+9 September. CI repeats the Node 22/24 and Docker gates before publication.
+The [re-review request](n8n-re-review-0.3.1.md) is prepared for the existing
+submission; manual approval is still pending.
+
 ## Automated coverage
 
-- Real n8n lint rules, TypeScript and package entry-point/icon/version checks.
-- 149 unit/execution tests: every action dispatch, legacy formats, product
+- Real n8n lint rules with inline configuration disabled, TypeScript and package
+  entry-point/icon/version checks, including the helper's location outside `nodes/`.
+- 151 unit/execution tests: every action dispatch, legacy formats, product
   routing, explicit public access, no anonymous fallback, traversal rejection,
   decimal strings, exact XML/hash checks, multipart files, pagination/repeated
-  cursors, destination credentials, structured problems and item linking.
+  cursors, destination credentials, structured problems and item linking. The
+  0.3.1 regression cases cover operation-selector defaults/options and lifecycle
+  activation/deletion/reactivation with retained duplicate state.
 - n8n 2.38.1 Docker workflow: seven original-operation/version cases plus 18
   expansion cases. It exercises authenticated and public helpers, XML/binary
   input, generation, multipart uploads/outputs, pagination, signed downloads,
@@ -39,10 +48,13 @@ attaches an API key to a public/signed download request.
 
 Webhook endpoints are registered explicitly and their secrets are stored in
 n8n credentials. The receiver does not own or delete those remote endpoints.
-There is a documented, targeted exception to the lint rule requiring automatic
-webhook registration/deletion. Other targeted exceptions cover the shared
-legacy implementation filename and a catalogue-selected operation default that
-the static rule cannot infer. These are not claims of manual Cloud verification.
+Version 0.3.1 implements `webhookMethods.default.checkExists`, `create` and
+`delete` as acknowledgements of external management. Returning true from
+`checkExists` skips automatic remote creation; it does not prove registration.
+The hooks perform no management API calls and preserve duplicate state.
+Each operation selector now has a literal default, and the shared Renderwolf
+implementation lives in `lib/`. All three submission-related lint suppressions
+have been removed. These checks do not establish manual Cloud verification.
 
 S3 and webhook credential connection checks validate supplied fields/format.
 Actual access/signing is checked through the product's destination/webhook test

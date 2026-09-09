@@ -28,6 +28,18 @@ function triggerContext(request, state = {}) {
  const response = { code: 200, status(code) { this.code = code; return this; }, json(body) { this.body = body; return this; } };
  return { state, response, getNode: () => ({ name: 'Trigger', type: 'ironfangTrigger', typeVersion: 1, position: [0, 0], parameters: {} }), getRequestObject: () => ({ rawBody: request.raw, headers: request.headers }), getResponseObject: () => response, getCredentials: async () => ({ product: 'auditwolf', signingSecret: secrets.auditwolf }), getWorkflowStaticData: () => state };
 }
+test('externally managed lifecycle leaves endpoints and duplicate state untouched across reactivation', async () => {
+ const trigger = new IronfangTrigger();
+ const ctx = triggerContext(signed('auditwolf'));
+ const hooks = trigger.webhookMethods.default;
+ const hookContext = new Proxy({}, { get(_, property) { throw new Error('External lifecycle must not access ' + String(property)); } });
+ for (const hook of ['checkExists', 'create']) assert.equal(await hooks[hook].call(hookContext), true);
+ assert.equal((await trigger.webhook.call(ctx)).workflowData[0][0].json._ironfang.eventId, 'event-1');
+ for (const hook of ['delete', 'delete', 'checkExists', 'create']) assert.equal(await hooks[hook].call(hookContext), true);
+ const duplicate = await trigger.webhook.call(ctx);
+ assert.equal(duplicate.webhookResponse.duplicate, true);
+ assert.equal(duplicate.workflowData, undefined);
+});
 test('trigger rejects forgery before state changes and deduplicates signed IDs', async () => {
  const trigger = new IronfangTrigger(); const request = signed('auditwolf'); const ctx = triggerContext(request);
  const first = await trigger.webhook.call(ctx); assert.equal(first.workflowData[0][0].json._ironfang.verified, true);
