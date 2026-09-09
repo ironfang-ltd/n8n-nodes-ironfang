@@ -1,6 +1,6 @@
-# Validation record - 8 September 2026
+# Validation record - 9 September 2026
 
-The published maintenance release is **0.2.3**, source/tag `0aa55d8` / `v0.2.3`.
+Maintenance release **0.2.3** was published from source/tag `0aa55d8` / `v0.2.3`.
 GitHub Release succeeded and npm reports SLSA provenance. Tag `v0.2.2` remains
 unpublished: the new runtime gate caught fixture file ownership differences on
 GitHub runners. Verification was moved into the fixture container; no test was

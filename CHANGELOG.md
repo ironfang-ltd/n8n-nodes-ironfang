@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 — Unreleased
+## 0.3.0 — 2026-09-09
 
 - Add 97 actions across Renderwolf, Financewolf, Auditwolf and public tools,
   preserving the existing six operations and saved workflow identifiers.

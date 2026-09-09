@@ -6,8 +6,8 @@ Use Renderwolf, Financewolf, Auditwolf and Ironfang's public developer tools in
 n8n. The Ironfang action node has **103 operations**, grouped by product. Ironfang
 Trigger receives signed Auditwolf and Renderwolf events.
 
-**Release status:** 0.2.3 is the published maintenance release. The product
-expansion described here is prepared for 0.3.0 and is not in 0.2.3.
+**Release: 0.3.0.** This version includes the product expansion and signed event
+trigger described below, plus the maintenance fixes from 0.2.3.
 
 ## Installation and credentials
 
