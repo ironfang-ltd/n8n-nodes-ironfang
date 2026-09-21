@@ -9,7 +9,7 @@ export interface Response {
 }
 
 export function apiBase(value: unknown): string {
-    const url = new URL(String(value || 'https://api.ironfang.uk/renderwolf'));
+    const url = new URL(String(value || 'https://api.ironfang.uk/render'));
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
         throw new Error('Base URL must be an HTTP(S) URL without credentials, a query or fragment');
     }
@@ -107,14 +107,23 @@ export function errorOutput(context: IExecuteFunctions, error: unknown, itemInde
     };
 }
 
-export function productBase(value: unknown, product: string): string {
-    const base = apiBase(value);
-    return base.replace(/\/(renderwolf|financewolf|auditwolf|tools)$/, '') + '/' + product;
+// The API serves /render, /audit and /finance; the launch prefixes are aliases.
+// Saved product values and saved base URLs keep working, and every request goes
+// to the current prefix so that self-links in responses match it.
+const prefixes: Record<string, string> = { renderwolf: 'render', financewolf: 'finance', auditwolf: 'audit' };
+const productSuffix = /\/(renderwolf|financewolf|auditwolf|render|finance|audit|rig|tools)$/;
+
+export function productPrefix(product: string): string {
+    return prefixes[product] ?? product;
 }
 
-// Preserve historical Renderwolf bases while accepting credentials shared from
-// another product. New operations always use the partitioned productBase.
+export function productBase(value: unknown, product: string): string {
+    return apiBase(value).replace(productSuffix, '') + '/' + productPrefix(product);
+}
+
+// An origin-only base keeps the unpartitioned /v1 Render surface it was saved
+// for; a base naming any product is routed to /render.
 export function renderwolfBase(value: unknown): string {
     const base = apiBase(value);
-    return /\/(financewolf|auditwolf|tools)$/.test(base) ? productBase(base, 'renderwolf') : base;
+    return productSuffix.test(base) ? productBase(base, 'renderwolf') : base;
 }

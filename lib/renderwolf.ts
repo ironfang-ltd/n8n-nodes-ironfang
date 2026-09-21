@@ -12,8 +12,8 @@ import { credentialTest } from '../nodes/Ironfang/credentialTest';
 
 /**
  * Ironfang node. One node per vendor: pick a product with Resource, then an
- * operation within it. Renderwolf (https://ironfang.uk/renderwolf/docs) is the
- * first product; later ones are added as further resources rather than as
+ * operation within it. Ironfang Render (https://ironfang.uk/render/docs) was the
+ * first product, and its saved resource value keeps the name it launched under; later ones are added as further resources rather than as
  * separate nodes.
  *
  * Render operations return binary data; sign and usage return JSON.
@@ -25,7 +25,7 @@ export const renderwolf = {
         icon: { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' },
         usableAsTool: true,
         group: ['transform'],
-        version: [1, 1.1],
+        version: [1, 1.1, 1.2],
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
         description: 'Rendering and developer APIs from Ironfang',
         defaults: { name: 'Ironfang' },
@@ -41,7 +41,7 @@ export const renderwolf = {
                 default: 'renderwolf',
                 options: [
                     {
-                        name: 'Renderwolf',
+                        name: 'Render',
                         value: 'renderwolf',
                         description: 'Screenshots, PDFs and templated images',
                     },
