@@ -36,3 +36,11 @@ jobs:
             exit 1
           fi
           cat /tmp/ironfang-webhook-runtime.log
+      - if: matrix.node == 24
+        run: |
+          if ! bash scripts/check-postgres-install.sh > /tmp/ironfang-install.log 2>&1; then
+            cat /tmp/ironfang-install.log
+            cat /tmp/ironfang-install.log >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          cat /tmp/ironfang-install.log

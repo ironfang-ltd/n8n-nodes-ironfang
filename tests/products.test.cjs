@@ -223,5 +223,18 @@ test('catalogue scopes and visible names use the current product names', () => {
  const description = new Ironfang().description;
  for (const option of description.properties.find(p => p.name === 'resource').options) assert.doesNotMatch(option.name, /wolf/i);
  assert.deepEqual(description.properties.find(p => p.name === 'resource').options.map(o => o.value), ['auditwolf', 'financewolf', 'tools', 'renderwolf', 'rig']);
- assert.deepEqual(description.version, [1, 1.1, 1.2]);
+ assert.deepEqual(description.version, [1, 1.1, 1.2, 2]);
+});
+test('each node\'s newest version is a whole number, which n8n before 2.33 requires to install on PostgreSQL', () => {
+ const { IronfangTrigger } = require('../dist/nodes/Ironfang/IronfangTrigger.node.js');
+ for (const node of [new Ironfang(), new IronfangTrigger()]) {
+  // n8n records description.version.slice(-1)[0] for an installed community node.
+  const recorded = Array.isArray(node.description.version) ? node.description.version.slice(-1)[0] : node.description.version;
+  assert(Number.isInteger(recorded), `${node.description.name} records ${recorded}`);
+  assert.equal(recorded, Math.max(...[node.description.version].flat()));
+ }
+});
+test('version 2 pages the same lists as version 1.2', async () => {
+ const ctx = setup({ resource: 'auditwolf', operation: 'listAudits', returnAll: true }, (_, i) => ({ body: { audits: [{ id: 'audit-' + i }], ...(i === 0 ? { next_cursor: 'next' } : {}) }, headers: {}, statusCode: 200 }), { version: 2 });
+ assert.equal((await ctx.execute()).length, 2);
 });

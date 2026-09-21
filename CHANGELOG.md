@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.1 — 2026-09-21
+
+- Make the package installable on n8n releases before 2.33 that use PostgreSQL.
+  Those releases store an installed community node's newest version in an
+  integer column, and refuse 1.1 or 1.2 with `Failed to save installed package`
+  (`invalid input syntax for type integer`). n8n 2.33 changed the column. The
+  action node's newest version is now 2, which behaves as 1.2 does; versions 1,
+  1.1 and 1.2 remain for saved workflows. A test keeps each node's newest
+  version a whole number. 0.2.3 to 0.4.0 are affected.
+
 ## 0.4.0 — 2026-09-21
 
 - Follow the product names: Ironfang Render, Finance and Audit. Requests go to

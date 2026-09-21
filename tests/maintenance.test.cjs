@@ -1,7 +1,7 @@
 const test=require('node:test');const assert=require('node:assert/strict');
 const {run,payload}=require('./context.cjs');
 const {credentialTest}=require('../dist/nodes/Ironfang/credentialTest.js');
-for(const version of [1,1.1,1.2]) {
+for(const version of [1,1.1,1.2,2]) {
  test(`all operations preserve inputs, binary and linking in node v${version}`,async()=>{
   const ops=['screenshot','pdf','image','video','sign','usage'];const {ctx,output}=await run(ops.map(operation=>({operation})),{version});
   assert.equal(output.length,6);output.forEach((x,i)=>assert.deepEqual(x.pairedItem,{item:i}));

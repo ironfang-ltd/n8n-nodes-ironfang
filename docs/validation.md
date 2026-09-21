@@ -32,6 +32,19 @@ live paid job. No live authenticated customer operation was used. `npm run check
 (220 tests), both real n8n 2.38.1 Docker checks and `npm audit` (zero reported
 vulnerabilities) passed locally on 21 September.
 
+The 0.4.1 patch answers an install failure reported from an n8n dashboard:
+`Failed to save installed package`, `invalid input syntax for type integer:
+"1.1"`. n8n before 2.33.0 stores an installed community node's newest version
+in an integer column on PostgreSQL (n8n-io/n8n#34717 changed it), and 0.2.3 to
+0.4.0 declared a fractional newest version. It was reproduced on n8n 2.32.4
+with PostgreSQL 16 against the published 0.4.0 (the same error, with `"1.2"`),
+and the 0.4.1 build then installed on the same n8n from a local registry, with
+newest versions 2 and 1 recorded; it also installs on 2.38.1. The earlier
+Docker checks could not see this: they load `dist/` as a custom extension on
+SQLite, which records nothing. `scripts/check-postgres-install.sh` now runs in
+CI before release. 224 tests and all three Docker checks passed locally on
+21 September.
+
 ## Automated coverage
 
 - 0.4.0 adds cases for routing saved `/renderwolf` and origin bases to the

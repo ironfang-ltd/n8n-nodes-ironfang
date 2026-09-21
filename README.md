@@ -6,7 +6,9 @@ Use Ironfang Render, Finance, Audit and Rig, and Ironfang's public developer
 tools, in n8n. The Ironfang action node has **162 operations**, grouped by
 product. Ironfang Trigger receives signed Audit, Finance and Render events.
 
-**Release: 0.4.0.** The products are named Ironfang Render, Finance and Audit
+**Release: 0.4.1.** This patch makes the package installable on n8n releases
+before 2.33 that use PostgreSQL; see [Installation](#installation-and-credentials).
+It includes 0.4.0, in which the products are named Ironfang Render, Finance and Audit
 (formerly Renderwolf, Financewolf and Auditwolf), and the node follows: requests
 go to the `/render`, `/finance` and `/audit` API prefixes and scopes are shown as
 `render:*`, `finance:*` and `audit:*`. It adds Ironfang Rig, Finance jobs,
@@ -18,7 +20,11 @@ change; see [Compatibility with earlier names](#compatibility-with-earlier-names
 
 On self-hosted n8n, open **Settings → Community Nodes → Install** and enter
 `@ironfang/n8n-nodes-ironfang`. The old `@ironfang/n8n-nodes-renderwolf` package
-is deprecated. n8n Cloud installation requires n8n's manual package verification;
+is deprecated. Versions 0.2.3 to 0.4.0 cannot be installed on n8n releases
+before 2.33 that use PostgreSQL: n8n reports `Failed to save installed package`
+with `invalid input syntax for type integer`, because those releases store a
+node's newest version as an integer and these packages' newest node version was
+1.1 or 1.2. Install 0.4.1 or later, or upgrade n8n. n8n Cloud installation requires n8n's manual package verification;
 npm publishing and automated checks do not establish that approval.
 
 Create an `if_live_` platform API key at [portal.ironfang.uk](https://portal.ironfang.uk)
@@ -192,7 +198,8 @@ Result against the current API: upgrade to fix it.
 
 Existing version 1 workflows retain string `bytes` and `error`
 fields. Version 1.1 uses numeric `bytes` and structured errors; version 1.2 adds
-paging to the Audit lists named above and is otherwise identical. All expose exact
+paging to the Audit lists named above and is otherwise identical. Version 2,
+which new nodes use, behaves as 1.2 does. All expose exact
 `byteLength`, item links and `_ironfang` response metadata when available:
 request ID, HTTP status, cache status and charged credits. Continued errors
 include available problem codes and retry information. New file operations use
@@ -214,15 +221,17 @@ and replace placeholder IDs, bucket names and example invoice data before runnin
 All examples are inactive on import.
 
 The tested n8n runtime is **2.38.1**, using its filesystem binary storage.
-Compilation/lint/unit checks run under Node.js 22 and 24. Saved version 1, 1.1
-and 1.2 workflows are exercised; older n8n host releases are not certified by this
+Compilation/lint/unit checks run under Node.js 22 and 24. Saved version 1, 1.1,
+1.2 and 2 workflows are exercised; older n8n host releases are not certified by this
 matrix. The published node has no external runtime dependencies.
 
 ## Development and releases
 
 Run `npm ci --ignore-scripts` and `npm run check`. With Docker, run
-`bash scripts/check-runtime.sh` and `bash scripts/check-webhook-runtime.sh`.
-These execute local fixtures, including multipart/file handling and signed
+`bash scripts/check-runtime.sh`, `bash scripts/check-webhook-runtime.sh` and
+`bash scripts/check-postgres-install.sh`. The last installs the build through
+n8n's community-package API on PostgreSQL, against n8n 2.32.4, from a throwaway
+local registry. The first two execute local fixtures, including multipart/file handling and signed
 webhooks; they make no paid API calls. CI requires both before release.
 Lint runs with inline configuration disabled, matching the submission scanner's
 handling of suppression comments. Shared code in `lib/` is also linted and packaged.
