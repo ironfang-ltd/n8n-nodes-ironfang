@@ -1,6 +1,6 @@
 {
   "name": "@ironfang/n8n-nodes-ironfang",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "n8n nodes for Ironfang: Render, Finance, Audit, Rig, public tools and signed events",
   "keywords": [
     "n8n-community-node-package",

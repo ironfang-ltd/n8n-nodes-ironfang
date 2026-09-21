@@ -25,7 +25,11 @@ export const renderwolf = {
         icon: { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' },
         usableAsTool: true,
         group: ['transform'],
-        version: [1, 1.1, 1.2],
+        // n8n before 2.33 stores a community node's newest version in an integer
+        // column on PostgreSQL and cannot install a package whose newest version
+        // is fractional, so the newest version here is always a whole number.
+        // Version 2 behaves as 1.2 does.
+        version: [1, 1.1, 1.2, 2],
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
         description: 'Rendering and developer APIs from Ironfang',
         defaults: { name: 'Ironfang' },

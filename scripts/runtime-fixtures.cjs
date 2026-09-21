@@ -20,7 +20,7 @@ const expanded=[
  {resource:'auditwolf',operation:'createSitesBySiteIdAudits',siteId:'fixture-site',requestBody:{reason:'fixture'},idempotencyKey:'runtime-audit'},
  {resource:'auditwolf',operation:'listAuditsByAuditIdEvidence',auditId:'fixture-audit'},
  {typeVersion:1.2,resource:'auditwolf',operation:'listAudits',returnAll:true},
- {typeVersion:1.2,resource:'rig',operation:'listRuns',returnAll:true},
+ {typeVersion:2,resource:'rig',operation:'listRuns',returnAll:true},
  {typeVersion:1.2,resource:'financewolf',operation:'verifyEinvoiceReport',inputBinaryField:'data'},
 ];
 const expected=Buffer.from('89504e470d0a1a0a0000000049454e44','hex');
