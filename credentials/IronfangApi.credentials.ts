@@ -12,7 +12,7 @@ export class IronfangApi implements ICredentialType {
 
     displayName = 'Ironfang API';
 
-    documentationUrl = 'https://ironfang.uk/renderwolf/docs';
+    documentationUrl = 'https://ironfang.uk/render/docs';
 
     properties: INodeProperties[] = [
         {
@@ -22,19 +22,19 @@ export class IronfangApi implements ICredentialType {
             typeOptions: { password: true },
             default: '',
             required: true,
-            description: 'An if_live_ platform API key from the Ironfang portal. Existing rw_live_ Renderwolf keys remain supported.',
+            description: 'An if_live_ platform API key from the Ironfang portal. Existing rw_live_ Render keys remain supported.',
         },
         {
             displayName: 'Base URL',
             name: 'baseUrl',
             type: 'string',
-            default: 'https://api.ironfang.uk/renderwolf',
+            default: 'https://api.ironfang.uk/render',
             description:
-                'API origin or product base URL. Both legacy origin-only and /renderwolf credentials remain valid; the node selects the requested product path.',
+                'API origin or product base URL. Origin-only and /renderwolf values saved by earlier versions remain valid; the node selects the requested product path.',
         },
         {
             displayName: 'Test Product', name: 'testProduct', type: 'options', default: 'auto',
-            options: [{ name: 'Auto', value: 'auto' }, { name: 'Auditwolf', value: 'auditwolf' }, { name: 'Financewolf', value: 'financewolf' }, { name: 'Renderwolf', value: 'renderwolf' }],
+            options: [{ name: 'Auto', value: 'auto' }, { name: 'Audit', value: 'auditwolf' }, { name: 'Finance', value: 'financewolf' }, { name: 'Render', value: 'renderwolf' }, { name: 'Rig', value: 'rig' }],
             description: 'Choose a product for the read-only connection check, or discover which product accepts the key',
         },
     ];

@@ -1,7 +1,9 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 import type { IDataObject, ICredentialsDecrypted, INodeCredentialTestResult } from 'n8n-workflow';
+// Signature headers keep the launch names (Renderwolf-Signature and so on), which
+// are also the saved product values. Render and Finance issue hex secrets.
 export function signingKey(product: string, secret: string): Buffer {
-    if (product === 'renderwolf' && /^[a-f0-9]{64}$/i.test(secret)) return Buffer.from(secret, 'hex');
+    if (['renderwolf', 'financewolf'].includes(product) && /^[a-f0-9]{64}$/i.test(secret)) return Buffer.from(secret, 'hex');
     if (product === 'auditwolf' && /^awsec_[A-Za-z0-9_-]{43}$/.test(secret)) return Buffer.from(secret, 'utf8');
     throw new Error('Enter the signing secret returned by the selected product');
 }

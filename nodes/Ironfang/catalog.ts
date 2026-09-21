@@ -9,7 +9,7 @@ export const operations: Operation[] = [
     "description": "Archive a monitor (one-way; its audits and evidence remain)",
     "method": "POST",
     "path": "/v1/monitors/{monitorId}/archive",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -21,7 +21,7 @@ export const operations: Operation[] = [
     "description": "Apply one decision to several findings",
     "method": "POST",
     "path": "/v1/findings/bulk",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "json",
     "response": "json",
@@ -38,7 +38,7 @@ export const operations: Operation[] = [
     "description": "What changed against the observation before it",
     "method": "GET",
     "path": "/v1/page-observations/{observationId}/comparison",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -50,7 +50,7 @@ export const operations: Operation[] = [
     "description": "Create an encrypted S3/S3-compatible destination",
     "method": "POST",
     "path": "/v1/export-destinations",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "json",
     "response": "json",
@@ -68,10 +68,13 @@ export const operations: Operation[] = [
     "description": "Create a monitor",
     "method": "POST",
     "path": "/v1/sites/{siteId}/monitors",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
-    "input": "none",
-    "response": "json"
+    "input": "json",
+    "response": "json",
+    "example": {
+      "mode": "full_site"
+    }
   },
   {
     "product": "auditwolf",
@@ -80,7 +83,7 @@ export const operations: Operation[] = [
     "description": "Create a deterministic rule",
     "method": "POST",
     "path": "/v1/sites/{siteId}/rules",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "json",
     "response": "json",
@@ -97,7 +100,7 @@ export const operations: Operation[] = [
     "description": "Create a site",
     "method": "POST",
     "path": "/v1/sites",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "json",
     "response": "json",
@@ -113,7 +116,7 @@ export const operations: Operation[] = [
     "description": "Create a signed webhook endpoint",
     "method": "POST",
     "path": "/v1/webhooks",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "json",
     "response": "json",
@@ -131,7 +134,7 @@ export const operations: Operation[] = [
     "description": "Retire an endpoint (soft; its delivery history is kept)",
     "method": "DELETE",
     "path": "/v1/webhooks/{endpointId}",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -143,7 +146,7 @@ export const operations: Operation[] = [
     "description": "Disable a rule for future audits",
     "method": "POST",
     "path": "/v1/rules/{lineageId}/disable",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -155,7 +158,7 @@ export const operations: Operation[] = [
     "description": "Stream an authenticated raw artifact",
     "method": "GET",
     "path": "/v1/artifacts/{artifactId}",
-    "scope": "auditwolf:evidence",
+    "scope": "audit:evidence",
     "query": [],
     "input": "none",
     "response": "binary"
@@ -167,7 +170,7 @@ export const operations: Operation[] = [
     "description": "Download the independently verifiable evidence ZIP",
     "method": "GET",
     "path": "/v1/audits/{auditId}/evidence",
-    "scope": "auditwolf:evidence",
+    "scope": "audit:evidence",
     "query": [],
     "input": "none",
     "response": "binary"
@@ -179,7 +182,7 @@ export const operations: Operation[] = [
     "description": "Enable a rule for future audits",
     "method": "POST",
     "path": "/v1/rules/{lineageId}/enable",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -191,7 +194,7 @@ export const operations: Operation[] = [
     "description": "Queue a manual S3 export",
     "method": "POST",
     "path": "/v1/audits/{auditId}/exports",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "json",
     "response": "json",
@@ -206,7 +209,7 @@ export const operations: Operation[] = [
     "description": "Get audit lifecycle, compliance and integrity state",
     "method": "GET",
     "path": "/v1/audits/{auditId}",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -218,7 +221,7 @@ export const operations: Operation[] = [
     "description": "Get one finding",
     "method": "GET",
     "path": "/v1/findings/{findingId}",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -230,7 +233,7 @@ export const operations: Operation[] = [
     "description": "The numbers at the top of the finding inbox",
     "method": "GET",
     "path": "/v1/findings/summary",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -242,7 +245,7 @@ export const operations: Operation[] = [
     "description": "Get a monitor with its URL set",
     "method": "GET",
     "path": "/v1/monitors/{monitorId}",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -254,7 +257,7 @@ export const operations: Operation[] = [
     "description": "One observation with its artifacts and rule results",
     "method": "GET",
     "path": "/v1/page-observations/{observationId}",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -266,7 +269,7 @@ export const operations: Operation[] = [
     "description": "Get the active revision of a rule",
     "method": "GET",
     "path": "/v1/rules/{lineageId}",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -278,7 +281,19 @@ export const operations: Operation[] = [
     "description": "Get a site",
     "method": "GET",
     "path": "/v1/sites/{siteId}",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "auditwolf",
+    "id": "getWebhookDelivery",
+    "name": "Get Webhook Delivery",
+    "description": "Read one organisation-owned delivery",
+    "method": "GET",
+    "path": "/v1/webhook-deliveries/{deliveryId}",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -290,7 +305,7 @@ export const operations: Operation[] = [
     "description": "Tenant-scoped setup facts and recent activity for the portal",
     "method": "GET",
     "path": "/v1/home",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -302,7 +317,7 @@ export const operations: Operation[] = [
     "description": "Install a rule pack",
     "method": "POST",
     "path": "/v1/sites/{siteId}/rule-packs",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "json",
     "response": "json",
@@ -313,40 +328,137 @@ export const operations: Operation[] = [
   },
   {
     "product": "auditwolf",
+    "id": "listWebhookDeliveries",
+    "name": "List All Webhook Deliveries",
+    "description": "Page organisation webhook deliveries",
+    "method": "GET",
+    "path": "/v1/webhook-deliveries",
+    "scope": "audit:integrations",
+    "query": [
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Last delivery ID from the preceding page, exclusive. Omit on page one.",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": "",
+        "description": "Global default 50; endpoint default 200.",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Pending selects queued with no attempts; retrying includes queued after an attempt; queued selects all queued records.",
+        "enum": [
+          "pending",
+          "queued",
+          "retrying",
+          "delivering",
+          "delivered",
+          "failed"
+        ]
+      },
+      {
+        "name": "destination",
+        "label": "Destination",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "deliveries",
+      "parameter": "cursor",
+      "size": 200
+    }
+  },
+  {
+    "product": "auditwolf",
     "id": "listAuditsByAuditIdPages",
     "name": "List Audit Pages",
     "description": "Page observations of an audit",
     "method": "GET",
     "path": "/v1/audits/{auditId}/pages",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [
       {
         "name": "change",
         "label": "Change",
         "type": "string",
-        "default": ""
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
       },
       {
         "name": "compliance",
         "label": "Compliance",
         "type": "string",
-        "default": ""
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
       },
       {
         "name": "capture",
         "label": "Capture",
         "type": "string",
-        "default": ""
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
       },
       {
         "name": "q",
         "label": "Q",
         "type": "string",
-        "default": ""
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Opaque next_cursor from the preceding page. Sort order is immutable created_at descending, then ID descending. This is a continuation boundary, not a frozen snapshot; newer inserts do not shift older pages, and removed records disappear.",
+        "enum": []
       }
     ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "pages",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
   },
   {
     "product": "auditwolf",
@@ -355,17 +467,67 @@ export const operations: Operation[] = [
     "description": "List organisation audits",
     "method": "GET",
     "path": "/v1/audits",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 200,
+        "description": "Bounded page size. The existing default of 200 is preserved; the portal requests 50.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Opaque next_cursor from the preceding page. Sort order is immutable created_at descending, then ID descending. This is a continuation boundary, not a frozen snapshot; newer inserts do not shift older pages, and removed records disappear.",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Applied before pagination. active selects every non-terminal audit state.",
+        "enum": [
+          "active",
+          "created",
+          "queued",
+          "discovering",
+          "capturing",
+          "evaluating",
+          "finalising_evidence",
+          "timestamping",
+          "completed",
+          "failed",
+          "cancelled",
+          "partial",
+          "quota_blocked"
+        ]
+      },
       {
         "name": "site_id",
         "label": "Site ID",
         "type": "string",
-        "default": ""
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
       }
     ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "audits",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
   },
   {
     "product": "auditwolf",
@@ -374,7 +536,7 @@ export const operations: Operation[] = [
     "description": "The organisation's recent product events, newest first",
     "method": "GET",
     "path": "/v1/events",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -386,7 +548,7 @@ export const operations: Operation[] = [
     "description": "List S3 destinations",
     "method": "GET",
     "path": "/v1/export-destinations",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -398,10 +560,44 @@ export const operations: Operation[] = [
     "description": "List export jobs",
     "method": "GET",
     "path": "/v1/exports",
-    "scope": "auditwolf:integrations",
-    "query": [],
+    "scope": "audit:integrations",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 200,
+        "description": "Bounded page size. The existing default of 200 is preserved; the portal requests 50.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Opaque next_cursor from the preceding page. Sort order is immutable created_at descending, then ID descending. This is a continuation boundary, not a frozen snapshot; newer inserts do not shift older pages, and removed records disappear.",
+        "enum": []
+      },
+      {
+        "name": "audit_id",
+        "label": "Audit ID",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      }
+    ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "exports",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
   },
   {
     "product": "auditwolf",
@@ -410,10 +606,35 @@ export const operations: Operation[] = [
     "description": "The append-only history of a finding",
     "method": "GET",
     "path": "/v1/findings/{findingId}/events",
-    "scope": "auditwolf:read",
-    "query": [],
+    "scope": "audit:read",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 200,
+        "description": "Bounded page size. The existing default of 200 is preserved; the portal requests 50.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Opaque next_cursor from the preceding page. Sort order is immutable created_at descending, then ID descending. This is a continuation boundary, not a frozen snapshot; newer inserts do not shift older pages, and removed records disappear.",
+        "enum": []
+      }
+    ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "events",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
   },
   {
     "product": "auditwolf",
@@ -422,7 +643,7 @@ export const operations: Operation[] = [
     "description": "The finding inbox",
     "method": "GET",
     "path": "/v1/findings",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [
       {
         "name": "site_id",
@@ -502,12 +723,33 @@ export const operations: Operation[] = [
         "enum": []
       },
       {
+        "name": "sort",
+        "label": "Sort",
+        "type": "string",
+        "required": false,
+        "default": "last_seen",
+        "description": "",
+        "enum": [
+          "last_seen",
+          "created"
+        ]
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Returned next_cursor; valid only with sort=created. Omit on the first page.",
+        "enum": []
+      },
+      {
         "name": "offset",
         "label": "Offset",
         "type": "integer",
         "required": false,
         "default": 0,
-        "description": "",
+        "description": "Legacy last-seen list only; cannot be combined with sort=created.",
         "enum": []
       }
     ],
@@ -526,7 +768,7 @@ export const operations: Operation[] = [
     "description": "Packs installed on this site",
     "method": "GET",
     "path": "/v1/sites/{siteId}/rule-packs",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -538,10 +780,103 @@ export const operations: Operation[] = [
     "description": "The monitor's audits, newest first",
     "method": "GET",
     "path": "/v1/monitors/{monitorId}/runs",
-    "scope": "auditwolf:read",
-    "query": [],
+    "scope": "audit:read",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 200,
+        "description": "Bounded page size. The existing default of 200 is preserved; the portal requests 50.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Opaque next_cursor from the preceding page. Sort order is immutable created_at descending, then ID descending. This is a continuation boundary, not a frozen snapshot; newer inserts do not shift older pages, and removed records disappear.",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Applied before pagination. active selects every non-terminal audit state.",
+        "enum": [
+          "active",
+          "created",
+          "queued",
+          "discovering",
+          "capturing",
+          "evaluating",
+          "finalising_evidence",
+          "timestamping",
+          "completed",
+          "failed",
+          "cancelled",
+          "partial",
+          "quota_blocked"
+        ]
+      }
+    ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "audits",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
+  },
+  {
+    "product": "auditwolf",
+    "id": "listMonitors",
+    "name": "List Monitors",
+    "description": "List monitors",
+    "method": "GET",
+    "path": "/v1/monitors",
+    "scope": "audit:read",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 200,
+        "description": "Bounded page size. The existing default of 200 is preserved; the portal requests 50.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Opaque next_cursor from the preceding page. Sort order is immutable created_at descending, then ID descending. This is a continuation boundary, not a frozen snapshot; newer inserts do not shift older pages, and removed records disappear.",
+        "enum": []
+      },
+      {
+        "name": "site_id",
+        "label": "Site ID",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "monitors",
+      "parameter": "cursor",
+      "size": 200
+    }
   },
   {
     "product": "auditwolf",
@@ -550,19 +885,25 @@ export const operations: Operation[] = [
     "description": "A page's observation history, newest first",
     "method": "GET",
     "path": "/v1/pages/{pageId}/observations",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [
-      {
-        "name": "cursor",
-        "label": "Cursor",
-        "type": "string",
-        "default": ""
-      },
       {
         "name": "limit",
         "label": "Limit",
         "type": "integer",
-        "default": 50
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "next_cursor from the previous page",
+        "enum": []
       }
     ],
     "input": "none",
@@ -580,7 +921,7 @@ export const operations: Operation[] = [
     "description": "The rule pack catalogue",
     "method": "GET",
     "path": "/v1/rule-packs",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -592,10 +933,35 @@ export const operations: Operation[] = [
     "description": "List every revision of a rule, newest first",
     "method": "GET",
     "path": "/v1/rules/{lineageId}/revisions",
-    "scope": "auditwolf:read",
-    "query": [],
+    "scope": "audit:read",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 200,
+        "description": "Bounded page size. The existing default of 200 is preserved; the portal requests 50.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "The next_cursor from the preceding page. This collection is keyed on the revision version, which is unique and monotonic within a rule, so the cursor is that version and the page continues below it.",
+        "enum": []
+      }
+    ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "revisions",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
   },
   {
     "product": "auditwolf",
@@ -604,10 +970,58 @@ export const operations: Operation[] = [
     "description": "List site audits",
     "method": "GET",
     "path": "/v1/sites/{siteId}/audits",
-    "scope": "auditwolf:read",
-    "query": [],
+    "scope": "audit:read",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 200,
+        "description": "Bounded page size. The existing default of 200 is preserved; the portal requests 50.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Opaque next_cursor from the preceding page. Sort order is immutable created_at descending, then ID descending. This is a continuation boundary, not a frozen snapshot; newer inserts do not shift older pages, and removed records disappear.",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Applied before pagination. active selects every non-terminal audit state.",
+        "enum": [
+          "active",
+          "created",
+          "queued",
+          "discovering",
+          "capturing",
+          "evaluating",
+          "finalising_evidence",
+          "timestamping",
+          "completed",
+          "failed",
+          "cancelled",
+          "partial",
+          "quota_blocked"
+        ]
+      }
+    ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "audits",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
   },
   {
     "product": "auditwolf",
@@ -616,7 +1030,7 @@ export const operations: Operation[] = [
     "description": "List the site's monitors",
     "method": "GET",
     "path": "/v1/sites/{siteId}/monitors",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -628,7 +1042,7 @@ export const operations: Operation[] = [
     "description": "List the site's versioned deterministic rules",
     "method": "GET",
     "path": "/v1/sites/{siteId}/rules",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -640,7 +1054,7 @@ export const operations: Operation[] = [
     "description": "List sites",
     "method": "GET",
     "path": "/v1/sites",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -649,13 +1063,54 @@ export const operations: Operation[] = [
     "product": "auditwolf",
     "id": "listWebhooksByEndpointIdDeliveries",
     "name": "List Webhook Deliveries",
-    "description": "List delivery attempts",
+    "description": "List endpoint deliveries",
     "method": "GET",
     "path": "/v1/webhooks/{endpointId}/deliveries",
-    "scope": "auditwolf:integrations",
-    "query": [],
+    "scope": "audit:integrations",
+    "query": [
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Last delivery ID from the preceding page, exclusive. Omit on page one.",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": "",
+        "description": "Global default 50; endpoint default 200.",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Pending selects queued with no attempts; retrying includes queued after an attempt; queued selects all queued records.",
+        "enum": [
+          "pending",
+          "queued",
+          "retrying",
+          "delivering",
+          "delivered",
+          "failed"
+        ]
+      }
+    ],
     "input": "none",
-    "response": "json"
+    "response": "json",
+    "pagination": {
+      "key": "deliveries",
+      "parameter": "cursor",
+      "size": 200,
+      "since": 1.2
+    }
   },
   {
     "product": "auditwolf",
@@ -664,7 +1119,7 @@ export const operations: Operation[] = [
     "description": "List lifecycle webhook endpoints",
     "method": "GET",
     "path": "/v1/webhooks",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -676,7 +1131,7 @@ export const operations: Operation[] = [
     "description": "Pause scheduling",
     "method": "POST",
     "path": "/v1/monitors/{monitorId}/pause",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -688,10 +1143,15 @@ export const operations: Operation[] = [
     "description": "Replace a url_set monitor's URL list",
     "method": "PUT",
     "path": "/v1/monitors/{monitorId}/urls",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
-    "input": "none",
-    "response": "json"
+    "input": "json",
+    "response": "json",
+    "example": {
+      "urls": [
+        "https://example.com"
+      ]
+    }
   },
   {
     "product": "auditwolf",
@@ -700,7 +1160,7 @@ export const operations: Operation[] = [
     "description": "Resume scheduling",
     "method": "POST",
     "path": "/v1/monitors/{monitorId}/resume",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -712,7 +1172,7 @@ export const operations: Operation[] = [
     "description": "Retire a rule",
     "method": "DELETE",
     "path": "/v1/rules/{lineageId}",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -724,7 +1184,7 @@ export const operations: Operation[] = [
     "description": "Re-queue a failed delivery",
     "method": "POST",
     "path": "/v1/webhooks/{endpointId}/deliveries/{deliveryId}/retry",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -736,7 +1196,7 @@ export const operations: Operation[] = [
     "description": "Replace the endpoint's signing secret",
     "method": "POST",
     "path": "/v1/webhooks/{endpointId}/rotate-secret",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -748,7 +1208,7 @@ export const operations: Operation[] = [
     "description": "Queue an audit now with the monitor's scope frozen as the scheduler would freeze it",
     "method": "POST",
     "path": "/v1/monitors/{monitorId}/run",
-    "scope": "auditwolf:run",
+    "scope": "audit:run",
     "query": [],
     "input": "none",
     "response": "json",
@@ -761,7 +1221,7 @@ export const operations: Operation[] = [
     "description": "Trigger an asynchronous audit",
     "method": "POST",
     "path": "/v1/sites/{siteId}/audits",
-    "scope": "auditwolf:run",
+    "scope": "audit:run",
     "query": [],
     "input": "json",
     "response": "json",
@@ -778,7 +1238,7 @@ export const operations: Operation[] = [
     "description": "Upload and verify a connection-test object",
     "method": "POST",
     "path": "/v1/export-destinations/{destinationId}/test",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -790,7 +1250,7 @@ export const operations: Operation[] = [
     "description": "Send a signed endpoint.test event",
     "method": "POST",
     "path": "/v1/webhooks/{endpointId}/test",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -802,7 +1262,7 @@ export const operations: Operation[] = [
     "description": "Uninstall a pack",
     "method": "DELETE",
     "path": "/v1/rule-packs/installed/{installationId}",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -814,7 +1274,7 @@ export const operations: Operation[] = [
     "description": "Assign, schedule, acknowledge, accept the risk, or close a finding",
     "method": "PATCH",
     "path": "/v1/findings/{findingId}",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "json",
     "response": "json",
@@ -827,10 +1287,13 @@ export const operations: Operation[] = [
     "description": "Change a monitor's name, cadence, anchor, timezone, capture profile or change policy",
     "method": "PATCH",
     "path": "/v1/monitors/{monitorId}",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
-    "input": "none",
-    "response": "json"
+    "input": "json",
+    "response": "json",
+    "example": {
+      "mode": "full_site"
+    }
   },
   {
     "product": "auditwolf",
@@ -839,7 +1302,7 @@ export const operations: Operation[] = [
     "description": "Revise a rule",
     "method": "PATCH",
     "path": "/v1/rules/{lineageId}",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "json",
     "response": "json",
@@ -852,10 +1315,11 @@ export const operations: Operation[] = [
     "description": "Enable or disable an endpoint, or change its subscribed events",
     "method": "PATCH",
     "path": "/v1/webhooks/{endpointId}",
-    "scope": "auditwolf:integrations",
+    "scope": "audit:integrations",
     "query": [],
-    "input": "none",
-    "response": "json"
+    "input": "json",
+    "response": "json",
+    "example": {}
   },
   {
     "product": "auditwolf",
@@ -864,7 +1328,7 @@ export const operations: Operation[] = [
     "description": "Upgrade an installed pack, or change its values",
     "method": "POST",
     "path": "/v1/rule-packs/installed/{installationId}/upgrade",
-    "scope": "auditwolf:manage",
+    "scope": "audit:manage",
     "query": [],
     "input": "json",
     "response": "json",
@@ -877,7 +1341,107 @@ export const operations: Operation[] = [
     "description": "Credits, quota position, projection and hosted evidence",
     "method": "GET",
     "path": "/v1/usage",
-    "scope": "auditwolf:read",
+    "scope": "audit:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "cancelEinvoiceBatch",
+    "name": "Cancel Batch",
+    "description": "Cancel an ordered batch",
+    "method": "POST",
+    "path": "/v1/einvoices/batches/{id}/cancel",
+    "scope": "finance:einvoices:write",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "cancelEinvoiceJob",
+    "name": "Cancel Job",
+    "description": "Cancel an async job",
+    "method": "POST",
+    "path": "/v1/einvoices/jobs/{id}/cancel",
+    "scope": "finance:einvoices:write",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "createEinvoiceBatch",
+    "name": "Create Batch",
+    "description": "Create an ordered batch",
+    "method": "POST",
+    "path": "/v1/einvoices/batches",
+    "scope": "finance:einvoices:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "jobs": [
+        {
+          "operation": "validate",
+          "document_base64": "PEludm9pY2UvPg==",
+          "options": {
+            "ruleset": "latest",
+            "profile": "peppol-bis-billing-3"
+          }
+        }
+      ]
+    },
+    "idempotency": true
+  },
+  {
+    "product": "financewolf",
+    "id": "createEinvoiceDestination",
+    "name": "Create Destination",
+    "description": "Create a webhook or S3 destination",
+    "method": "POST",
+    "path": "/v1/einvoices/destinations",
+    "scope": "finance:einvoices:destinations:manage",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "name": "n8n delivery",
+      "config": {
+        "url": "https://example.com/webhook"
+      }
+    }
+  },
+  {
+    "product": "financewolf",
+    "id": "createEinvoiceJob",
+    "name": "Create Job",
+    "description": "Create an async job",
+    "method": "POST",
+    "path": "/v1/einvoices/jobs",
+    "scope": "finance:einvoices:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "operation": "validate",
+      "document_base64": "PEludm9pY2UvPg==",
+      "options": {
+        "ruleset": "latest",
+        "profile": "peppol-bis-billing-3"
+      }
+    },
+    "idempotency": true
+  },
+  {
+    "product": "financewolf",
+    "id": "deleteEinvoiceDestination",
+    "name": "Delete Destination",
+    "description": "Retire a destination and erase its stored credentials",
+    "method": "DELETE",
+    "path": "/v1/einvoices/destinations/{id}",
+    "scope": "finance:einvoices:destinations:manage",
     "query": [],
     "input": "none",
     "response": "json"
@@ -889,10 +1453,25 @@ export const operations: Operation[] = [
     "description": "Delete saved result bytes and findings",
     "method": "DELETE",
     "path": "/v1/einvoices/results/{id}",
-    "scope": "financewolf:einvoices:write",
+    "scope": "finance:einvoices:write",
     "query": [],
     "input": "none",
     "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "createEinvoiceReport",
+    "name": "Download Signed Report",
+    "description": "Download a signed report for a retained result",
+    "method": "POST",
+    "path": "/v1/einvoices/reports",
+    "scope": "finance:einvoices:read",
+    "query": [],
+    "input": "json",
+    "response": "binary",
+    "example": {
+      "operation_id": "00000000-0000-0000-0000-000000000000"
+    }
   },
   {
     "product": "financewolf",
@@ -901,7 +1480,7 @@ export const operations: Operation[] = [
     "description": "Generate and validate one UBL e-invoice",
     "method": "POST",
     "path": "/v1/einvoices/generate",
-    "scope": "financewolf:einvoices:write",
+    "scope": "finance:einvoices:write",
     "query": [
       {
         "name": "ruleset",
@@ -988,12 +1567,73 @@ export const operations: Operation[] = [
   },
   {
     "product": "financewolf",
+    "id": "getEinvoiceBatch",
+    "name": "Get Batch",
+    "description": "Get an ordered batch",
+    "method": "GET",
+    "path": "/v1/einvoices/batches/{id}",
+    "scope": "finance:einvoices:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "getEinvoiceDelivery",
+    "name": "Get Delivery",
+    "description": "Read a delivery and its immutable attempt history",
+    "method": "GET",
+    "path": "/v1/einvoices/deliveries/{id}",
+    "scope": "finance:einvoices:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "getEinvoiceDestination",
+    "name": "Get Destination",
+    "description": "Read a destination without its credentials",
+    "method": "GET",
+    "path": "/v1/einvoices/destinations/{id}",
+    "scope": "finance:einvoices:destinations:manage",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "getEinvoiceJob",
+    "name": "Get Job",
+    "description": "Get an async job",
+    "method": "GET",
+    "path": "/v1/einvoices/jobs/{id}",
+    "scope": "finance:einvoices:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "getEinvoiceReportKeys",
+    "name": "Get Report Signing Keys",
+    "description": "Read Ironfang Finance report signing public keys",
+    "method": "GET",
+    "path": "/v1/einvoices/reports/keys",
+    "scope": "none",
+    "query": [],
+    "input": "none",
+    "response": "json",
+    "public": true
+  },
+  {
+    "product": "financewolf",
     "id": "getValidationResult",
     "name": "Get Result",
     "description": "Read a saved validation or generation result",
     "method": "GET",
     "path": "/v1/einvoices/results/{id}",
-    "scope": "financewolf:einvoices:read",
+    "scope": "finance:einvoices:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1005,7 +1645,7 @@ export const operations: Operation[] = [
     "description": "Fetch one ruleset by its immutable id",
     "method": "GET",
     "path": "/v1/einvoices/rulesets/{id}",
-    "scope": "financewolf:einvoices:rulesets:read",
+    "scope": "finance:einvoices:rulesets:read",
     "query": [],
     "input": "none",
     "response": "json",
@@ -1013,12 +1653,180 @@ export const operations: Operation[] = [
   },
   {
     "product": "financewolf",
+    "id": "listEinvoiceBatches",
+    "name": "List Batches",
+    "description": "List batches",
+    "method": "GET",
+    "path": "/v1/einvoices/batches",
+    "scope": "finance:einvoices:read",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Pass next_cursor from the preceding page; empty means the first page.",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "batches",
+      "parameter": "cursor",
+      "size": 100
+    }
+  },
+  {
+    "product": "financewolf",
+    "id": "listEinvoiceDeliveries",
+    "name": "List Deliveries",
+    "description": "List delivery history with keyset pagination",
+    "method": "GET",
+    "path": "/v1/einvoices/deliveries",
+    "scope": "finance:einvoices:read",
+    "query": [
+      {
+        "name": "destination",
+        "label": "Destination",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "operation_id",
+        "label": "Operation ID",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": [
+          "pending",
+          "retrying",
+          "delivering",
+          "delivered",
+          "failed"
+        ]
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "deliveries",
+      "parameter": "cursor",
+      "size": 100
+    }
+  },
+  {
+    "product": "financewolf",
+    "id": "listEinvoiceDestinations",
+    "name": "List Destinations",
+    "description": "List active destination configurations",
+    "method": "GET",
+    "path": "/v1/einvoices/destinations",
+    "scope": "finance:einvoices:destinations:manage",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "listEinvoiceJobs",
+    "name": "List Jobs",
+    "description": "List jobs",
+    "method": "GET",
+    "path": "/v1/einvoices/jobs",
+    "scope": "finance:einvoices:read",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Pass next_cursor from the preceding page; empty means the first page.",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": [
+          "queued",
+          "running",
+          "completed",
+          "failed",
+          "cancelled"
+        ]
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "jobs",
+      "parameter": "cursor",
+      "size": 100
+    }
+  },
+  {
+    "product": "financewolf",
     "id": "listValidationResults",
     "name": "List Results",
-    "description": "List saved validation results",
+    "description": "List saved validation and generation results",
     "method": "GET",
     "path": "/v1/einvoices/results",
-    "scope": "financewolf:einvoices:read",
+    "scope": "finance:einvoices:read",
     "query": [
       {
         "name": "before",
@@ -1026,7 +1834,76 @@ export const operations: Operation[] = [
         "type": "string",
         "required": false,
         "default": "",
-        "description": "Last operation ID from the preceding page.",
+        "description": "Legacy last operation ID; cannot be combined with cursor. Unknown or foreign IDs return 404.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Include empty on the first page to opt into stable cursors, then pass next_cursor here.",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 20,
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "kind",
+        "label": "Kind",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": [
+          "validate",
+          "generate"
+        ]
+      },
+      {
+        "name": "outcome",
+        "label": "Outcome",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": [
+          "valid",
+          "invalid"
+        ]
+      },
+      {
+        "name": "ruleset",
+        "label": "Ruleset",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "q",
+        "label": "Q",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Case-insensitive literal substring of operation ID or an available document name. NUL is rejected.",
+        "enum": []
+      },
+      {
+        "name": "operation_id",
+        "label": "Operation ID",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Exact tenant-owned operation ID for bounded metadata lookup. Unknown or foreign IDs return an empty list.",
         "enum": []
       }
     ],
@@ -1045,7 +1922,7 @@ export const operations: Operation[] = [
     "description": "List rulesets available for selection and reproduction",
     "method": "GET",
     "path": "/v1/einvoices/rulesets",
-    "scope": "financewolf:einvoices:rulesets:read",
+    "scope": "finance:einvoices:rulesets:read",
     "query": [
       {
         "name": "document_type",
@@ -1090,12 +1967,85 @@ export const operations: Operation[] = [
   },
   {
     "product": "financewolf",
+    "id": "renderEinvoice",
+    "name": "Render E-Invoice PDF",
+    "description": "Render a saved generation as a readable PDF",
+    "method": "POST",
+    "path": "/v1/einvoices/render",
+    "scope": "finance:einvoices:read",
+    "query": [],
+    "input": "json",
+    "response": "binary",
+    "example": {
+      "operation_id": "00000000-0000-0000-0000-000000000000"
+    }
+  },
+  {
+    "product": "financewolf",
+    "id": "retryEinvoiceDelivery",
+    "name": "Retry Delivery",
+    "description": "Retry failed delivery without rerunning validation",
+    "method": "POST",
+    "path": "/v1/einvoices/deliveries/{id}/retry",
+    "scope": "finance:einvoices:destinations:manage",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
+    "id": "updateEinvoiceDestination",
+    "name": "Update Destination",
+    "description": "Enable, disable or rotate destination credentials",
+    "method": "PATCH",
+    "path": "/v1/einvoices/destinations/{id}",
+    "scope": "finance:einvoices:destinations:manage",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "enabled": true
+    }
+  },
+  {
+    "product": "financewolf",
+    "id": "getEinvoiceUsage",
+    "name": "Usage",
+    "description": "Reconcile Ironfang Finance document usage",
+    "method": "GET",
+    "path": "/v1/einvoices/usage",
+    "scope": "finance:billing:manage",
+    "query": [
+      {
+        "name": "start",
+        "label": "Start",
+        "type": "string",
+        "required": true,
+        "default": "",
+        "description": "RFC3339 inclusive start / exclusive end; at most 366 days.",
+        "enum": []
+      },
+      {
+        "name": "end",
+        "label": "End",
+        "type": "string",
+        "required": true,
+        "default": "",
+        "description": "RFC3339 inclusive start / exclusive end; at most 366 days.",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "financewolf",
     "id": "validateEInvoice",
     "name": "Validate E-Invoice",
     "description": "Validate one e-invoice XML document",
     "method": "POST",
     "path": "/v1/einvoices/validate",
-    "scope": "financewolf:einvoices:write",
+    "scope": "finance:einvoices:write",
     "query": [
       {
         "name": "ruleset",
@@ -1137,13 +2087,26 @@ export const operations: Operation[] = [
     "public": true
   },
   {
+    "product": "financewolf",
+    "id": "verifyEinvoiceReport",
+    "name": "Verify Signed Report",
+    "description": "Verify report integrity without an account",
+    "method": "POST",
+    "path": "/v1/einvoices/reports/verify",
+    "scope": "none",
+    "query": [],
+    "input": "zip",
+    "response": "json",
+    "public": true
+  },
+  {
     "product": "renderwolf",
     "id": "cancelJob",
     "name": "Cancel Job",
     "description": "Cancel a job",
     "method": "DELETE",
     "path": "/v1/jobs/{id}",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1152,7 +2115,7 @@ export const operations: Operation[] = [
     "product": "renderwolf",
     "id": "getCapabilities",
     "name": "Capabilities",
-    "description": "What Renderwolf does, is building and does not offer",
+    "description": "What Ironfang Render does, is building and does not offer",
     "method": "GET",
     "path": "/v1/capabilities",
     "scope": "none",
@@ -1168,7 +2131,7 @@ export const operations: Operation[] = [
     "description": "Register a delivery destination",
     "method": "POST",
     "path": "/v1/destinations",
-    "scope": "renderwolf:destinations",
+    "scope": "render:destinations",
     "query": [],
     "input": "json",
     "response": "json",
@@ -1184,7 +2147,7 @@ export const operations: Operation[] = [
     "description": "Create a template",
     "method": "POST",
     "path": "/v1/templates",
-    "scope": "renderwolf:templates:write",
+    "scope": "render:templates:write",
     "query": [],
     "input": "json",
     "response": "json",
@@ -1202,7 +2165,7 @@ export const operations: Operation[] = [
     "description": "Remove a destination",
     "method": "DELETE",
     "path": "/v1/destinations/{id}",
-    "scope": "renderwolf:destinations",
+    "scope": "render:destinations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1214,7 +2177,7 @@ export const operations: Operation[] = [
     "description": "Delete a template",
     "method": "DELETE",
     "path": "/v1/templates/{id}",
-    "scope": "renderwolf:templates:write",
+    "scope": "render:templates:write",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1226,7 +2189,7 @@ export const operations: Operation[] = [
     "description": "Collect a job's result",
     "method": "GET",
     "path": "/v1/jobs/{id}/result",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "none",
     "response": "redirect"
@@ -1238,7 +2201,7 @@ export const operations: Operation[] = [
     "description": "Poll a batch",
     "method": "GET",
     "path": "/v1/batches/{id}",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1250,7 +2213,7 @@ export const operations: Operation[] = [
     "description": "One delivery, with the body it posted",
     "method": "GET",
     "path": "/v1/deliveries/{id}",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1262,7 +2225,7 @@ export const operations: Operation[] = [
     "description": "Get a destination",
     "method": "GET",
     "path": "/v1/destinations/{id}",
-    "scope": "renderwolf:destinations",
+    "scope": "render:destinations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1274,7 +2237,7 @@ export const operations: Operation[] = [
     "description": "Poll a job",
     "method": "GET",
     "path": "/v1/jobs/{id}",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1286,10 +2249,46 @@ export const operations: Operation[] = [
     "description": "Fetch a template",
     "method": "GET",
     "path": "/v1/templates/{id}",
-    "scope": "renderwolf:templates:read",
+    "scope": "render:templates:read",
     "query": [],
     "input": "none",
     "response": "json"
+  },
+  {
+    "product": "renderwolf",
+    "id": "listBatches",
+    "name": "List Batches",
+    "description": "List batches",
+    "method": "GET",
+    "path": "/v1/batches",
+    "scope": "render:render",
+    "query": [
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Pass next_cursor from the preceding page; empty means the first page.",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "batches",
+      "parameter": "cursor",
+      "size": 100
+    }
   },
   {
     "product": "renderwolf",
@@ -1298,7 +2297,7 @@ export const operations: Operation[] = [
     "description": "List deliveries",
     "method": "GET",
     "path": "/v1/deliveries",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [
       {
         "name": "destination",
@@ -1310,11 +2309,35 @@ export const operations: Operation[] = [
         "enum": []
       },
       {
+        "name": "job_id",
+        "label": "Job ID",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": [
+          "pending",
+          "retrying",
+          "delivering",
+          "delivered",
+          "failed"
+        ]
+      },
+      {
         "name": "limit",
         "label": "Limit",
         "type": "integer",
         "required": false,
-        "default": "",
+        "default": 50,
         "description": "",
         "enum": []
       },
@@ -1343,7 +2366,7 @@ export const operations: Operation[] = [
     "description": "List destinations",
     "method": "GET",
     "path": "/v1/destinations",
-    "scope": "renderwolf:destinations",
+    "scope": "render:destinations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1355,7 +2378,7 @@ export const operations: Operation[] = [
     "description": "List jobs",
     "method": "GET",
     "path": "/v1/jobs",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [
       {
         "name": "status",
@@ -1400,7 +2423,7 @@ export const operations: Operation[] = [
     "description": "Request history",
     "method": "GET",
     "path": "/v1/requests",
-    "scope": "renderwolf:usage:read",
+    "scope": "render:usage:read",
     "query": [
       {
         "name": "since",
@@ -1522,7 +2545,7 @@ export const operations: Operation[] = [
     "description": "List templates",
     "method": "GET",
     "path": "/v1/templates",
-    "scope": "renderwolf:templates:read",
+    "scope": "render:templates:read",
     "query": [
       {
         "name": "cursor",
@@ -1530,7 +2553,7 @@ export const operations: Operation[] = [
         "type": "string",
         "required": false,
         "default": "",
-        "description": "Opaque next_cursor from the previous page.",
+        "description": "Opaque next_cursor from the previous page; empty means the first page.",
         "enum": []
       },
       {
@@ -1567,7 +2590,7 @@ export const operations: Operation[] = [
     "description": "Render a QR code",
     "method": "POST",
     "path": "/v1/qr",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "json",
     "response": "binary",
@@ -1582,7 +2605,7 @@ export const operations: Operation[] = [
     "description": "Send a delivery again",
     "method": "POST",
     "path": "/v1/deliveries/{id}/redeliver",
-    "scope": "renderwolf:destinations",
+    "scope": "render:destinations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1594,7 +2617,7 @@ export const operations: Operation[] = [
     "description": "Render a scrolling website preview",
     "method": "POST",
     "path": "/v1/site-preview",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "json",
     "response": "multipart",
@@ -1612,7 +2635,7 @@ export const operations: Operation[] = [
     "description": "Submit up to 100 jobs together",
     "method": "POST",
     "path": "/v1/batches",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "json",
     "response": "json",
@@ -1635,7 +2658,7 @@ export const operations: Operation[] = [
     "description": "Submit a durable render job",
     "method": "POST",
     "path": "/v1/jobs",
-    "scope": "renderwolf:render",
+    "scope": "render:render",
     "query": [],
     "input": "json",
     "response": "json",
@@ -1654,7 +2677,7 @@ export const operations: Operation[] = [
     "description": "Test a destination now",
     "method": "POST",
     "path": "/v1/destinations/{id}/test",
-    "scope": "renderwolf:destinations",
+    "scope": "render:destinations",
     "query": [],
     "input": "none",
     "response": "json"
@@ -1666,7 +2689,7 @@ export const operations: Operation[] = [
     "description": "Rename or enable a destination",
     "method": "PATCH",
     "path": "/v1/destinations/{id}",
-    "scope": "renderwolf:destinations",
+    "scope": "render:destinations",
     "query": [],
     "input": "json",
     "response": "json",
@@ -1679,7 +2702,7 @@ export const operations: Operation[] = [
     "description": "Replace a template",
     "method": "PUT",
     "path": "/v1/templates/{id}",
-    "scope": "renderwolf:templates:write",
+    "scope": "render:templates:write",
     "query": [],
     "input": "json",
     "response": "json",
@@ -1689,6 +2712,665 @@ export const operations: Operation[] = [
       "width": 1200,
       "height": 630
     }
+  },
+  {
+    "product": "rig",
+    "id": "addFault",
+    "name": "Add Fault",
+    "description": "Arm a fault",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/faults",
+    "scope": "rig:run",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "type": "delay",
+      "resource": "order_webhook",
+      "delay": "5s"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "cancelRun",
+    "name": "Cancel Run",
+    "description": "Cancel a run",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/cancel",
+    "scope": "rig:run",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "reason": "Cancelled from n8n"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "createConnector",
+    "name": "Create Connector",
+    "description": "Mint a connector and its bootstrap token",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/connectors",
+    "scope": "rig:connector",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "name": "n8n"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "createProject",
+    "name": "Create Project",
+    "description": "Create a project",
+    "method": "POST",
+    "path": "/v1/projects",
+    "scope": "rig:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "slug": "ironfang-platform",
+      "name": "Ironfang Platform"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "createResource",
+    "name": "Create Resource",
+    "description": "Allocate a resource",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/resources",
+    "scope": "rig:run",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "name": "order_webhook",
+      "type": "callback"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "createRun",
+    "name": "Create Run",
+    "description": "Start a run",
+    "method": "POST",
+    "path": "/v1/suites/{suiteId}/runs",
+    "scope": "rig:run",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "ttl": "30m",
+      "reason": "n8n workflow run"
+    },
+    "idempotency": true
+  },
+  {
+    "product": "rig",
+    "id": "createRunReceipt",
+    "name": "Create Run Receipt",
+    "description": "A signed receipt for the run",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/receipt",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "createSuite",
+    "name": "Create Suite",
+    "description": "Create a suite",
+    "method": "POST",
+    "path": "/v1/suites",
+    "scope": "rig:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "project_id": "",
+      "slug": "signup",
+      "name": "Signup flow",
+      "definition": {
+        "version": 1,
+        "resources": {
+          "customer_email": {
+            "type": "email"
+          },
+          "stripe_callback": {
+            "type": "callback",
+            "connector": {
+              "route": "stripe"
+            }
+          },
+          "shipping_api": {
+            "type": "mock_http"
+          }
+        }
+      }
+    }
+  },
+  {
+    "product": "rig",
+    "id": "getEventPayload",
+    "name": "Download Event Payload",
+    "description": "Download an event's payload",
+    "method": "GET",
+    "path": "/v1/runs/{runId}/events/{eventId}/payload",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "binary"
+  },
+  {
+    "product": "rig",
+    "id": "exportEvidence",
+    "name": "Export Run Evidence",
+    "description": "Export the run's evidence bundle",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/evidence",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "binary",
+    "accept": "application/zip"
+  },
+  {
+    "product": "rig",
+    "id": "finishRun",
+    "name": "Finish Run",
+    "description": "Finish a run",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/finish",
+    "scope": "rig:run",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "outcome": "pass"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "getEnvironment",
+    "name": "Get Environment",
+    "description": "The hosts, bounds and retention a client builds against",
+    "method": "GET",
+    "path": "/v1/environment",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "getEvent",
+    "name": "Get Event",
+    "description": "Get an event",
+    "method": "GET",
+    "path": "/v1/runs/{runId}/events/{eventId}",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "getProject",
+    "name": "Get Project",
+    "description": "Get a project",
+    "method": "GET",
+    "path": "/v1/projects/{projectId}",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "getRun",
+    "name": "Get Run",
+    "description": "Get a run",
+    "method": "GET",
+    "path": "/v1/runs/{runId}",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "getSuite",
+    "name": "Get Suite",
+    "description": "Get a suite",
+    "method": "GET",
+    "path": "/v1/suites/{suiteId}",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "holdRun",
+    "name": "Hold Run",
+    "description": "Keep the run from retention until a date",
+    "method": "PUT",
+    "path": "/v1/runs/{runId}/hold",
+    "scope": "rig:run",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "until": "2027-01-01T00:00:00Z"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "getProductHome",
+    "name": "Home",
+    "description": "Tenant-scoped setup facts and recent activity for the portal",
+    "method": "GET",
+    "path": "/v1/home",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "listConnectors",
+    "name": "List Connectors",
+    "description": "List a run's connectors",
+    "method": "GET",
+    "path": "/v1/runs/{runId}/connectors",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "listEvents",
+    "name": "List Events",
+    "description": "Read the timeline",
+    "method": "GET",
+    "path": "/v1/runs/{runId}/events",
+    "scope": "rig:read",
+    "query": [
+      {
+        "name": "since",
+        "label": "Since",
+        "type": "integer",
+        "required": false,
+        "default": 0,
+        "description": "Return events with a sequence greater than this.",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 100,
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "events",
+      "parameter": "since",
+      "size": 500,
+      "next": "next_since"
+    }
+  },
+  {
+    "product": "rig",
+    "id": "listEvidenceKeys",
+    "name": "List Evidence Signing Keys",
+    "description": "The keys evidence is signed with",
+    "method": "GET",
+    "path": "/v1/evidence/keys",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "listFaults",
+    "name": "List Faults",
+    "description": "List a run's faults",
+    "method": "GET",
+    "path": "/v1/runs/{runId}/faults",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "listProjects",
+    "name": "List Projects",
+    "description": "List projects",
+    "method": "GET",
+    "path": "/v1/projects",
+    "scope": "rig:read",
+    "query": [
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "The next_cursor of the previous page.",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "projects",
+      "parameter": "cursor",
+      "size": 100
+    }
+  },
+  {
+    "product": "rig",
+    "id": "listResources",
+    "name": "List Resources",
+    "description": "List a run's resources",
+    "method": "GET",
+    "path": "/v1/runs/{runId}/resources",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "listRuns",
+    "name": "List Runs",
+    "description": "List runs",
+    "method": "GET",
+    "path": "/v1/runs",
+    "scope": "rig:read",
+    "query": [
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "suite",
+        "label": "Suite",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": [
+          "active",
+          "finished",
+          "cancelled",
+          "expired"
+        ]
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "The next_cursor of the previous page.",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "runs",
+      "parameter": "cursor",
+      "size": 100
+    }
+  },
+  {
+    "product": "rig",
+    "id": "listSuiteVersions",
+    "name": "List Suite Versions",
+    "description": "List a suite's versions",
+    "method": "GET",
+    "path": "/v1/suites/{suiteId}/versions",
+    "scope": "rig:read",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "listSuites",
+    "name": "List Suites",
+    "description": "List suites",
+    "method": "GET",
+    "path": "/v1/suites",
+    "scope": "rig:read",
+    "query": [
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Limit to one project by id.",
+        "enum": []
+      },
+      {
+        "name": "cursor",
+        "label": "Cursor",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "The next_cursor of the previous page.",
+        "enum": []
+      },
+      {
+        "name": "limit",
+        "label": "Limit",
+        "type": "integer",
+        "required": false,
+        "default": 50,
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json",
+    "pagination": {
+      "key": "suites",
+      "parameter": "cursor",
+      "size": 100
+    }
+  },
+  {
+    "product": "rig",
+    "id": "releaseRun",
+    "name": "Release Run Hold",
+    "description": "Lift a retention hold",
+    "method": "DELETE",
+    "path": "/v1/runs/{runId}/hold",
+    "scope": "rig:run",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "removeFault",
+    "name": "Remove Fault",
+    "description": "Disarm a fault",
+    "method": "DELETE",
+    "path": "/v1/runs/{runId}/faults/{faultId}",
+    "scope": "rig:run",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "replayCallback",
+    "name": "Replay Callback",
+    "description": "Replay a recorded callback",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/events/{eventId}/replay",
+    "scope": "rig:run",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "reviseSuite",
+    "name": "Revise Suite",
+    "description": "Revise a suite",
+    "method": "PUT",
+    "path": "/v1/suites/{suiteId}",
+    "scope": "rig:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "definition": {
+        "version": 1,
+        "resources": {
+          "customer_email": {
+            "type": "email"
+          },
+          "stripe_callback": {
+            "type": "callback",
+            "connector": {
+              "route": "stripe"
+            }
+          },
+          "shipping_api": {
+            "type": "mock_http"
+          }
+        }
+      }
+    }
+  },
+  {
+    "product": "rig",
+    "id": "setMockRules",
+    "name": "Set Mock Rules",
+    "description": "Replace a mock's rules",
+    "method": "PUT",
+    "path": "/v1/runs/{runId}/resources/{resourceId}/mock",
+    "scope": "rig:run",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "rules": [
+        {
+          "match": {
+            "method": "POST",
+            "path": "/v1/ship/{id}"
+          },
+          "respond": {
+            "status": 200,
+            "json": {
+              "ok": true
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "product": "rig",
+    "id": "getUsage",
+    "name": "Usage",
+    "description": "Runs and events in a window",
+    "method": "GET",
+    "path": "/v1/usage",
+    "scope": "rig:read",
+    "query": [
+      {
+        "name": "since",
+        "label": "Since",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Start of the window, RFC 3339; default the first of the current UTC month.",
+        "enum": []
+      },
+      {
+        "name": "until",
+        "label": "Until",
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "End of the window, RFC 3339, exclusive; default now.",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "rig",
+    "id": "waitForEvent",
+    "name": "Wait For Event",
+    "description": "Wait for an event",
+    "method": "POST",
+    "path": "/v1/runs/{runId}/wait",
+    "scope": "rig:read",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "type": "callback.received",
+      "resource": "order_webhook",
+      "timeout": "30s"
+    },
+    "timeout": 100000
   },
   {
     "product": "tools",

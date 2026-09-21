@@ -31,6 +31,11 @@ const operationParameters: INodeProperties[] = [
     },
     {
         displayName: 'Operation', name: 'operation', type: 'options', noDataExpression: true,
+        default: 'listRuns', displayOptions: { show: { resource: ['rig'] } },
+        options: operationOptions('rig'),
+    },
+    {
+        displayName: 'Operation', name: 'operation', type: 'options', noDataExpression: true,
         default: 'convertImage', displayOptions: { show: { resource: ['tools'] } },
         options: operationOptions('tools'),
     },
@@ -41,14 +46,14 @@ export class Ironfang implements INodeType {
         ...legacy.description,
         usableAsTool: true,
         icon: { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' },
-        subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-        description: 'Renderwolf, Financewolf, Auditwolf and public developer tools',
+        subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"].replace("wolf", "")}}',
+        description: 'Ironfang Render, Finance, Audit and Rig, and public developer tools',
         credentials: [
-            { name: 'ironfangS3', required: true, testedBy: 'ironfangS3Test', displayOptions: { show: { operation: ['createDestination', 'createExportDestinations'] }, hide: { destinationType: ['webhook'] } } },
-            { name: 'ironfangApi', required: true, testedBy: 'ironfangApiTest', displayOptions: { show: { resource: ['renderwolf', 'auditwolf', 'financewolf'] }, hide: { authentication: ['public'] } } },
+            { name: 'ironfangS3', required: true, testedBy: 'ironfangS3Test', displayOptions: { show: { operation: ['createDestination', 'createExportDestinations', 'createEinvoiceDestination', 'updateEinvoiceDestination'] }, hide: { destinationType: ['webhook'] } } },
+            { name: 'ironfangApi', required: true, testedBy: 'ironfangApiTest', displayOptions: { show: { resource: ['renderwolf', 'auditwolf', 'financewolf', 'rig'] }, hide: { authentication: ['public'] } } },
         ],
         properties: [
-            { displayName: 'Resource', name: 'resource', type: 'options', noDataExpression: true, default: 'renderwolf', options: [{ name: 'Auditwolf', value: 'auditwolf' }, { name: 'Financewolf', value: 'financewolf' }, { name: 'Renderwolf', value: 'renderwolf' }, { name: 'Public Tool', value: 'tools' }] },
+            { displayName: 'Resource', name: 'resource', type: 'options', noDataExpression: true, default: 'renderwolf', options: [{ name: 'Audit', value: 'auditwolf', description: 'Site audits, findings, monitors and evidence' }, { name: 'Finance', value: 'financewolf', description: 'E-invoice generation, validation, jobs and delivery' }, { name: 'Public Tool', value: 'tools', description: 'Free developer tools that need no account' }, { name: 'Render', value: 'renderwolf', description: 'Screenshots, PDFs, video clips and templated images' }, { name: 'Rig', value: 'rig', description: 'Integration test runs, mocks, faults and evidence' }] },
             ...operationParameters,
             ...legacy.description.properties.slice(2).map(field => ({ ...field, displayOptions: { ...field.displayOptions, show: { ...field.displayOptions?.show, resource: ['renderwolf'] } } })),
             ...renderOptions,

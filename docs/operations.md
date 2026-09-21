@@ -1,23 +1,23 @@
 # Operation reference
 
-Generated from Ironfang main `2230209`. Runtime endpoint selection is fixed by this catalogue.
+Generated from Ironfang main `de1547b`. Runtime endpoint selection is fixed by this catalogue.
 Complex request bodies use JSON so all supported schema fields remain available. Replace placeholders with your own values.
 
-## auditwolf / Archive Monitor
+## audit / Archive Monitor
 
-`POST /auditwolf/v1/monitors/{monitorId}/archive`. Scope: `auditwolf:manage`.
+`POST /audit/v1/monitors/{monitorId}/archive`. Scope: `audit:manage`.
 
 Archive a monitor (one-way; its audits and evidence remain)
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Bulk Update Findings
+## audit / Bulk Update Findings
 
-`POST /auditwolf/v1/findings/bulk`. Scope: `auditwolf:manage`.
+`POST /audit/v1/findings/bulk`. Scope: `audit:manage`.
 
 Apply one decision to several findings
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -27,21 +27,21 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / Compare Page Observation
+## audit / Compare Page Observation
 
-`GET /auditwolf/v1/page-observations/{observationId}/comparison`. Scope: `auditwolf:read`.
+`GET /audit/v1/page-observations/{observationId}/comparison`. Scope: `audit:read`.
 
 What changed against the observation before it
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Create Export Destination
+## audit / Create Export Destination
 
-`POST /auditwolf/v1/export-destinations`. Scope: `auditwolf:integrations`.
+`POST /audit/v1/export-destinations`. Scope: `audit:integrations`.
 
 Create an encrypted S3/S3-compatible destination
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -52,21 +52,27 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / Create Monitor
+## audit / Create Monitor
 
-`POST /auditwolf/v1/sites/{siteId}/monitors`. Scope: `auditwolf:manage`.
+`POST /audit/v1/sites/{siteId}/monitors`. Scope: `audit:manage`.
 
 Create a monitor
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Create Rule
+```json
+{
+  "mode": "full_site"
+}
+```
 
-`POST /auditwolf/v1/sites/{siteId}/rules`. Scope: `auditwolf:manage`.
+## audit / Create Rule
+
+`POST /audit/v1/sites/{siteId}/rules`. Scope: `audit:manage`.
 
 Create a deterministic rule
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -76,13 +82,13 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / Create Site
+## audit / Create Site
 
-`POST /auditwolf/v1/sites`. Scope: `auditwolf:manage`.
+`POST /audit/v1/sites`. Scope: `audit:manage`.
 
 Create a site
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -91,13 +97,13 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / Create Webhook
+## audit / Create Webhook
 
-`POST /auditwolf/v1/webhooks`. Scope: `auditwolf:integrations`.
+`POST /audit/v1/webhooks`. Scope: `audit:integrations`.
 
 Create a signed webhook endpoint
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -108,53 +114,53 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / Delete Webhook
+## audit / Delete Webhook
 
-`DELETE /auditwolf/v1/webhooks/{endpointId}`. Scope: `auditwolf:integrations`.
+`DELETE /audit/v1/webhooks/{endpointId}`. Scope: `audit:integrations`.
 
 Retire an endpoint (soft; its delivery history is kept)
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Disable Rule
+## audit / Disable Rule
 
-`POST /auditwolf/v1/rules/{lineageId}/disable`. Scope: `auditwolf:manage`.
+`POST /audit/v1/rules/{lineageId}/disable`. Scope: `audit:manage`.
 
 Disable a rule for future audits
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Download Artifact
+## audit / Download Artifact
 
-`GET /auditwolf/v1/artifacts/{artifactId}`. Scope: `auditwolf:evidence`.
+`GET /audit/v1/artifacts/{artifactId}`. Scope: `audit:evidence`.
 
 Stream an authenticated raw artifact
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Download Audit Evidence
+## audit / Download Audit Evidence
 
-`GET /auditwolf/v1/audits/{auditId}/evidence`. Scope: `auditwolf:evidence`.
+`GET /audit/v1/audits/{auditId}/evidence`. Scope: `audit:evidence`.
 
 Download the independently verifiable evidence ZIP
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Enable Rule
+## audit / Enable Rule
 
-`POST /auditwolf/v1/rules/{lineageId}/enable`. Scope: `auditwolf:manage`.
+`POST /audit/v1/rules/{lineageId}/enable`. Scope: `audit:manage`.
 
 Enable a rule for future audits
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Export Audit
+## audit / Export Audit
 
-`POST /auditwolf/v1/audits/{auditId}/exports`. Scope: `auditwolf:integrations`.
+`POST /audit/v1/audits/{auditId}/exports`. Scope: `audit:integrations`.
 
 Queue a manual S3 export
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -162,77 +168,85 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / Get Audit
+## audit / Get Audit
 
-`GET /auditwolf/v1/audits/{auditId}`. Scope: `auditwolf:read`.
+`GET /audit/v1/audits/{auditId}`. Scope: `audit:read`.
 
 Get audit lifecycle, compliance and integrity state
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Get Finding
+## audit / Get Finding
 
-`GET /auditwolf/v1/findings/{findingId}`. Scope: `auditwolf:read`.
+`GET /audit/v1/findings/{findingId}`. Scope: `audit:read`.
 
 Get one finding
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Get Findings Summary
+## audit / Get Findings Summary
 
-`GET /auditwolf/v1/findings/summary`. Scope: `auditwolf:read`.
+`GET /audit/v1/findings/summary`. Scope: `audit:read`.
 
 The numbers at the top of the finding inbox
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Get Monitor
+## audit / Get Monitor
 
-`GET /auditwolf/v1/monitors/{monitorId}`. Scope: `auditwolf:read`.
+`GET /audit/v1/monitors/{monitorId}`. Scope: `audit:read`.
 
 Get a monitor with its URL set
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Get Page Observation
+## audit / Get Page Observation
 
-`GET /auditwolf/v1/page-observations/{observationId}`. Scope: `auditwolf:read`.
+`GET /audit/v1/page-observations/{observationId}`. Scope: `audit:read`.
 
 One observation with its artifacts and rule results
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Get Rule
+## audit / Get Rule
 
-`GET /auditwolf/v1/rules/{lineageId}`. Scope: `auditwolf:read`.
+`GET /audit/v1/rules/{lineageId}`. Scope: `audit:read`.
 
 Get the active revision of a rule
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Get Site
+## audit / Get Site
 
-`GET /auditwolf/v1/sites/{siteId}`. Scope: `auditwolf:read`.
+`GET /audit/v1/sites/{siteId}`. Scope: `audit:read`.
 
 Get a site
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Home
+## audit / Get Webhook Delivery
 
-`GET /auditwolf/v1/home`. Scope: `auditwolf:read`.
+`GET /audit/v1/webhook-deliveries/{deliveryId}`. Scope: `audit:integrations`.
+
+Read one organisation-owned delivery
+
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+
+## audit / Home
+
+`GET /audit/v1/home`. Scope: `audit:read`.
 
 Tenant-scoped setup facts and recent activity for the portal
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Install Rule Pack
+## audit / Install Rule Pack
 
-`POST /auditwolf/v1/sites/{siteId}/rule-packs`. Scope: `auditwolf:manage`.
+`POST /audit/v1/sites/{siteId}/rule-packs`. Scope: `audit:manage`.
 
 Install a rule pack
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -241,221 +255,261 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / List Audit Pages
+## audit / List All Webhook Deliveries
 
-`GET /auditwolf/v1/audits/{auditId}/pages`. Scope: `auditwolf:read`.
+`GET /audit/v1/webhook-deliveries`. Scope: `audit:integrations`.
+
+Page organisation webhook deliveries
+
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+
+Query fields: `cursor`, `limit`, `status`, `destination`.
+
+## audit / List Audit Pages
+
+`GET /audit/v1/audits/{auditId}/pages`. Scope: `audit:read`.
 
 Page observations of an audit
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-Query fields: `change`, `compliance`, `capture`, `q`.
+Query fields: `change`, `compliance`, `capture`, `q`, `limit`, `cursor`.
 
-## auditwolf / List Audits
+## audit / List Audits
 
-`GET /auditwolf/v1/audits`. Scope: `auditwolf:read`.
+`GET /audit/v1/audits`. Scope: `audit:read`.
 
 List organisation audits
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-Query fields: `site_id`.
+Query fields: `limit`, `cursor`, `status`, `site_id`.
 
-## auditwolf / List Events
+## audit / List Events
 
-`GET /auditwolf/v1/events`. Scope: `auditwolf:read`.
+`GET /audit/v1/events`. Scope: `audit:read`.
 
 The organisation's recent product events, newest first
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Export Destinations
+## audit / List Export Destinations
 
-`GET /auditwolf/v1/export-destinations`. Scope: `auditwolf:integrations`.
+`GET /audit/v1/export-destinations`. Scope: `audit:integrations`.
 
 List S3 destinations
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Exports
+## audit / List Exports
 
-`GET /auditwolf/v1/exports`. Scope: `auditwolf:integrations`.
+`GET /audit/v1/exports`. Scope: `audit:integrations`.
 
 List export jobs
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Finding Events
+Query fields: `limit`, `cursor`, `audit_id`.
 
-`GET /auditwolf/v1/findings/{findingId}/events`. Scope: `auditwolf:read`.
+## audit / List Finding Events
+
+`GET /audit/v1/findings/{findingId}/events`. Scope: `audit:read`.
 
 The append-only history of a finding
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Findings
+Query fields: `limit`, `cursor`.
 
-`GET /auditwolf/v1/findings`. Scope: `auditwolf:read`.
+## audit / List Findings
+
+`GET /audit/v1/findings`. Scope: `audit:read`.
 
 The finding inbox
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-Query fields: `site_id`, `page_id`, `rule_id`, `state`, `severity`, `assignee`, `open_longer_than_days`, `limit`, `offset`.
+Query fields: `site_id`, `page_id`, `rule_id`, `state`, `severity`, `assignee`, `open_longer_than_days`, `limit`, `sort`, `cursor`, `offset`.
 
-## auditwolf / List Installed Rule Packs
+## audit / List Installed Rule Packs
 
-`GET /auditwolf/v1/sites/{siteId}/rule-packs`. Scope: `auditwolf:read`.
+`GET /audit/v1/sites/{siteId}/rule-packs`. Scope: `audit:read`.
 
 Packs installed on this site
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Monitor Runs
+## audit / List Monitor Runs
 
-`GET /auditwolf/v1/monitors/{monitorId}/runs`. Scope: `auditwolf:read`.
+`GET /audit/v1/monitors/{monitorId}/runs`. Scope: `audit:read`.
 
 The monitor's audits, newest first
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Page Observations
+Query fields: `limit`, `cursor`, `status`.
 
-`GET /auditwolf/v1/pages/{pageId}/observations`. Scope: `auditwolf:read`.
+## audit / List Monitors
+
+`GET /audit/v1/monitors`. Scope: `audit:read`.
+
+List monitors
+
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+
+Query fields: `limit`, `cursor`, `site_id`.
+
+## audit / List Page Observations
+
+`GET /audit/v1/pages/{pageId}/observations`. Scope: `audit:read`.
 
 A page's observation history, newest first
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-Query fields: `cursor`, `limit`.
+Query fields: `limit`, `cursor`.
 
-## auditwolf / List Rule Packs
+## audit / List Rule Packs
 
-`GET /auditwolf/v1/rule-packs`. Scope: `auditwolf:read`.
+`GET /audit/v1/rule-packs`. Scope: `audit:read`.
 
 The rule pack catalogue
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Rule Revisions
+## audit / List Rule Revisions
 
-`GET /auditwolf/v1/rules/{lineageId}/revisions`. Scope: `auditwolf:read`.
+`GET /audit/v1/rules/{lineageId}/revisions`. Scope: `audit:read`.
 
 List every revision of a rule, newest first
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Site Audits
+Query fields: `limit`, `cursor`.
 
-`GET /auditwolf/v1/sites/{siteId}/audits`. Scope: `auditwolf:read`.
+## audit / List Site Audits
+
+`GET /audit/v1/sites/{siteId}/audits`. Scope: `audit:read`.
 
 List site audits
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Site Monitors
+Query fields: `limit`, `cursor`, `status`.
 
-`GET /auditwolf/v1/sites/{siteId}/monitors`. Scope: `auditwolf:read`.
+## audit / List Site Monitors
+
+`GET /audit/v1/sites/{siteId}/monitors`. Scope: `audit:read`.
 
 List the site's monitors
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Site Rules
+## audit / List Site Rules
 
-`GET /auditwolf/v1/sites/{siteId}/rules`. Scope: `auditwolf:read`.
+`GET /audit/v1/sites/{siteId}/rules`. Scope: `audit:read`.
 
 List the site's versioned deterministic rules
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Sites
+## audit / List Sites
 
-`GET /auditwolf/v1/sites`. Scope: `auditwolf:read`.
+`GET /audit/v1/sites`. Scope: `audit:read`.
 
 List sites
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Webhook Deliveries
+## audit / List Webhook Deliveries
 
-`GET /auditwolf/v1/webhooks/{endpointId}/deliveries`. Scope: `auditwolf:integrations`.
+`GET /audit/v1/webhooks/{endpointId}/deliveries`. Scope: `audit:integrations`.
 
-List delivery attempts
+List endpoint deliveries
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / List Webhooks
+Query fields: `cursor`, `limit`, `status`.
 
-`GET /auditwolf/v1/webhooks`. Scope: `auditwolf:integrations`.
+## audit / List Webhooks
+
+`GET /audit/v1/webhooks`. Scope: `audit:integrations`.
 
 List lifecycle webhook endpoints
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Pause Monitor
+## audit / Pause Monitor
 
-`POST /auditwolf/v1/monitors/{monitorId}/pause`. Scope: `auditwolf:manage`.
+`POST /audit/v1/monitors/{monitorId}/pause`. Scope: `audit:manage`.
 
 Pause scheduling
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Replace Monitor URLs
+## audit / Replace Monitor URLs
 
-`PUT /auditwolf/v1/monitors/{monitorId}/urls`. Scope: `auditwolf:manage`.
+`PUT /audit/v1/monitors/{monitorId}/urls`. Scope: `audit:manage`.
 
 Replace a url_set monitor's URL list
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Resume Monitor
+```json
+{
+  "urls": [
+    "https://example.com"
+  ]
+}
+```
 
-`POST /auditwolf/v1/monitors/{monitorId}/resume`. Scope: `auditwolf:manage`.
+## audit / Resume Monitor
+
+`POST /audit/v1/monitors/{monitorId}/resume`. Scope: `audit:manage`.
 
 Resume scheduling
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Retire Rule
+## audit / Retire Rule
 
-`DELETE /auditwolf/v1/rules/{lineageId}`. Scope: `auditwolf:manage`.
+`DELETE /audit/v1/rules/{lineageId}`. Scope: `audit:manage`.
 
 Retire a rule
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Retry Webhook Delivery
+## audit / Retry Webhook Delivery
 
-`POST /auditwolf/v1/webhooks/{endpointId}/deliveries/{deliveryId}/retry`. Scope: `auditwolf:integrations`.
+`POST /audit/v1/webhooks/{endpointId}/deliveries/{deliveryId}/retry`. Scope: `audit:integrations`.
 
 Re-queue a failed delivery
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Rotate Webhook Secret
+## audit / Rotate Webhook Secret
 
-`POST /auditwolf/v1/webhooks/{endpointId}/rotate-secret`. Scope: `auditwolf:integrations`.
+`POST /audit/v1/webhooks/{endpointId}/rotate-secret`. Scope: `audit:integrations`.
 
 Replace the endpoint's signing secret
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Run Monitor
+## audit / Run Monitor
 
-`POST /auditwolf/v1/monitors/{monitorId}/run`. Scope: `auditwolf:run`.
+`POST /audit/v1/monitors/{monitorId}/run`. Scope: `audit:run`.
 
 Queue an audit now with the monitor's scope frozen as the scheduler would freeze it
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Run Site Audit
+## audit / Run Site Audit
 
-`POST /auditwolf/v1/sites/{siteId}/audits`. Scope: `auditwolf:run`.
+`POST /audit/v1/sites/{siteId}/audits`. Scope: `audit:run`.
 
 Trigger an asynchronous audit
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {
@@ -464,105 +518,212 @@ Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
 }
 ```
 
-## auditwolf / Test Export Destination
+## audit / Test Export Destination
 
-`POST /auditwolf/v1/export-destinations/{destinationId}/test`. Scope: `auditwolf:integrations`.
+`POST /audit/v1/export-destinations/{destinationId}/test`. Scope: `audit:integrations`.
 
 Upload and verify a connection-test object
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Test Webhook
+## audit / Test Webhook
 
-`POST /auditwolf/v1/webhooks/{endpointId}/test`. Scope: `auditwolf:integrations`.
+`POST /audit/v1/webhooks/{endpointId}/test`. Scope: `audit:integrations`.
 
 Send a signed endpoint.test event
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Uninstall Rule Pack
+## audit / Uninstall Rule Pack
 
-`DELETE /auditwolf/v1/rule-packs/installed/{installationId}`. Scope: `auditwolf:manage`.
+`DELETE /audit/v1/rule-packs/installed/{installationId}`. Scope: `audit:manage`.
 
 Uninstall a pack
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Update Finding
+## audit / Update Finding
 
-`PATCH /auditwolf/v1/findings/{findingId}`. Scope: `auditwolf:manage`.
+`PATCH /audit/v1/findings/{findingId}`. Scope: `audit:manage`.
 
 Assign, schedule, acknowledge, accept the risk, or close a finding
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {}
 ```
 
-## auditwolf / Update Monitor
+## audit / Update Monitor
 
-`PATCH /auditwolf/v1/monitors/{monitorId}`. Scope: `auditwolf:manage`.
+`PATCH /audit/v1/monitors/{monitorId}`. Scope: `audit:manage`.
 
 Change a monitor's name, cadence, anchor, timezone, capture profile or change policy
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## auditwolf / Update Rule
+```json
+{
+  "mode": "full_site"
+}
+```
 
-`PATCH /auditwolf/v1/rules/{lineageId}`. Scope: `auditwolf:manage`.
+## audit / Update Rule
+
+`PATCH /audit/v1/rules/{lineageId}`. Scope: `audit:manage`.
 
 Revise a rule
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {}
 ```
 
-## auditwolf / Update Webhook
+## audit / Update Webhook
 
-`PATCH /auditwolf/v1/webhooks/{endpointId}`. Scope: `auditwolf:integrations`.
+`PATCH /audit/v1/webhooks/{endpointId}`. Scope: `audit:integrations`.
 
 Enable or disable an endpoint, or change its subscribed events
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
-
-## auditwolf / Upgrade Rule Pack
-
-`POST /auditwolf/v1/rule-packs/installed/{installationId}/upgrade`. Scope: `auditwolf:manage`.
-
-Upgrade an installed pack, or change its values
-
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 ```json
 {}
 ```
 
-## auditwolf / Usage
+## audit / Upgrade Rule Pack
 
-`GET /auditwolf/v1/usage`. Scope: `auditwolf:read`.
+`POST /audit/v1/rule-packs/installed/{installationId}/upgrade`. Scope: `audit:manage`.
+
+Upgrade an installed pack, or change its values
+
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+
+```json
+{}
+```
+
+## audit / Usage
+
+`GET /audit/v1/usage`. Scope: `audit:read`.
 
 Credits, quota position, projection and hosted evidence
 
-Full request contract: https://api.ironfang.uk/auditwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
-## financewolf / Delete Result
+## finance / Cancel Batch
 
-`DELETE /financewolf/v1/einvoices/results/{id}`. Scope: `financewolf:einvoices:write`.
+`POST /finance/v1/einvoices/batches/{id}/cancel`. Scope: `finance:einvoices:write`.
+
+Cancel an ordered batch
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Cancel Job
+
+`POST /finance/v1/einvoices/jobs/{id}/cancel`. Scope: `finance:einvoices:write`.
+
+Cancel an async job
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Create Batch
+
+`POST /finance/v1/einvoices/batches`. Scope: `finance:einvoices:write`.
+
+Create an ordered batch
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+```json
+{
+  "jobs": [
+    {
+      "operation": "validate",
+      "document_base64": "PEludm9pY2UvPg==",
+      "options": {
+        "ruleset": "latest",
+        "profile": "peppol-bis-billing-3"
+      }
+    }
+  ]
+}
+```
+
+## finance / Create Destination
+
+`POST /finance/v1/einvoices/destinations`. Scope: `finance:einvoices:destinations:manage`.
+
+Create a webhook or S3 destination
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+```json
+{
+  "name": "n8n delivery",
+  "config": {
+    "url": "https://example.com/webhook"
+  }
+}
+```
+
+## finance / Create Job
+
+`POST /finance/v1/einvoices/jobs`. Scope: `finance:einvoices:write`.
+
+Create an async job
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+```json
+{
+  "operation": "validate",
+  "document_base64": "PEludm9pY2UvPg==",
+  "options": {
+    "ruleset": "latest",
+    "profile": "peppol-bis-billing-3"
+  }
+}
+```
+
+## finance / Delete Destination
+
+`DELETE /finance/v1/einvoices/destinations/{id}`. Scope: `finance:einvoices:destinations:manage`.
+
+Retire a destination and erase its stored credentials
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Delete Result
+
+`DELETE /finance/v1/einvoices/results/{id}`. Scope: `finance:einvoices:write`.
 
 Delete saved result bytes and findings
 
-Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
-## financewolf / Generate E-Invoice
+## finance / Download Signed Report
 
-`POST /financewolf/v1/einvoices/generate`. Scope: `financewolf:einvoices:write`.
+`POST /finance/v1/einvoices/reports`. Scope: `finance:einvoices:read`.
+
+Download a signed report for a retained result
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+```json
+{
+  "operation_id": "00000000-0000-0000-0000-000000000000"
+}
+```
+
+## finance / Generate E-Invoice
+
+`POST /finance/v1/einvoices/generate`. Scope: `finance:einvoices:write`.
 
 Generate and validate one UBL e-invoice
 
-Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 ```json
 {
@@ -626,75 +787,207 @@ Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
 
 Query fields: `ruleset` (required), `profile` (required).
 
-## financewolf / Get Result
+## finance / Get Batch
 
-`GET /financewolf/v1/einvoices/results/{id}`. Scope: `financewolf:einvoices:read`.
+`GET /finance/v1/einvoices/batches/{id}`. Scope: `finance:einvoices:read`.
+
+Get an ordered batch
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Get Delivery
+
+`GET /finance/v1/einvoices/deliveries/{id}`. Scope: `finance:einvoices:read`.
+
+Read a delivery and its immutable attempt history
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Get Destination
+
+`GET /finance/v1/einvoices/destinations/{id}`. Scope: `finance:einvoices:destinations:manage`.
+
+Read a destination without its credentials
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Get Job
+
+`GET /finance/v1/einvoices/jobs/{id}`. Scope: `finance:einvoices:read`.
+
+Get an async job
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Get Report Signing Keys
+
+`GET /finance/v1/einvoices/reports/keys`. Scope: `none`.
+
+Read Ironfang Finance report signing public keys
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Get Result
+
+`GET /finance/v1/einvoices/results/{id}`. Scope: `finance:einvoices:read`.
 
 Read a saved validation or generation result
 
-Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
-## financewolf / Get Ruleset
+## finance / Get Ruleset
 
-`GET /financewolf/v1/einvoices/rulesets/{id}`. Scope: `financewolf:einvoices:rulesets:read`.
+`GET /finance/v1/einvoices/rulesets/{id}`. Scope: `finance:einvoices:rulesets:read`.
 
 Fetch one ruleset by its immutable id
 
-Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
-## financewolf / List Results
+## finance / List Batches
 
-`GET /financewolf/v1/einvoices/results`. Scope: `financewolf:einvoices:read`.
+`GET /finance/v1/einvoices/batches`. Scope: `finance:einvoices:read`.
 
-List saved validation results
+List batches
 
-Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
-Query fields: `before`.
+Query fields: `limit`, `cursor`.
 
-## financewolf / List Rulesets
+## finance / List Deliveries
 
-`GET /financewolf/v1/einvoices/rulesets`. Scope: `financewolf:einvoices:rulesets:read`.
+`GET /finance/v1/einvoices/deliveries`. Scope: `finance:einvoices:read`.
+
+List delivery history with keyset pagination
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+Query fields: `destination`, `operation_id`, `status`, `cursor`, `limit`.
+
+## finance / List Destinations
+
+`GET /finance/v1/einvoices/destinations`. Scope: `finance:einvoices:destinations:manage`.
+
+List active destination configurations
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / List Jobs
+
+`GET /finance/v1/einvoices/jobs`. Scope: `finance:einvoices:read`.
+
+List jobs
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+Query fields: `limit`, `cursor`, `status`.
+
+## finance / List Results
+
+`GET /finance/v1/einvoices/results`. Scope: `finance:einvoices:read`.
+
+List saved validation and generation results
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+Query fields: `before`, `cursor`, `limit`, `kind`, `outcome`, `ruleset`, `q`, `operation_id`.
+
+## finance / List Rulesets
+
+`GET /finance/v1/einvoices/rulesets`. Scope: `finance:einvoices:rulesets:read`.
 
 List rulesets available for selection and reproduction
 
-Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Query fields: `document_type`, `profile`, `state`.
 
-## financewolf / Validate E-Invoice
+## finance / Render E-Invoice PDF
 
-`POST /financewolf/v1/einvoices/validate`. Scope: `financewolf:einvoices:write`.
+`POST /finance/v1/einvoices/render`. Scope: `finance:einvoices:read`.
+
+Render a saved generation as a readable PDF
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+```json
+{
+  "operation_id": "00000000-0000-0000-0000-000000000000"
+}
+```
+
+## finance / Retry Delivery
+
+`POST /finance/v1/einvoices/deliveries/{id}/retry`. Scope: `finance:einvoices:destinations:manage`.
+
+Retry failed delivery without rerunning validation
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## finance / Update Destination
+
+`PATCH /finance/v1/einvoices/destinations/{id}`. Scope: `finance:einvoices:destinations:manage`.
+
+Enable, disable or rotate destination credentials
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+```json
+{
+  "enabled": true
+}
+```
+
+## finance / Usage
+
+`GET /finance/v1/einvoices/usage`. Scope: `finance:billing:manage`.
+
+Reconcile Ironfang Finance document usage
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+Query fields: `start` (required), `end` (required).
+
+## finance / Validate E-Invoice
+
+`POST /finance/v1/einvoices/validate`. Scope: `finance:einvoices:write`.
 
 Validate one e-invoice XML document
 
-Full request contract: https://api.ironfang.uk/financewolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Query fields: `ruleset`, `profile`, `document_type`.
 
-## renderwolf / Cancel Job
+## finance / Verify Signed Report
 
-`DELETE /renderwolf/v1/jobs/{id}`. Scope: `renderwolf:render`.
+`POST /finance/v1/einvoices/reports/verify`. Scope: `none`.
+
+Verify report integrity without an account
+
+Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+
+## render / Cancel Job
+
+`DELETE /render/v1/jobs/{id}`. Scope: `render:render`.
 
 Cancel a job
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Capabilities
+## render / Capabilities
 
-`GET /renderwolf/v1/capabilities`. Scope: `none`.
+`GET /render/v1/capabilities`. Scope: `none`.
 
-What Renderwolf does, is building and does not offer
+What Ironfang Render does, is building and does not offer
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Create Destination
+## render / Create Destination
 
-`POST /renderwolf/v1/destinations`. Scope: `renderwolf:destinations`.
+`POST /render/v1/destinations`. Scope: `render:destinations`.
 
 Register a delivery destination
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {
@@ -703,13 +996,13 @@ Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
 }
 ```
 
-## renderwolf / Create Template
+## render / Create Template
 
-`POST /renderwolf/v1/templates`. Scope: `renderwolf:templates:write`.
+`POST /render/v1/templates`. Scope: `render:templates:write`.
 
 Create a template
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {
@@ -720,125 +1013,135 @@ Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
 }
 ```
 
-## renderwolf / Delete Destination
+## render / Delete Destination
 
-`DELETE /renderwolf/v1/destinations/{id}`. Scope: `renderwolf:destinations`.
+`DELETE /render/v1/destinations/{id}`. Scope: `render:destinations`.
 
 Remove a destination
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Delete Template
+## render / Delete Template
 
-`DELETE /renderwolf/v1/templates/{id}`. Scope: `renderwolf:templates:write`.
+`DELETE /render/v1/templates/{id}`. Scope: `render:templates:write`.
 
 Delete a template
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Download Job Result
+## render / Download Job Result
 
-`GET /renderwolf/v1/jobs/{id}/result`. Scope: `renderwolf:render`.
+`GET /render/v1/jobs/{id}/result`. Scope: `render:render`.
 
 Collect a job's result
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Get Batch
+## render / Get Batch
 
-`GET /renderwolf/v1/batches/{id}`. Scope: `renderwolf:render`.
+`GET /render/v1/batches/{id}`. Scope: `render:render`.
 
 Poll a batch
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Get Delivery
+## render / Get Delivery
 
-`GET /renderwolf/v1/deliveries/{id}`. Scope: `renderwolf:render`.
+`GET /render/v1/deliveries/{id}`. Scope: `render:render`.
 
 One delivery, with the body it posted
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Get Destination
+## render / Get Destination
 
-`GET /renderwolf/v1/destinations/{id}`. Scope: `renderwolf:destinations`.
+`GET /render/v1/destinations/{id}`. Scope: `render:destinations`.
 
 Get a destination
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Get Job
+## render / Get Job
 
-`GET /renderwolf/v1/jobs/{id}`. Scope: `renderwolf:render`.
+`GET /render/v1/jobs/{id}`. Scope: `render:render`.
 
 Poll a job
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Get Template
+## render / Get Template
 
-`GET /renderwolf/v1/templates/{id}`. Scope: `renderwolf:templates:read`.
+`GET /render/v1/templates/{id}`. Scope: `render:templates:read`.
 
 Fetch a template
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / List Deliveries
+## render / List Batches
 
-`GET /renderwolf/v1/deliveries`. Scope: `renderwolf:render`.
+`GET /render/v1/batches`. Scope: `render:render`.
+
+List batches
+
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
+
+Query fields: `limit`, `cursor`.
+
+## render / List Deliveries
+
+`GET /render/v1/deliveries`. Scope: `render:render`.
 
 List deliveries
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-Query fields: `destination`, `limit`, `cursor`.
+Query fields: `destination`, `job_id`, `status`, `limit`, `cursor`.
 
-## renderwolf / List Destinations
+## render / List Destinations
 
-`GET /renderwolf/v1/destinations`. Scope: `renderwolf:destinations`.
+`GET /render/v1/destinations`. Scope: `render:destinations`.
 
 List destinations
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / List Jobs
+## render / List Jobs
 
-`GET /renderwolf/v1/jobs`. Scope: `renderwolf:render`.
+`GET /render/v1/jobs`. Scope: `render:render`.
 
 List jobs
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Query fields: `status`, `limit`, `cursor`.
 
-## renderwolf / List Requests
+## render / List Requests
 
-`GET /renderwolf/v1/requests`. Scope: `renderwolf:usage:read`.
+`GET /render/v1/requests`. Scope: `render:usage:read`.
 
 Request history
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Query fields: `since`, `until`, `outcome`, `kind`, `cache`, `key`, `error`, `id`, `limit`, `offset`.
 
-## renderwolf / List Templates
+## render / List Templates
 
-`GET /renderwolf/v1/templates`. Scope: `renderwolf:templates:read`.
+`GET /render/v1/templates`. Scope: `render:templates:read`.
 
 List templates
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Query fields: `cursor`, `limit`, `summary`.
 
-## renderwolf / QR Code
+## render / QR Code
 
-`POST /renderwolf/v1/qr`. Scope: `renderwolf:render`.
+`POST /render/v1/qr`. Scope: `render:render`.
 
 Render a QR code
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {
@@ -846,21 +1149,21 @@ Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
 }
 ```
 
-## renderwolf / Redeliver Delivery
+## render / Redeliver Delivery
 
-`POST /renderwolf/v1/deliveries/{id}/redeliver`. Scope: `renderwolf:destinations`.
+`POST /render/v1/deliveries/{id}/redeliver`. Scope: `render:destinations`.
 
 Send a delivery again
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Site Preview
+## render / Site Preview
 
-`POST /renderwolf/v1/site-preview`. Scope: `renderwolf:render`.
+`POST /render/v1/site-preview`. Scope: `render:render`.
 
 Render a scrolling website preview
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {
@@ -871,13 +1174,13 @@ Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
 }
 ```
 
-## renderwolf / Submit Batch
+## render / Submit Batch
 
-`POST /renderwolf/v1/batches`. Scope: `renderwolf:render`.
+`POST /render/v1/batches`. Scope: `render:render`.
 
 Submit up to 100 jobs together
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {
@@ -892,13 +1195,13 @@ Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
 }
 ```
 
-## renderwolf / Submit Job
+## render / Submit Job
 
-`POST /renderwolf/v1/jobs`. Scope: `renderwolf:render`.
+`POST /render/v1/jobs`. Scope: `render:render`.
 
 Submit a durable render job
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {
@@ -909,33 +1212,33 @@ Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
 }
 ```
 
-## renderwolf / Test Destination
+## render / Test Destination
 
-`POST /renderwolf/v1/destinations/{id}/test`. Scope: `renderwolf:destinations`.
+`POST /render/v1/destinations/{id}/test`. Scope: `render:destinations`.
 
 Test a destination now
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
-## renderwolf / Update Destination
+## render / Update Destination
 
-`PATCH /renderwolf/v1/destinations/{id}`. Scope: `renderwolf:destinations`.
+`PATCH /render/v1/destinations/{id}`. Scope: `render:destinations`.
 
 Rename or enable a destination
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {}
 ```
 
-## renderwolf / Update Template
+## render / Update Template
 
-`PUT /renderwolf/v1/templates/{id}`. Scope: `renderwolf:templates:write`.
+`PUT /render/v1/templates/{id}`. Scope: `render:templates:write`.
 
 Replace a template
 
-Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
+Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 ```json
 {
@@ -943,6 +1246,415 @@ Full request contract: https://api.ironfang.uk/renderwolf/openapi.yaml
   "html": "<h1>{{title}}</h1>",
   "width": 1200,
   "height": 630
+}
+```
+
+## rig / Add Fault
+
+`POST /rig/v1/runs/{runId}/faults`. Scope: `rig:run`.
+
+Arm a fault
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "type": "delay",
+  "resource": "order_webhook",
+  "delay": "5s"
+}
+```
+
+## rig / Cancel Run
+
+`POST /rig/v1/runs/{runId}/cancel`. Scope: `rig:run`.
+
+Cancel a run
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "reason": "Cancelled from n8n"
+}
+```
+
+## rig / Create Connector
+
+`POST /rig/v1/runs/{runId}/connectors`. Scope: `rig:connector`.
+
+Mint a connector and its bootstrap token
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "name": "n8n"
+}
+```
+
+## rig / Create Project
+
+`POST /rig/v1/projects`. Scope: `rig:write`.
+
+Create a project
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "slug": "ironfang-platform",
+  "name": "Ironfang Platform"
+}
+```
+
+## rig / Create Resource
+
+`POST /rig/v1/runs/{runId}/resources`. Scope: `rig:run`.
+
+Allocate a resource
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "name": "order_webhook",
+  "type": "callback"
+}
+```
+
+## rig / Create Run
+
+`POST /rig/v1/suites/{suiteId}/runs`. Scope: `rig:run`.
+
+Start a run
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "ttl": "30m",
+  "reason": "n8n workflow run"
+}
+```
+
+## rig / Create Run Receipt
+
+`POST /rig/v1/runs/{runId}/receipt`. Scope: `rig:read`.
+
+A signed receipt for the run
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Create Suite
+
+`POST /rig/v1/suites`. Scope: `rig:write`.
+
+Create a suite
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "project_id": "",
+  "slug": "signup",
+  "name": "Signup flow",
+  "definition": {
+    "version": 1,
+    "resources": {
+      "customer_email": {
+        "type": "email"
+      },
+      "stripe_callback": {
+        "type": "callback",
+        "connector": {
+          "route": "stripe"
+        }
+      },
+      "shipping_api": {
+        "type": "mock_http"
+      }
+    }
+  }
+}
+```
+
+## rig / Download Event Payload
+
+`GET /rig/v1/runs/{runId}/events/{eventId}/payload`. Scope: `rig:read`.
+
+Download an event's payload
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Export Run Evidence
+
+`POST /rig/v1/runs/{runId}/evidence`. Scope: `rig:read`.
+
+Export the run's evidence bundle
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Finish Run
+
+`POST /rig/v1/runs/{runId}/finish`. Scope: `rig:run`.
+
+Finish a run
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "outcome": "pass"
+}
+```
+
+## rig / Get Environment
+
+`GET /rig/v1/environment`. Scope: `rig:read`.
+
+The hosts, bounds and retention a client builds against
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Get Event
+
+`GET /rig/v1/runs/{runId}/events/{eventId}`. Scope: `rig:read`.
+
+Get an event
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Get Project
+
+`GET /rig/v1/projects/{projectId}`. Scope: `rig:read`.
+
+Get a project
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Get Run
+
+`GET /rig/v1/runs/{runId}`. Scope: `rig:read`.
+
+Get a run
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Get Suite
+
+`GET /rig/v1/suites/{suiteId}`. Scope: `rig:read`.
+
+Get a suite
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Hold Run
+
+`PUT /rig/v1/runs/{runId}/hold`. Scope: `rig:run`.
+
+Keep the run from retention until a date
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "until": "2027-01-01T00:00:00Z"
+}
+```
+
+## rig / Home
+
+`GET /rig/v1/home`. Scope: `rig:read`.
+
+Tenant-scoped setup facts and recent activity for the portal
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / List Connectors
+
+`GET /rig/v1/runs/{runId}/connectors`. Scope: `rig:read`.
+
+List a run's connectors
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / List Events
+
+`GET /rig/v1/runs/{runId}/events`. Scope: `rig:read`.
+
+Read the timeline
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+Query fields: `since`, `limit`.
+
+## rig / List Evidence Signing Keys
+
+`GET /rig/v1/evidence/keys`. Scope: `rig:read`.
+
+The keys evidence is signed with
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / List Faults
+
+`GET /rig/v1/runs/{runId}/faults`. Scope: `rig:read`.
+
+List a run's faults
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / List Projects
+
+`GET /rig/v1/projects`. Scope: `rig:read`.
+
+List projects
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+Query fields: `cursor`, `limit`.
+
+## rig / List Resources
+
+`GET /rig/v1/runs/{runId}/resources`. Scope: `rig:read`.
+
+List a run's resources
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / List Runs
+
+`GET /rig/v1/runs`. Scope: `rig:read`.
+
+List runs
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+Query fields: `project`, `suite`, `status`, `cursor`, `limit`.
+
+## rig / List Suite Versions
+
+`GET /rig/v1/suites/{suiteId}/versions`. Scope: `rig:read`.
+
+List a suite's versions
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / List Suites
+
+`GET /rig/v1/suites`. Scope: `rig:read`.
+
+List suites
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+Query fields: `project`, `cursor`, `limit`.
+
+## rig / Release Run Hold
+
+`DELETE /rig/v1/runs/{runId}/hold`. Scope: `rig:run`.
+
+Lift a retention hold
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Remove Fault
+
+`DELETE /rig/v1/runs/{runId}/faults/{faultId}`. Scope: `rig:run`.
+
+Disarm a fault
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Replay Callback
+
+`POST /rig/v1/runs/{runId}/events/{eventId}/replay`. Scope: `rig:run`.
+
+Replay a recorded callback
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+## rig / Revise Suite
+
+`PUT /rig/v1/suites/{suiteId}`. Scope: `rig:write`.
+
+Revise a suite
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "definition": {
+    "version": 1,
+    "resources": {
+      "customer_email": {
+        "type": "email"
+      },
+      "stripe_callback": {
+        "type": "callback",
+        "connector": {
+          "route": "stripe"
+        }
+      },
+      "shipping_api": {
+        "type": "mock_http"
+      }
+    }
+  }
+}
+```
+
+## rig / Set Mock Rules
+
+`PUT /rig/v1/runs/{runId}/resources/{resourceId}/mock`. Scope: `rig:run`.
+
+Replace a mock's rules
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "rules": [
+    {
+      "match": {
+        "method": "POST",
+        "path": "/v1/ship/{id}"
+      },
+      "respond": {
+        "status": 200,
+        "json": {
+          "ok": true
+        }
+      }
+    }
+  ]
+}
+```
+
+## rig / Usage
+
+`GET /rig/v1/usage`. Scope: `rig:read`.
+
+Runs and events in a window
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+Query fields: `since`, `until`.
+
+## rig / Wait For Event
+
+`POST /rig/v1/runs/{runId}/wait`. Scope: `rig:read`.
+
+Wait for an event
+
+Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+
+```json
+{
+  "type": "callback.received",
+  "resource": "order_webhook",
+  "timeout": "30s"
 }
 ```
 

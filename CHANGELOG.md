@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.4.0 — 2026-09-21
+
+- Follow the product names: Ironfang Render, Finance and Audit. Requests go to
+  the `/render`, `/finance` and `/audit` API prefixes, permissions are shown as
+  `render:*`, `finance:*` and `audit:*`, and labels, messages and documentation
+  links use the current names. Saved resource values (`renderwolf`,
+  `financewolf`, `auditwolf`), operation IDs, defaults, webhook credential
+  products and base URLs saved as an origin or `/renderwolf` are unchanged.
+- Fix Download Job Result. The API now returns the signed download location
+  under `/render`, which earlier versions refused as outside the expected
+  endpoint because they called `/renderwolf`.
+- Add Ironfang Rig: 34 actions for projects, suites, runs, resources, mock rules,
+  faults, connectors, the event timeline, waits, callback replay, receipts,
+  holds and evidence bundles. The credential test can check a Rig key.
+- Add 21 Finance actions: async jobs and ordered batches, webhook and S3
+  destinations, deliveries and retries, signed reports and keyless report
+  verification, readable PDFs and usage. Ironfang Trigger verifies signed
+  Finance deliveries.
+- Add Audit List Monitors, List All Webhook Deliveries and Get Webhook Delivery,
+  and Render List Batches. Create and Update Monitor, Replace Monitor URLs and
+  Update Webhook now send the request body the API requires.
+- Add node version 1.2: Audit lists released without paging return one item per
+  row with Return All and Limit. Versions 1 and 1.1 keep the single response.
+- Expose newer filters (audit status and site, export audit, delivery status,
+  Finance result search) and document Render `css`, `script` and `actions`.
+- Take operation permissions from the Finance contract and the Audit and Rig
+  route tables, and label the operation reference with its source commit.
+
 ## 0.3.1 — 2026-09-09
 
 - Implement all three trigger webhook lifecycle hooks while preserving external
