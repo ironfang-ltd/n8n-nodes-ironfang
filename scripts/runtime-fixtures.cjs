@@ -19,6 +19,9 @@ const expanded=[
  {resource:'auditwolf',operation:'listFindings',query:{state:['open','acknowledged']},limit:10},
  {resource:'auditwolf',operation:'createSitesBySiteIdAudits',siteId:'fixture-site',requestBody:{reason:'fixture'},idempotencyKey:'runtime-audit'},
  {resource:'auditwolf',operation:'listAuditsByAuditIdEvidence',auditId:'fixture-audit'},
+ {typeVersion:1.2,resource:'auditwolf',operation:'listAudits',returnAll:true},
+ {typeVersion:1.2,resource:'rig',operation:'listRuns',returnAll:true},
+ {typeVersion:1.2,resource:'financewolf',operation:'verifyEinvoiceReport',inputBinaryField:'data'},
 ];
 const expected=Buffer.from('89504e470d0a1a0a0000000049454e44','hex');
 if(process.argv[3]==='verify'){
@@ -33,15 +36,17 @@ if(process.argv[3]==='verify'){
  const validation=requests.find(x=>x.url.includes('/einvoices/validate'));assert.deepEqual(Buffer.from(validation.raw,'base64'),expected);assert.equal(validation.contentType,'application/xml');
  for(const upload of requests.filter(x=>/tools\/v1\/(convert|favicon|qr\/verify)/.test(x.url))){assert.match(upload.contentType,/multipart\/form-data; boundary=/);assert(Buffer.from(upload.raw,'base64').includes(expected));assert.equal(upload.authenticated,false);}
  assert.equal(requests.find(x=>x.url.includes('/v1/results/123/')).authenticated,false);
- const finding=new URL(requests.find(x=>x.url.startsWith('/auditwolf/v1/findings')).url,'http://fixture');assert.deepEqual(finding.searchParams.getAll('state'),['open','acknowledged']);
- console.log('Real n8n runtime: legacy/new Renderwolf, Financewolf XML, Auditwolf, public tools, multipart, pagination, signed downloads and filesystem binary storage passed');process.exit(0);
+ const finding=new URL(requests.find(x=>x.url.startsWith('/audit/v1/findings')).url,'http://fixture');assert.deepEqual(finding.searchParams.getAll('state'),['open','acknowledged']);
+ assert(requests.every(x=>!/wolf/.test(x.url)),'A request used a launch-era prefix');assert.equal(data['Expanded 18'][0].data.main[0][0].json.id,'audit');assert.equal(data['Expanded 19'][0].data.main[0][0].json.id,'run');
+ const report=requests.find(x=>x.url.includes('/reports/verify'));assert.deepEqual(Buffer.from(report.raw,'base64'),expected);assert.equal(report.contentType,'application/zip');assert.equal(data['Expanded 20'][0].data.main[0][0].json.verified,true);
+ console.log('Real n8n runtime: saved /renderwolf credential routed to current prefixes, legacy/new Render, Finance XML and reports, Audit, Rig, versioned paging, public tools, multipart, pagination, signed downloads and filesystem binary storage passed');process.exit(0);
 }
 const credential={id:'runtime-key',name:'Fixture API',type:'ironfangApi',data:{apiKey:'synthetic-runtime-key',baseUrl:'http://fixture-api:8080/renderwolf'}};
 fs.writeFileSync(path.join(dir,'credentials.json'),JSON.stringify([credential,{id:'runtime-s3',name:'Fixture S3',type:'ironfangS3',data:{accessKey:'synthetic-access',secretKey:'synthetic-secret'}}]));
 const ops=['screenshot','screenshot','pdf','image','video','sign','usage'];const nodes=[{id:'start',name:'Start',type:'n8n-nodes-base.manualTrigger',typeVersion:1,position:[0,0],parameters:{}}];const connections={};
 for(const [i,operation] of ops.entries()){const name='Operation '+i;const previous=i===0?'Start':'Operation '+(i-1);connections[previous]={main:[[{node:name,type:'main',index:0}]]};nodes.push({id:name,name,type:'CUSTOM.ironfang',typeVersion:i===0?1:1.1,position:[(i+1)*220,0],credentials:{ironfangApi:{id:'runtime-key',name:'Fixture API'}},parameters:{resource:'renderwolf',operation,source:'url',url:'https://example.com',screenshotOptions:{},pdfOptions:{},binaryProperty:'data',templateId:'fixture-template',imageFormat:'png',vars:{values:[{name:'title',value:'Fixture'}]},signKind:'screenshot',signUrl:'https://example.com',signFullPage:false,ttlHours:1,clipSize:'720p',clipDuration:3,captions:{},clipOptions:{font_size:0}}});}
-for(const [i,params] of expanded.entries()){
+for(const [i,{typeVersion=1.1,...params}] of expanded.entries()){
  const name='Expanded '+i;connections['Operation 1'].main[0].push({node:name,type:'main',index:0});
- nodes.push({id:name,name,type:'CUSTOM.ironfang',typeVersion:1.1,position:[700,i*200+200],credentials:{ironfangApi:{id:'runtime-key',name:'Fixture API'},ironfangS3:{id:'runtime-s3',name:'Fixture S3'}},parameters:{authentication:'apiKey',publicBaseUrl:'http://fixture-api:8080',outputBinaryField:'data',inputBinaryField:'data',...params}});
+ nodes.push({id:name,name,type:'CUSTOM.ironfang',typeVersion,position:[700,i*200+200],credentials:{ironfangApi:{id:'runtime-key',name:'Fixture API'},ironfangS3:{id:'runtime-s3',name:'Fixture S3'}},parameters:{authentication:'apiKey',publicBaseUrl:'http://fixture-api:8080',outputBinaryField:'data',inputBinaryField:'data',...params}});
 }
 fs.writeFileSync(path.join(dir,'workflow.json'),JSON.stringify({id:'runtime-fixture',name:'Runtime fixture',nodes,connections,active:false,settings:{executionOrder:'v1'}}));

@@ -6,12 +6,12 @@ export class IronfangTrigger implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Ironfang Trigger', name: 'ironfangTrigger', group: ['trigger'], version: 1,
         icon: { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' },
-        subtitle: 'Signed product events', description: 'Receive signed Auditwolf and Renderwolf events', defaults: { name: 'Ironfang Trigger' },
+        subtitle: 'Signed product events', description: 'Receive signed Ironfang Audit, Finance and Render events', defaults: { name: 'Ironfang Trigger' },
         inputs: [], outputs: [NodeConnectionTypes.Main],
         credentials: [{ name: 'ironfangWebhookApi', required: true, testedBy: 'ironfangWebhookTest' }],
         webhooks: [{ name: 'default', httpMethod: 'POST', responseMode: 'onReceived', path: 'events' }],
         properties: [
-            { displayName: 'Register this node’s production webhook URL using Create Webhooks (Auditwolf) or Create Destination (Renderwolf), save the returned signing secret in its credential, then activate the workflow and test the endpoint. Signatures and timestamps are checked before execution.', name: 'setupNotice', type: 'notice', default: '' },
+            { displayName: 'Register this node’s production webhook URL using Create Webhook (Audit) or Create Destination (Finance or Render), save the returned signing secret in its credential, then activate the workflow and test the endpoint. Signatures and timestamps are checked before execution.', name: 'setupNotice', type: 'notice', default: '' },
         ],
     };
     methods = { credentialTest: { ironfangWebhookTest: webhookCredentialTest } };

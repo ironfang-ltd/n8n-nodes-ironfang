@@ -6,14 +6,14 @@ const { IronfangTrigger } = require('../dist/nodes/Ironfang/IronfangTrigger.node
 const { Ironfang } = require('../dist/nodes/Ironfang/Ironfang.node.js');
 const { NodeHelpers } = require('n8n-workflow');
 const now = Date.now();
-const secrets = { auditwolf: 'awsec_' + 'a'.repeat(43), renderwolf: '12'.repeat(32) };
+const secrets = { auditwolf: 'awsec_' + 'a'.repeat(43), renderwolf: '12'.repeat(32), financewolf: '34'.repeat(32) };
 function signed(product, event = { id: 'event-1', type: 'audit.completed', data: { title: '£ café' } }, time = now) {
  const raw = Buffer.from(JSON.stringify(event, null, 2));
  const timestamp = String(Math.floor(time / 1000));
  const signature = 'v1=' + createHmac('sha256', signingKey(product, secrets[product])).update(timestamp + '.').update(raw).digest('hex');
  return { raw, headers: { [`${product}-timestamp`]: timestamp, [`${product}-signature`]: signature, [`${product}-event-id`]: 'unsigned-id' } };
 }
-for (const product of ['auditwolf', 'renderwolf']) test(`verifies exact ${product} signed bytes and secret encoding`, () => {
+for (const product of ['auditwolf', 'renderwolf', 'financewolf']) test(`verifies exact ${product} signed bytes and secret encoding`, () => {
  const { raw, headers } = signed(product); assert.equal(verifyEvent(raw, headers, product, secrets[product], now).id, 'event-1');
  assert.throws(() => verifyEvent(Buffer.from(raw.toString().replace('café', 'coffee')), headers, product, secrets[product], now), /signature/);
  assert.throws(() => verifyEvent(Buffer.from(JSON.stringify(JSON.parse(raw))), headers, product, secrets[product], now), /signature/);
@@ -53,7 +53,7 @@ test('credential declarations are unique and visible for authenticated product o
  const description = new Ironfang().description;
  assert.equal(new Set(description.credentials.map(c => c.name)).size, description.credentials.length);
  const credential = description.credentials.find(c => c.name === 'ironfangApi');
- for (const resource of ['renderwolf', 'financewolf', 'auditwolf']) assert(NodeHelpers.displayParameter({ resource, authentication: 'apiKey' }, credential, undefined, description));
+ for (const resource of ['renderwolf', 'financewolf', 'auditwolf', 'rig']) assert(NodeHelpers.displayParameter({ resource, authentication: 'apiKey' }, credential, undefined, description));
  assert.equal(NodeHelpers.displayParameter({ resource: 'tools' }, credential, undefined, description), false);
  assert.equal(NodeHelpers.displayParameter({ resource: 'financewolf', authentication: 'public' }, credential, undefined, description), false);
 });

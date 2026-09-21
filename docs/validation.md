@@ -19,7 +19,28 @@ n8n automatically detects the new npm version for review; no manual re-review
 request is required. The [feedback resolution record](n8n-re-review-0.3.1.md)
 documents the three fixes. Review approval is still pending.
 
+The 0.4.0 product-name and feature release follows Ironfang main `de1547b`
+(21 September 2026). Its 156 catalogue operations were each matched to a route
+registered by the API, and every permission shown was compared with the scope or
+tenant permission that route's handler requires (no mismatches). Every JSON
+request example was validated against its request schema; the only differences
+are the destination `type` and S3 keys that the node supplies itself. The four
+production OpenAPI YAML URLs and the documentation links the credentials point
+to returned HTTP 200. The Download Job Result fault in 0.3.1 was established
+from the API source (the signed location is issued under `/render`), not from a
+live paid job. No live authenticated customer operation was used. `npm run check`
+(220 tests), both real n8n 2.38.1 Docker checks and `npm audit` (zero reported
+vulnerabilities) passed locally on 21 September.
+
 ## Automated coverage
+
+- 0.4.0 adds cases for routing saved `/renderwolf` and origin bases to the
+  current prefixes, version-gated Audit paging, Rig sequence paging, the long
+  Rig wait and evidence content negotiation, nested Finance S3 credentials,
+  keyless report verification, Finance webhook signatures and the absence of
+  launch-era names from scopes and labels. The Docker workflow adds three
+  version 1.2 cases (Audit paging, Rig, report upload) and asserts that no
+  request used a launch-era prefix from a credential saved as `/renderwolf`.
 
 - Real n8n lint rules with inline configuration disabled, TypeScript and package
   entry-point/icon/version checks, including the helper's location outside `nodes/`.

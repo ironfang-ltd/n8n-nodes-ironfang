@@ -22,16 +22,17 @@ async function outputFile(context: IExecuteFunctions, item: number, response: Re
 }
 async function jsonOutput(context: IExecuteFunctions, item: number, op: Operation, response: Response): Promise<INodeExecutionData> {
     const json: IDataObject = response.body && typeof response.body === 'object' && !Array.isArray(response.body) ? response.body as IDataObject : { result: response.body ?? null };
-    if (op.id === 'generateEInvoice' && !json.artifact) throw new Error('Financewolf generation response is missing the validated XML artifact');
+    if (op.id === 'generateEInvoice' && !json.artifact) throw new Error('Finance generation response is missing the validated XML artifact');
     if (op.product === 'financewolf' && ['generateEInvoice', 'getValidationResult'].includes(op.id) && json.artifact) {
         const artifact = json.artifact as IDataObject;
-        if (typeof artifact.data_base64 !== 'string' || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(artifact.data_base64)) throw new Error('Financewolf returned an invalid XML artifact');
+        if (typeof artifact.data_base64 !== 'string' || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(artifact.data_base64)) throw new Error('Finance returned an invalid XML artifact');
         const xml = Buffer.from(artifact.data_base64, 'base64');
-        if (!xml.length || xml.length > 5_242_880 || xml.length !== artifact.bytes || createHash('sha256').update(xml).digest('hex') !== artifact.sha256) throw new Error('Financewolf XML artifact size or SHA-256 does not match its metadata');
+        if (!xml.length || xml.length > 5_242_880 || xml.length !== artifact.bytes || createHash('sha256').update(xml).digest('hex') !== artifact.sha256) throw new Error('Finance XML artifact size or SHA-256 does not match its metadata');
         return outputFile(context, item, { ...response, body: xml, headers: { 'content-type': 'application/xml' } }, String(parameter(context, 'outputBinaryField', item, 'data')), 'invoice.xml', json);
     }
     return { json: { ...json, _ironfang: response.metadata }, pairedItem: { item } };
 }
+const destinationOperations = ['createDestination', 'createExportDestinations', 'createEinvoiceDestination', 'updateEinvoiceDestination'];
 async function runOperation(context: IExecuteFunctions, item: number, op: Operation): Promise<INodeExecutionData[]> {
     const publicMode = op.product === 'tools' || (op.product === 'financewolf' && parameter(context, 'authentication', item, 'apiKey') === 'public');
     if (publicMode && !op.public) throw new Error('This operation requires an API key; public mode cannot access saved results');
@@ -54,24 +55,27 @@ async function runOperation(context: IExecuteFunctions, item: number, op: Operat
             if (!Array.isArray(qs[q.name]) || !(qs[q.name] as unknown[]).every(value => typeof value === 'string')) throw new Error(`${q.label} must be a JSON array of strings`);
         }
     }
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = op.accept ? { Accept: op.accept } : {};
     if (op.idempotency) {
         const key = String(parameter(context, 'idempotencyKey', item));
-        if (key && publicMode) throw new Error('Public Financewolf calls cannot use an idempotency key');
+        if (key && publicMode) throw new Error('Public Finance calls cannot use an idempotency key');
         if (['submitJob', 'submitBatch'].includes(op.id) && !key.trim()) throw new Error('Use a stable idempotency key for job or batch submission');
         if (key) headers['Idempotency-Key'] = key;
     }
     let body: IHttpRequestOptions['body'];
     if (op.input === 'json') { body = jsonObject(parameter(context, 'requestBody', item, op.example ?? {})); headers['Content-Type'] = 'application/json'; }
-    if (op.id === 'createDestination' || op.id === 'createExportDestinations') {
+    if (destinationOperations.includes(op.id)) {
         const destination = body as IDataObject;
-        if (['access_key', 'secret_key', 'session_token'].some(key => key in destination)) throw new Error('Store destination secrets in the Ironfang S3 Destination credential');
+        if (['access_key', 'secret_key', 'session_token', 'credentials'].some(key => key in destination)) throw new Error('Store destination secrets in the Ironfang S3 Destination credential');
         const s3 = op.id === 'createExportDestinations' || parameter(context, 'destinationType', item, 'webhook') === 's3';
-        if (op.product === 'renderwolf') destination.type = s3 ? 's3' : 'webhook';
+        if (['createDestination', 'createEinvoiceDestination'].includes(op.id)) destination.type = s3 ? 's3' : 'webhook';
         if (s3) {
             const credential = await context.getCredentials('ironfangS3');
-            destination.access_key = String(credential.accessKey || ''); destination.secret_key = String(credential.secretKey || '');
-            if (credential.sessionToken) destination.session_token = String(credential.sessionToken);
+            // Finance nests the S3 keys; Render and Audit take them beside the bucket.
+            const target: IDataObject = op.product === 'financewolf' ? {} : destination;
+            target.access_key = String(credential.accessKey || ''); target.secret_key = String(credential.secretKey || '');
+            if (credential.sessionToken) target.session_token = String(credential.sessionToken);
+            if (op.product === 'financewolf') destination.credentials = target;
         }
     }
     if (op.input === 'xml') {
@@ -79,16 +83,21 @@ async function runOperation(context: IExecuteFunctions, item: number, op: Operat
         if (!Buffer.isBuffer(body) || !body.length || body.length > 5_242_880) throw new Error('XML input must contain between 1 byte and 5 MiB');
         headers['Content-Type'] = 'application/xml';
     }
+    if (op.input === 'zip') {
+        body = await context.helpers.getBinaryDataBuffer(item, String(parameter(context, 'inputBinaryField', item, 'data')));
+        if (!Buffer.isBuffer(body) || !body.length || body.length > 48 * 1024 * 1024) throw new Error('Report input must contain between 1 byte and 48 MiB');
+        headers['Content-Type'] = 'application/zip';
+    }
     if (op.input === 'upload') {
         const input = await context.helpers.getBinaryDataBuffer(item, String(parameter(context, 'inputBinaryField', item, 'data')));
         if (!input.length || input.length > 8 * 1024 * 1024 - 8192) throw new Error('Image input must fit within the 8 MiB multipart request limit');
         const multipart = multipartUpload(input, jsonObject(parameter(context, 'requestBody', item, op.example ?? {})));
         body = multipart.body; headers['Content-Type'] = multipart.contentType;
     }
-    const options: IHttpRequestOptions = { method: op.method, url, qs, headers, body, arrayFormat: 'repeat', ...(op.response === 'json' ? { json: true } : { encoding: 'arraybuffer' }) };
+    const options: IHttpRequestOptions = { method: op.method, url, qs, headers, body, arrayFormat: 'repeat', ...(op.timeout ? { timeout: op.timeout } : {}), ...(op.response === 'json' ? { json: true } : { encoding: 'arraybuffer' }) };
     if (op.response === 'redirect') options.ignoreHttpStatusErrors = { ignore: true, except: Array.from({ length: 300 }, (_, i) => i + 300).filter(code => code !== 302) };
     let response: Response;
-    if (op.pagination) return paginated(context, item, op, options, !publicMode);
+    if (op.pagination && context.getNode().typeVersion >= (op.pagination.since ?? 0)) return paginated(context, item, op, options, !publicMode);
     response = await request.call(context, options, !publicMode);
     if (op.response === 'redirect') {
         const location = response.headers.location;
@@ -115,8 +124,9 @@ async function paginated(context: IExecuteFunctions, item: number, op: Operation
     const all = parameter(context, 'returnAll', item, false) === true;
     const limit = all ? Infinity : Number(parameter(context, 'limit', item, 50));
     if (!all && (!Number.isSafeInteger(limit) || limit < 1)) throw new Error('Limit must be a positive integer');
-    let cursor = parameter(context, 'pageStart', item, paging.parameter === 'offset' ? 0 : '') as string | number;
-    if (paging.parameter === 'offset' && (!Number.isSafeInteger(Number(cursor)) || Number(cursor) < 0)) throw new Error('Start offset must be a non-negative integer');
+    const counted = paging.parameter === 'offset' || paging.parameter === 'since';
+    let cursor = parameter(context, 'pageStart', item, counted ? 0 : '') as string | number;
+    if (counted && (!Number.isSafeInteger(Number(cursor)) || Number(cursor) < 0)) throw new Error('Start offset must be a non-negative integer');
     const output: INodeExecutionData[] = [];
     const seen = new Set<string>();
     for (let page = 0; page < 1000; page++) {
@@ -127,16 +137,16 @@ async function paginated(context: IExecuteFunctions, item: number, op: Operation
         const data = jsonObject(response.body);
         const rows = data[paging.key];
         if (!Array.isArray(rows)) throw new Error(`API list response is missing ${paging.key}`);
-        for (const row of rows.slice(0, limit - output.length)) output.push({ json: { ...row as IDataObject, _ironfang: { ...response.metadata, nextCursor: data.next_cursor ?? '', ...(data.retention_days ? { retentionDays: data.retention_days } : {}) } }, pairedItem: { item } });
+        for (const row of rows.slice(0, limit - output.length)) output.push({ json: { ...row as IDataObject, _ironfang: { ...response.metadata, nextCursor: data[paging.next ?? 'next_cursor'] ?? '', ...(data.retention_days ? { retentionDays: data.retention_days } : {}) } }, pairedItem: { item } });
         if (output.length >= limit || !rows.length) return output;
         if (paging.parameter === 'offset') {
             if (rows.length < Number(qs.limit)) return output;
             cursor = Number(cursor) + rows.length;
         } else {
-            const next = data.next_cursor;
-            if (!next) return output;
-            if (typeof next !== 'string' || next === cursor || seen.has(next)) throw new Error('API repeated a pagination cursor');
-            seen.add(next); cursor = next;
+            const next = data[paging.next ?? 'next_cursor'];
+            if (!next || (counted && rows.length < Number(qs.limit))) return output;
+            if (!['string', 'number'].includes(typeof next) || next === cursor || seen.has(String(next))) throw new Error('API repeated a pagination cursor');
+            seen.add(String(next)); cursor = next as string | number;
         }
     }
     throw new Error('Pagination exceeded 1,000 pages; narrow the query or continue from a cursor');

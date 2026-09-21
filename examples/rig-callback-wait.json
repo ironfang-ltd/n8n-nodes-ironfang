@@ -1,0 +1,131 @@
+{
+  "name": "Rig: start a run, wait for a callback, finish",
+  "active": false,
+  "nodes": [
+    {
+      "id": "start",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "start-run",
+      "name": "Start Run",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "resource": "rig",
+        "operation": "createRun",
+        "suiteId": "replace-suite-id",
+        "requestBody": "{\"ttl\": \"30m\", \"reason\": \"n8n workflow run\"}",
+        "idempotencyKey": "={{ 'n8n-rig-' + $execution.id }}"
+      }
+    },
+    {
+      "id": "create-callback",
+      "name": "Create Callback",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.2,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {
+        "resource": "rig",
+        "operation": "createResource",
+        "runId": "={{ $('Start Run').first().json.run.id }}",
+        "requestBody": "{\"name\": \"order_webhook\", \"type\": \"callback\"}"
+      }
+    },
+    {
+      "id": "wait",
+      "name": "Wait For Callback",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.2,
+      "position": [
+        780,
+        0
+      ],
+      "parameters": {
+        "resource": "rig",
+        "operation": "waitForEvent",
+        "runId": "={{ $('Start Run').first().json.run.id }}",
+        "requestBody": "{\"type\": \"callback.received\", \"resource\": \"order_webhook\", \"timeout\": \"60s\"}"
+      }
+    },
+    {
+      "id": "finish",
+      "name": "Finish Run",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        0
+      ],
+      "parameters": {
+        "resource": "rig",
+        "operation": "finishRun",
+        "runId": "={{ $('Start Run').first().json.run.id }}",
+        "requestBody": "={{ JSON.stringify({ outcome: $json.matched ? 'pass' : 'fail', reason: $json.matched ? 'Callback received' : 'No callback within 60 seconds' }) }}"
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Start Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Run": {
+      "main": [
+        [
+          {
+            "node": "Create Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Callback": {
+      "main": [
+        [
+          {
+            "node": "Wait For Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait For Callback": {
+      "main": [
+        [
+          {
+            "node": "Finish Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

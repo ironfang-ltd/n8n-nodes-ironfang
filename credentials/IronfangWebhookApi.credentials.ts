@@ -3,9 +3,9 @@ export class IronfangWebhookApi implements ICredentialType {
     name = 'ironfangWebhookApi';
     displayName = 'Ironfang Webhook API';
     icon: Icon = { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' };
-    documentationUrl = 'https://ironfang.uk/auditwolf/docs';
+    documentationUrl = 'https://ironfang.uk/audit/docs';
     properties: INodeProperties[] = [
-        { displayName: 'Product', name: 'product', type: 'options', default: 'auditwolf', options: [{ name: 'Auditwolf', value: 'auditwolf' }, { name: 'Renderwolf', value: 'renderwolf' }] },
+        { displayName: 'Product', name: 'product', type: 'options', default: 'auditwolf', options: [{ name: 'Audit', value: 'auditwolf' }, { name: 'Finance', value: 'financewolf' }, { name: 'Render', value: 'renderwolf' }] },
         { displayName: 'Signing Secret', name: 'signingSecret', type: 'string', typeOptions: { password: true }, default: '', required: true, description: 'The one-time secret returned when creating the webhook endpoint or destination. This is not an API key.' },
     ];
 }

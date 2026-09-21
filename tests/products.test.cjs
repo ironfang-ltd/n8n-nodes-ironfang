@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
 const { Ironfang } = require('../dist/nodes/Ironfang/Ironfang.node.js');
 const { operations } = require('../dist/nodes/Ironfang/catalog.js');
-const { productBase } = require('../dist/nodes/Ironfang/transport.js');
+const { productBase, productPrefix } = require('../dist/nodes/Ironfang/transport.js');
 const { credentialTest } = require('../dist/nodes/Ironfang/credentialTest.js');
 const { searchTemplates } = require('../dist/nodes/Ironfang/templates.js');
 const { NodeHelpers } = require('n8n-workflow');
@@ -13,7 +13,7 @@ const generation = { artifact: { data_base64: xml.toString('base64'), bytes: xml
 const preview = Buffer.concat([Buffer.from('--fixture\r\nContent-Disposition: form-data; name="poster"; filename="poster.jpg"\r\nContent-Type: image/jpeg\r\n\r\n'), payload, Buffer.from('\r\n--fixture\r\nContent-Disposition: form-data; name="video"; filename="preview.mp4"\r\nContent-Type: video/mp4\r\n\r\n'), payload, Buffer.from('\r\n--fixture--\r\n')]);
 test('each product exposes one operation selector with its existing default and complete options', () => {
   const description = new Ironfang().description;
-  const defaults = { auditwolf: 'archiveMonitorsByMonitorId', financewolf: 'deleteValidationResult', renderwolf: 'screenshot', tools: 'convertImage' };
+  const defaults = { auditwolf: 'archiveMonitorsByMonitorId', financewolf: 'deleteValidationResult', renderwolf: 'screenshot', rig: 'listRuns', tools: 'convertImage' };
   const legacy = ['pdf', 'screenshot', 'sign', 'image', 'usage', 'video'];
   for (const [resource, expectedDefault] of Object.entries(defaults)) {
     const selectors = description.properties.filter(p => p.name === 'operation' && NodeHelpers.displayParameter({ resource }, p, undefined, description));
@@ -34,7 +34,7 @@ function setup(params, reply, settings = {}) {
   const context = {
     getInputData: () => rows.map(() => ({ json: {}, binary: { data: { data: 'filesystem-v2', id: 'stored-binary' } } })),
     getNodeParameter: (name, i, fallback) => rows[i][name] ?? fallback,
-    getNode: () => ({ name: 'Ironfang', type: 'ironfang', typeVersion: 1.1, parameters: {}, position: [0, 0] }),
+    getNode: () => ({ name: 'Ironfang', type: 'ironfang', typeVersion: settings.version ?? 1.1, parameters: {}, position: [0, 0] }),
     getCredentials: async name => { credentials.push(name); if (settings.noCredentials) throw new Error('Credentials must not be accessed'); return name === 'ironfangS3' ? { accessKey: 'fixture-access', secretKey: 'fixture-secret' } : { baseUrl: base, apiKey: 'fixture-key' }; },
     continueOnFail: () => !!settings.continueOnFail,
     helpers: {
@@ -49,7 +49,7 @@ function setup(params, reply, settings = {}) {
 function parameters(op) {
   const result = { resource: op.product, operation: op.id, requestBody: op.example || {}, xmlSource: 'text', xml: xml.toString(), idempotencyKey: 'fixture-operation-key', destinationType: 'webhook' };
   for (const id of op.path.matchAll(/\{(\w+)\}/g)) result[id[1]] = 'fixture-id';
-  for (const query of op.query) if (query.required) result[query.name] = query.default;
+  for (const query of op.query) if (query.required) result[query.name] = query.default || '2026-01-01T00:00:00Z';
   return result;
 }
 // Exercise every operation's dispatch and output family. Independent tests below
@@ -59,16 +59,17 @@ for (const op of operations) test(`${op.product}: ${op.name} executes`, async ()
     let body = op.pagination ? { [op.pagination.key]: [{ id: 'row' }] } : op.id === 'generateEInvoice' ? generation : {};
     const headers = { 'x-ironfang-request-id': 'fixture-request' }; let statusCode = 200;
     if (op.response === 'binary' || op.response === 'redirect') { body = payload; headers['content-type'] = 'image/png'; }
-    if (op.response === 'redirect' && index === 0) { statusCode = 302; headers.location = '/renderwolf/v1/results/123/signature'; }
+    if (op.response === 'redirect' && index === 0) { statusCode = 302; headers.location = '/render/v1/results/123/signature'; }
     if (op.response === 'multipart') { body = preview; headers['content-type'] = 'multipart/form-data; boundary=fixture'; }
     return { body, headers, statusCode };
   });
   const output = await ctx.execute(); assert.equal(output.length, 1); assert.deepEqual(output[0].pairedItem, { item: 0 });
-  assert(ctx.requests[0].url.includes(`/${op.product}/v1/`)); assert.equal(ctx.requests[0].authenticated, op.product !== 'tools');
+  assert(ctx.requests[0].url.startsWith(`https://api.ironfang.uk/${productPrefix(op.product)}/v1/`)); assert.equal(ctx.requests[0].authenticated, op.product !== 'tools');
 });
 test('routing accepts origin, product and custom gateway prefix bases', () => {
-  for (const base of ['https://api.ironfang.uk', 'https://api.ironfang.uk/renderwolf/', 'https://api.ironfang.uk/auditwolf']) assert.equal(productBase(base, 'financewolf'), 'https://api.ironfang.uk/financewolf');
+  for (const base of ['https://api.ironfang.uk', 'https://api.ironfang.uk/renderwolf/', 'https://api.ironfang.uk/auditwolf', 'https://api.ironfang.uk/render', 'https://api.ironfang.uk/rig/']) assert.equal(productBase(base, 'financewolf'), 'https://api.ironfang.uk/finance');
   assert.equal(productBase('https://local.example/gateway/renderwolf', 'tools'), 'https://local.example/gateway/tools');
+  for (const [product, prefix] of [['renderwolf', 'render'], ['auditwolf', 'audit'], ['financewolf', 'finance'], ['rig', 'rig'], ['tools', 'tools']]) assert.equal(productBase('https://api.ironfang.uk/renderwolf', product), 'https://api.ironfang.uk/' + prefix);
   assert.throws(() => productBase('https://user:secret@local.example', 'tools'));
 });
 test('public tools and explicit public Financewolf calls never read credentials', async () => {
@@ -116,10 +117,10 @@ test('image multipart uses stored binary bytes and sends ordinary form fields', 
 });
 test('signed downloads validate destination and omit credentials on the second request', async () => {
   const params = { resource: 'renderwolf', operation: 'getJobResult', id: 'job-1' };
-  for (const location of ['https://evil.example/renderwolf/v1/results/1/sig', '/warden/v1/me', '/renderwolf/v1/results/../../destinations']) {
+  for (const location of ['https://evil.example/render/v1/results/1/sig', '/warden/v1/me', '/render/v1/results/../../destinations']) {
     const ctx = setup(params, () => ({ statusCode: 302, headers: { location }, body: '' })); await assert.rejects(ctx.execute(), /outside/); assert.equal(ctx.requests.length, 1);
   }
-  const ctx = setup(params, (_, i) => i === 0 ? { statusCode: 302, headers: { location: '/renderwolf/v1/results/123/sig' }, body: '' } : { statusCode: 200, headers: { 'content-type': 'image/png' }, body: payload }); await ctx.execute(); assert.equal(ctx.requests[1].authenticated, false); assert.equal(ctx.requests[1].headers, undefined);
+  const ctx = setup(params, (_, i) => i === 0 ? { statusCode: 302, headers: { location: '/render/v1/results/123/sig' }, body: '' } : { statusCode: 200, headers: { 'content-type': 'image/png' }, body: payload }); await ctx.execute(); assert.equal(ctx.requests[1].authenticated, false); assert.equal(ctx.requests[1].headers, undefined);
 });
 test('site preview separates exact poster and video bytes', async () => {
   const ctx = setup({ resource: 'renderwolf', operation: 'createSitePreview', requestBody: { url: 'https://example.com' }, outputBinaryField: 'clip' }, () => ({ body: preview, headers: { 'content-type': 'multipart/form-data; boundary="fixture"' }, statusCode: 200 })); const [out] = await ctx.execute();
@@ -137,8 +138,8 @@ test('multi-item continued errors keep problem metadata and item linking', async
 });
 test('credential auto-discovery checks each product without durable calls', async () => {
   const requests = [];
-  const result = await credentialTest.call({ helpers: { request: async options => { requests.push(options); return options.uri.includes('/auditwolf/') ? { statusCode: 200, body: { sites: [] } } : { statusCode: 401 }; } } }, { data: { apiKey: 'fixture-key', baseUrl: 'https://api.ironfang.uk/renderwolf' } });
-  assert.equal(result.status, 'OK'); assert.equal(requests.length, 3); assert(requests.every(r => r.method === 'GET')); assert.match(requests[1].uri, /financewolf\/v1\/einvoices\/results$/);
+  const result = await credentialTest.call({ helpers: { request: async options => { requests.push(options); return options.uri.includes('/audit/') ? { statusCode: 200, body: { sites: [] } } : { statusCode: 401 }; } } }, { data: { apiKey: 'fixture-key', baseUrl: 'https://api.ironfang.uk/renderwolf' } });
+  assert.equal(result.status, 'OK'); assert.equal(requests.length, 3); assert(requests.every(r => r.method === 'GET')); assert.match(requests[1].uri, /\.uk\/finance\/v1\/einvoices\/results$/); assert.match(result.message, /Ironfang audit/);
 });
 test('template picker requests HTML-free pages and returns the next cursor', async () => {
   let options; const result = await searchTemplates.call({ getCredentials: async () => ({ baseUrl: 'https://api.ironfang.uk' }), helpers: { httpRequestWithAuthentication: async (_, request) => { options = request; return { templates: [{ id: 'template', name: 'Card' }], next_cursor: 'next' }; } } }, undefined, 'previous');
@@ -167,7 +168,7 @@ test('legacy Renderwolf operations accept credentials based at another product',
  const { run } = require('./context.cjs');
  for (const product of ['financewolf', 'auditwolf', 'tools']) {
   const { ctx } = await run([{}], { baseUrl: `https://gateway.example/prefix/${product}/` });
-  assert.equal(ctx.requests[0].url, 'https://gateway.example/prefix/renderwolf/v1/screenshot');
+  assert.equal(ctx.requests[0].url, 'https://gateway.example/prefix/render/v1/screenshot');
  }
 });
 test('invalid array filters are rejected before they can silently broaden a query', async () => {
@@ -180,4 +181,47 @@ test('a network failure without an HTTP response does not invent a status code',
  const { errorDetails } = require('../dist/nodes/Ironfang/transport.js');
  const error = new Error('Connection failed'); error.httpCode = null;
  assert.equal(Object.hasOwn(errorDetails(error, 0), 'statusCode'), false);
+});
+test('lists that gained paging keep their single response before node version 1.2', async () => {
+ const p = { resource: 'auditwolf', operation: 'listAudits', returnAll: true };
+ const reply = (_, i) => ({ body: { audits: [{ id: 'audit-' + i }], ...(i === 0 ? { next_cursor: 'next' } : {}) }, headers: {}, statusCode: 200 });
+ const saved = setup(p, reply, { version: 1.1 }); const [envelope] = await saved.execute();
+ assert.equal(saved.requests.length, 1); assert.equal(envelope.json.next_cursor, 'next'); assert(!('limit' in saved.requests[0].qs));
+ const current = setup(p, reply, { version: 1.2 }); const rows = await current.execute();
+ assert.deepEqual(rows.map(row => row.json.id), ['audit-0', 'audit-1']); assert.equal(current.requests[1].qs.cursor, 'next');
+ const description = new Ironfang().description;
+ const field = description.properties.find(f => f.name === 'returnAll' && f.displayOptions.show.operation.includes('listAudits'));
+ assert.equal(NodeHelpers.displayParameter({ resource: 'auditwolf', operation: 'listAudits' }, field, { typeVersion: 1.1 }, description), false);
+ assert.equal(NodeHelpers.displayParameter({ resource: 'auditwolf', operation: 'listAudits' }, field, { typeVersion: 1.2 }, description), true);
+});
+test('Rig timeline pages by sequence and stops on a short page', async () => {
+ const ctx = setup({ resource: 'rig', operation: 'listEvents', runId: 'run-1', returnAll: true, pageStart: 4 }, (options, i) => ({ body: { events: Array.from({ length: i === 0 ? options.qs.limit : 2 }, (_, n) => ({ seq: n })), next_since: i === 0 ? 504 : 506 }, headers: {}, statusCode: 200 }));
+ const out = await ctx.execute(); assert.equal(out.length, 502); assert.equal(ctx.requests.length, 2);
+ assert.equal(ctx.requests[0].qs.since, 4); assert.equal(ctx.requests[1].qs.since, 504); assert.equal(out[0].json._ironfang.nextCursor, 504);
+});
+test('Rig waits outlast the API maximum and evidence asks for the bundle', async () => {
+ const wait = setup({ resource: 'rig', operation: 'waitForEvent', runId: 'run-1', requestBody: { type: 'callback.received', timeout: '90s' } }, () => ({ body: { matched: false, next_since: 3 }, headers: {}, statusCode: 200 }));
+ const [result] = await wait.execute(); assert.equal(result.json.matched, false); assert(wait.requests[0].timeout > 90_000);
+ const evidence = setup({ resource: 'rig', operation: 'exportEvidence', runId: 'run-1' }, () => ({ body: payload, headers: { 'content-type': 'application/zip' }, statusCode: 200 }));
+ const [bundle] = await evidence.execute(); assert.equal(evidence.requests[0].headers.Accept, 'application/zip'); assert.equal(bundle.binary.data.fileName, 'result.zip');
+});
+test('Finance S3 destinations take nested keys from the n8n credential only', async () => {
+ const create = setup({ resource: 'financewolf', operation: 'createEinvoiceDestination', destinationType: 's3', requestBody: { name: 'archive', config: { bucket: 'fixture', region: 'eu-west-2' } } }); await create.execute();
+ assert.equal(create.requests[0].body.type, 's3'); assert.deepEqual(create.requests[0].body.credentials, { access_key: 'fixture-access', secret_key: 'fixture-secret' }); assert(!('secret_key' in create.requests[0].body));
+ const webhook = setup({ resource: 'financewolf', operation: 'createEinvoiceDestination', destinationType: 'webhook', requestBody: { name: 'hook', config: { url: 'https://example.com/webhook' } } }); await webhook.execute();
+ assert.equal(webhook.requests[0].body.type, 'webhook'); assert(!('credentials' in webhook.requests[0].body)); assert.deepEqual(webhook.credentials, ['ironfangApi']);
+ const rotate = setup({ resource: 'financewolf', operation: 'updateEinvoiceDestination', id: 'destination-1', destinationType: 's3', requestBody: {} }); await rotate.execute();
+ assert.equal(rotate.requests[0].method, 'PATCH'); assert.equal(rotate.requests[0].body.credentials.secret_key, 'fixture-secret'); assert(!('type' in rotate.requests[0].body));
+ const bad = setup({ resource: 'financewolf', operation: 'updateEinvoiceDestination', id: 'destination-1', requestBody: { credentials: { secret_key: 'do-not-store-in-workflow' } } }); await assert.rejects(bad.execute(), /credential/); assert.equal(bad.requests.length, 0);
+});
+test('signed report verification sends the ZIP bytes and needs no key', async () => {
+ const ctx = setup({ resource: 'financewolf', operation: 'verifyEinvoiceReport', authentication: 'public', inputBinaryField: 'report' }, () => ({ body: { verified: true }, headers: {}, statusCode: 200 }), { noCredentials: true });
+ const [out] = await ctx.execute(); assert.equal(out.json.verified, true); assert.deepEqual(ctx.requests[0].body, payload); assert.equal(ctx.requests[0].headers['Content-Type'], 'application/zip'); assert.equal(ctx.requests[0].url, 'https://api.ironfang.uk/finance/v1/einvoices/reports/verify'); assert.deepEqual(ctx.binaryReads, [{ item: 0, field: 'report' }]);
+});
+test('catalogue scopes and visible names use the current product names', () => {
+ for (const op of operations) assert.doesNotMatch(op.scope, /wolf/, op.id);
+ const description = new Ironfang().description;
+ for (const option of description.properties.find(p => p.name === 'resource').options) assert.doesNotMatch(option.name, /wolf/i);
+ assert.deepEqual(description.properties.find(p => p.name === 'resource').options.map(o => o.value), ['auditwolf', 'financewolf', 'tools', 'renderwolf', 'rig']);
+ assert.deepEqual(description.version, [1, 1.1, 1.2]);
 });

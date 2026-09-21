@@ -1,0 +1,127 @@
+{
+  "name": "Finance: validate as a job, then download the signed report",
+  "active": false,
+  "nodes": [
+    {
+      "id": "start",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "create-job",
+      "name": "Create Job",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "resource": "financewolf",
+        "operation": "createEinvoiceJob",
+        "requestBody": "{\"operation\": \"validate\", \"document_base64\": \"PEludm9pY2UvPg==\", \"options\": {\"ruleset\": \"latest\", \"profile\": \"peppol-bis-billing-3\"}}",
+        "idempotencyKey": "={{ 'n8n-invoice-job-' + $execution.id }}"
+      }
+    },
+    {
+      "id": "pause",
+      "name": "Pause",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {
+        "amount": 10,
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "get-job",
+      "name": "Get Job",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.2,
+      "position": [
+        780,
+        0
+      ],
+      "parameters": {
+        "resource": "financewolf",
+        "operation": "getEinvoiceJob",
+        "id": "={{ $('Create Job').first().json.id }}"
+      }
+    },
+    {
+      "id": "report",
+      "name": "Download Signed Report",
+      "type": "@ironfang/n8n-nodes-ironfang.ironfang",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        0
+      ],
+      "parameters": {
+        "resource": "financewolf",
+        "operation": "createEinvoiceReport",
+        "requestBody": "={{ JSON.stringify({ operation_id: $json.operation_id, include_pdf: false }) }}",
+        "outputBinaryField": "report"
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Create Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Job": {
+      "main": [
+        [
+          {
+            "node": "Pause",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pause": {
+      "main": [
+        [
+          {
+            "node": "Get Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job": {
+      "main": [
+        [
+          {
+            "node": "Download Signed Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
