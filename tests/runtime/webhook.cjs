@@ -21,7 +21,7 @@ if (mode === 'generate') {
   const timestamp = String(Math.floor(Date.now() / 1000) - (kind === 'stale' ? 400 : 0));
   const body = JSON.stringify({ id, type: 'audit.completed', data: { text: '£ café' } }, null, 2);
   const signature = 'v1=' + createHmac('sha256', secret).update(timestamp + '.').update(body).digest('hex');
-  return fetch(url, { method: 'POST', headers: { 'content-type': 'application/json', 'auditwolf-timestamp': timestamp, 'auditwolf-signature': kind === 'forged' ? 'v1=' + '0'.repeat(64) : signature, 'auditwolf-event-id': 'unsigned-header-' + Math.random() }, body: kind === 'mutated' ? body.replace('café', 'coffee') : body });
+  return fetch(url, { method: 'POST', headers: { 'content-type': 'application/json', 'ironfang-timestamp': timestamp, 'ironfang-signature': kind === 'forged' ? 'v1=' + '0'.repeat(64) : signature, 'auditwolf-event-id': 'unsigned-header-' + Math.random() }, body: kind === 'mutated' ? body.replace('café', 'coffee') : body });
  }
  (async () => {
   let response;

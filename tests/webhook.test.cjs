@@ -7,21 +7,24 @@ const { Ironfang } = require('../dist/nodes/Ironfang/Ironfang.node.js');
 const { NodeHelpers } = require('n8n-workflow');
 const now = Date.now();
 const secrets = { auditwolf: 'awsec_' + 'a'.repeat(43), renderwolf: '12'.repeat(32), financewolf: '34'.repeat(32) };
-function signed(product, event = { id: 'event-1', type: 'audit.completed', data: { title: '£ café' } }, time = now) {
+function signed(product, event = { id: 'event-1', type: 'audit.completed', data: { title: '£ café' } }, time = now, prefix = 'ironfang') {
  const raw = Buffer.from(JSON.stringify(event, null, 2));
  const timestamp = String(Math.floor(time / 1000));
  const signature = 'v1=' + createHmac('sha256', signingKey(product, secrets[product])).update(timestamp + '.').update(raw).digest('hex');
- return { raw, headers: { [`${product}-timestamp`]: timestamp, [`${product}-signature`]: signature, [`${product}-event-id`]: 'unsigned-id' } };
+ return { raw, headers: { [`${prefix}-timestamp`]: timestamp, [`${prefix}-signature`]: signature, [`${prefix}-event-id`]: 'unsigned-id' } };
 }
 for (const product of ['auditwolf', 'renderwolf', 'financewolf']) test(`verifies exact ${product} signed bytes and secret encoding`, () => {
  const { raw, headers } = signed(product); assert.equal(verifyEvent(raw, headers, product, secrets[product], now).id, 'event-1');
  assert.throws(() => verifyEvent(Buffer.from(raw.toString().replace('café', 'coffee')), headers, product, secrets[product], now), /signature/);
  assert.throws(() => verifyEvent(Buffer.from(JSON.stringify(JSON.parse(raw))), headers, product, secrets[product], now), /signature/);
 });
+test('still verifies a delivery signed only with the launch-era headers', () => {
+ for (const product of ['auditwolf', 'renderwolf', 'financewolf']) { const { raw, headers } = signed(product, undefined, now, product); assert.equal(verifyEvent(raw, headers, product, secrets[product], now).id, 'event-1'); }
+});
 test('rejects stale, future, malformed and oversized webhook requests', () => {
  for (const time of [now - 301000, now + 301000]) { const { raw, headers } = signed('auditwolf', undefined, time); assert.throws(() => verifyEvent(raw, headers, 'auditwolf', secrets.auditwolf, now), /timestamp/); }
  const { raw, headers } = signed('auditwolf');
- for (const signature of ['', 'v1=abcd', 'v2=' + 'a'.repeat(64)]) assert.throws(() => verifyEvent(raw, { ...headers, 'auditwolf-signature': signature }, 'auditwolf', secrets.auditwolf, now));
+ for (const signature of ['', 'v1=abcd', 'v2=' + 'a'.repeat(64)]) assert.throws(() => verifyEvent(raw, { ...headers, 'ironfang-signature': signature }, 'auditwolf', secrets.auditwolf, now));
  assert.throws(() => verifyEvent(Buffer.alloc(65537), headers, 'auditwolf', secrets.auditwolf, now), /size/);
 });
 function triggerContext(request, state = {}) {

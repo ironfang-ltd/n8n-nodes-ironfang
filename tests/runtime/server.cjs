@@ -11,7 +11,7 @@ http.createServer(async (req, res) => {
  let body = {};
  if (req.headers['content-type']?.includes('application/json')) { try { body = JSON.parse(raw.toString() || '{}'); } catch { res.writeHead(400); res.end(); return; } }
  fs.appendFileSync('/output/requests.jsonl', JSON.stringify({ url: req.url, method: req.method, authenticated: !!req.headers.authorization, contentType: req.headers['content-type'], body, raw: raw.toString('base64') }) + '\n');
- const headers = { 'x-ironfang-request-id': 'runtime-request', 'x-renderwolf-credits': '1', 'x-renderwolf-cache': 'miss' };
+ const headers = { 'x-ironfang-request-id': 'runtime-request', 'x-ironfang-credits': '1', 'x-ironfang-cache': 'miss' };
  const json = (body, status = 200) => { res.writeHead(status, { ...headers, 'content-type': 'application/json' }); res.end(JSON.stringify(body)); };
  const binary = (body = png, type = 'image/png') => { res.writeHead(200, { ...headers, 'content-type': type }); res.end(body); };
  if (url.pathname === '/finance/v1/einvoices/generate') return json({ artifact: { data_base64: xml.toString('base64'), bytes: xml.length, sha256: crypto.createHash('sha256').update(xml).digest('hex'), content_type: 'application/xml' }, validation: { outcome: 'valid' } });

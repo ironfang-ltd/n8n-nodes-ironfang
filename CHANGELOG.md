@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.3 — 2026-09-28
+
+- Responses report credits and cache status from the `X-Ironfang-Credits` and
+  `X-Ironfang-Cache` headers, and the trigger verifies deliveries signed with
+  `Ironfang-Signature` and `Ironfang-Timestamp`. The Ironfang API sends these
+  alongside the launch-era `X-Renderwolf-*` and `Renderwolf-*`/`Financewolf-*`/
+  `Auditwolf-*` headers for now and will stop sending the old ones, so update
+  to this version before then. The trigger still accepts a delivery that
+  carries only the old headers. No workflow or credential needs editing.
+
 ## 0.4.2 — 2026-09-28
 
 - The Ironfang API moved from `api.ironfang.uk` to `api.ironfang.com`. New

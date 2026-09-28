@@ -6,7 +6,7 @@ Use Ironfang Render, Finance, Audit and Rig, and Ironfang's public developer
 tools, in n8n. The Ironfang action node has **162 operations**, grouped by
 product. Ironfang Trigger receives signed Audit, Finance and Render events.
 
-**Release: 0.4.2.** The API is now at `api.ironfang.com`; credentials saved with the old `api.ironfang.uk` address keep working unchanged. 0.4.1 made the package installable on n8n releases
+**Release: 0.4.3.** Credits, cache status and webhook signatures are read from the `X-Ironfang-*` and `Ironfang-*` headers; update before the API stops sending the launch-era ones. 0.4.2 moved the API to `api.ironfang.com` (credentials saved with the old `api.ironfang.uk` address keep working unchanged), and 0.4.1 made the package installable on n8n releases
 before 2.33 that use PostgreSQL; see [Installation](#installation-and-credentials).
 It includes 0.4.0, in which the products are named Ironfang Render, Finance and Audit
 (formerly Renderwolf, Financewolf and Auditwolf), and the node follows: requests
@@ -164,8 +164,9 @@ The trigger verifies HMAC-SHA256 over the timestamp and exact body bytes using
 constant-time comparison, accepts timestamps within five minutes, and rejects
 invalid signatures before starting a workflow. Render and Finance secrets are
 decoded from hex; Audit secrets are used as returned. Deliveries are signed in
-the `Renderwolf-`, `Financewolf-` and `Auditwolf-` headers the products launched
-with; the trigger reads the ones for the credential's product. The signed event ID, rather
+the `Ironfang-Signature` and `Ironfang-Timestamp` headers; the trigger still
+reads the `Renderwolf-`, `Financewolf-` or `Auditwolf-` headers the products
+launched with when those are all a delivery carries. The signed event ID, rather
 than the unsigned header ID, is used for duplicate detection.
 
 Duplicate state covers seven days/up to 10,000 IDs in n8n workflow static data.

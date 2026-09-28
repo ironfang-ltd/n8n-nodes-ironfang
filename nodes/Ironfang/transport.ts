@@ -33,8 +33,8 @@ export function identifier(context: IExecuteFunctions, value: unknown, itemIndex
 export function responseMetadata(headers: Record<string, string>, statusCode: number): IDataObject {
     const result: IDataObject = { statusCode };
     if (headers['x-ironfang-request-id']) result.requestId = headers['x-ironfang-request-id'];
-    if (headers['x-renderwolf-cache']) result.cacheStatus = headers['x-renderwolf-cache'];
-    const credits = headers['x-renderwolf-credits'];
+    if (headers['x-ironfang-cache']) result.cacheStatus = headers['x-ironfang-cache'];
+    const credits = headers['x-ironfang-credits'];
     if (credits !== undefined && credits !== '' && Number.isFinite(Number(credits))) result.creditsCharged = Number(credits);
     return result;
 }
