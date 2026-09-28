@@ -9,7 +9,7 @@ Complex request bodies use JSON so all supported schema fields remain available.
 
 Archive a monitor (one-way; its audits and evidence remain)
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Bulk Update Findings
 
@@ -17,7 +17,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Apply one decision to several findings
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -33,7 +33,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 What changed against the observation before it
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Create Export Destination
 
@@ -41,7 +41,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Create an encrypted S3/S3-compatible destination
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -58,7 +58,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Create a monitor
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -72,7 +72,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Create a deterministic rule
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -88,7 +88,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Create a site
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -103,7 +103,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Create a signed webhook endpoint
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -120,7 +120,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Retire an endpoint (soft; its delivery history is kept)
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Disable Rule
 
@@ -128,7 +128,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Disable a rule for future audits
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Download Artifact
 
@@ -136,7 +136,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Stream an authenticated raw artifact
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Download Audit Evidence
 
@@ -144,7 +144,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Download the independently verifiable evidence ZIP
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Enable Rule
 
@@ -152,7 +152,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Enable a rule for future audits
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Export Audit
 
@@ -160,7 +160,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Queue a manual S3 export
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -174,7 +174,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Get audit lifecycle, compliance and integrity state
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Get Finding
 
@@ -182,7 +182,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Get one finding
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Get Findings Summary
 
@@ -190,7 +190,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 The numbers at the top of the finding inbox
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Get Monitor
 
@@ -198,7 +198,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Get a monitor with its URL set
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Get Page Observation
 
@@ -206,7 +206,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 One observation with its artifacts and rule results
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Get Rule
 
@@ -214,7 +214,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Get the active revision of a rule
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Get Site
 
@@ -222,7 +222,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Get a site
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Get Webhook Delivery
 
@@ -230,7 +230,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Read one organisation-owned delivery
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Home
 
@@ -238,7 +238,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Tenant-scoped setup facts and recent activity for the portal
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Install Rule Pack
 
@@ -246,7 +246,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Install a rule pack
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -261,7 +261,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Page organisation webhook deliveries
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `cursor`, `limit`, `status`, `destination`.
 
@@ -271,7 +271,7 @@ Query fields: `cursor`, `limit`, `status`, `destination`.
 
 Page observations of an audit
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `change`, `compliance`, `capture`, `q`, `limit`, `cursor`.
 
@@ -281,7 +281,7 @@ Query fields: `change`, `compliance`, `capture`, `q`, `limit`, `cursor`.
 
 List organisation audits
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`, `status`, `site_id`.
 
@@ -291,7 +291,7 @@ Query fields: `limit`, `cursor`, `status`, `site_id`.
 
 The organisation's recent product events, newest first
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / List Export Destinations
 
@@ -299,7 +299,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 List S3 destinations
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / List Exports
 
@@ -307,7 +307,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 List export jobs
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`, `audit_id`.
 
@@ -317,7 +317,7 @@ Query fields: `limit`, `cursor`, `audit_id`.
 
 The append-only history of a finding
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`.
 
@@ -327,7 +327,7 @@ Query fields: `limit`, `cursor`.
 
 The finding inbox
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `site_id`, `page_id`, `rule_id`, `state`, `severity`, `assignee`, `open_longer_than_days`, `limit`, `sort`, `cursor`, `offset`.
 
@@ -337,7 +337,7 @@ Query fields: `site_id`, `page_id`, `rule_id`, `state`, `severity`, `assignee`, 
 
 Packs installed on this site
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / List Monitor Runs
 
@@ -345,7 +345,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 The monitor's audits, newest first
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`, `status`.
 
@@ -355,7 +355,7 @@ Query fields: `limit`, `cursor`, `status`.
 
 List monitors
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`, `site_id`.
 
@@ -365,7 +365,7 @@ Query fields: `limit`, `cursor`, `site_id`.
 
 A page's observation history, newest first
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`.
 
@@ -375,7 +375,7 @@ Query fields: `limit`, `cursor`.
 
 The rule pack catalogue
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / List Rule Revisions
 
@@ -383,7 +383,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 List every revision of a rule, newest first
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`.
 
@@ -393,7 +393,7 @@ Query fields: `limit`, `cursor`.
 
 List site audits
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `limit`, `cursor`, `status`.
 
@@ -403,7 +403,7 @@ Query fields: `limit`, `cursor`, `status`.
 
 List the site's monitors
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / List Site Rules
 
@@ -411,7 +411,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 List the site's versioned deterministic rules
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / List Sites
 
@@ -419,7 +419,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 List sites
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / List Webhook Deliveries
 
@@ -427,7 +427,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 List endpoint deliveries
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 Query fields: `cursor`, `limit`, `status`.
 
@@ -437,7 +437,7 @@ Query fields: `cursor`, `limit`, `status`.
 
 List lifecycle webhook endpoints
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Pause Monitor
 
@@ -445,7 +445,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Pause scheduling
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Replace Monitor URLs
 
@@ -453,7 +453,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Replace a url_set monitor's URL list
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -469,7 +469,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Resume scheduling
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Retire Rule
 
@@ -477,7 +477,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Retire a rule
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Retry Webhook Delivery
 
@@ -485,7 +485,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Re-queue a failed delivery
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Rotate Webhook Secret
 
@@ -493,7 +493,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Replace the endpoint's signing secret
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Run Monitor
 
@@ -501,7 +501,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Queue an audit now with the monitor's scope frozen as the scheduler would freeze it
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Run Site Audit
 
@@ -509,7 +509,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Trigger an asynchronous audit
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -524,7 +524,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Upload and verify a connection-test object
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Test Webhook
 
@@ -532,7 +532,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Send a signed endpoint.test event
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Uninstall Rule Pack
 
@@ -540,7 +540,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Uninstall a pack
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## audit / Update Finding
 
@@ -548,7 +548,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Assign, schedule, acknowledge, accept the risk, or close a finding
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {}
@@ -560,7 +560,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Change a monitor's name, cadence, anchor, timezone, capture profile or change policy
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {
@@ -574,7 +574,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Revise a rule
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {}
@@ -586,7 +586,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Enable or disable an endpoint, or change its subscribed events
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {}
@@ -598,7 +598,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Upgrade an installed pack, or change its values
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ```json
 {}
@@ -610,7 +610,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Credits, quota position, projection and hosted evidence
 
-Full request contract: https://api.ironfang.uk/audit/openapi.yaml
+Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 ## finance / Cancel Batch
 
@@ -618,7 +618,7 @@ Full request contract: https://api.ironfang.uk/audit/openapi.yaml
 
 Cancel an ordered batch
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Cancel Job
 
@@ -626,7 +626,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Cancel an async job
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Create Batch
 
@@ -634,7 +634,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Create an ordered batch
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ```json
 {
@@ -657,7 +657,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Create a webhook or S3 destination
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ```json
 {
@@ -674,7 +674,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Create an async job
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ```json
 {
@@ -693,7 +693,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Retire a destination and erase its stored credentials
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Delete Result
 
@@ -701,7 +701,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Delete saved result bytes and findings
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Download Signed Report
 
@@ -709,7 +709,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Download a signed report for a retained result
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ```json
 {
@@ -723,7 +723,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Generate and validate one UBL e-invoice
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ```json
 {
@@ -793,7 +793,7 @@ Query fields: `ruleset` (required), `profile` (required).
 
 Get an ordered batch
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Get Delivery
 
@@ -801,7 +801,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Read a delivery and its immutable attempt history
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Get Destination
 
@@ -809,7 +809,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Read a destination without its credentials
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Get Job
 
@@ -817,7 +817,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Get an async job
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Get Report Signing Keys
 
@@ -825,7 +825,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Read Ironfang Finance report signing public keys
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Get Result
 
@@ -833,7 +833,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Read a saved validation or generation result
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Get Ruleset
 
@@ -841,7 +841,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Fetch one ruleset by its immutable id
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / List Batches
 
@@ -849,7 +849,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 List batches
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 Query fields: `limit`, `cursor`.
 
@@ -859,7 +859,7 @@ Query fields: `limit`, `cursor`.
 
 List delivery history with keyset pagination
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 Query fields: `destination`, `operation_id`, `status`, `cursor`, `limit`.
 
@@ -869,7 +869,7 @@ Query fields: `destination`, `operation_id`, `status`, `cursor`, `limit`.
 
 List active destination configurations
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / List Jobs
 
@@ -877,7 +877,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 List jobs
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 Query fields: `limit`, `cursor`, `status`.
 
@@ -887,7 +887,7 @@ Query fields: `limit`, `cursor`, `status`.
 
 List saved validation and generation results
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 Query fields: `before`, `cursor`, `limit`, `kind`, `outcome`, `ruleset`, `q`, `operation_id`.
 
@@ -897,7 +897,7 @@ Query fields: `before`, `cursor`, `limit`, `kind`, `outcome`, `ruleset`, `q`, `o
 
 List rulesets available for selection and reproduction
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 Query fields: `document_type`, `profile`, `state`.
 
@@ -907,7 +907,7 @@ Query fields: `document_type`, `profile`, `state`.
 
 Render a saved generation as a readable PDF
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ```json
 {
@@ -921,7 +921,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Retry failed delivery without rerunning validation
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## finance / Update Destination
 
@@ -929,7 +929,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Enable, disable or rotate destination credentials
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ```json
 {
@@ -943,7 +943,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Reconcile Ironfang Finance document usage
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 Query fields: `start` (required), `end` (required).
 
@@ -953,7 +953,7 @@ Query fields: `start` (required), `end` (required).
 
 Validate one e-invoice XML document
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 Query fields: `ruleset`, `profile`, `document_type`.
 
@@ -963,7 +963,7 @@ Query fields: `ruleset`, `profile`, `document_type`.
 
 Verify report integrity without an account
 
-Full request contract: https://api.ironfang.uk/finance/openapi.yaml
+Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 ## render / Cancel Job
 
@@ -971,7 +971,7 @@ Full request contract: https://api.ironfang.uk/finance/openapi.yaml
 
 Cancel a job
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Capabilities
 
@@ -979,7 +979,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 What Ironfang Render does, is building and does not offer
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Create Destination
 
@@ -987,7 +987,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Register a delivery destination
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {
@@ -1002,7 +1002,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Create a template
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {
@@ -1019,7 +1019,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Remove a destination
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Delete Template
 
@@ -1027,7 +1027,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Delete a template
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Download Job Result
 
@@ -1035,7 +1035,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Collect a job's result
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Get Batch
 
@@ -1043,7 +1043,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Poll a batch
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Get Delivery
 
@@ -1051,7 +1051,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 One delivery, with the body it posted
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Get Destination
 
@@ -1059,7 +1059,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Get a destination
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Get Job
 
@@ -1067,7 +1067,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Poll a job
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Get Template
 
@@ -1075,7 +1075,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Fetch a template
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / List Batches
 
@@ -1083,7 +1083,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 List batches
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 Query fields: `limit`, `cursor`.
 
@@ -1093,7 +1093,7 @@ Query fields: `limit`, `cursor`.
 
 List deliveries
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 Query fields: `destination`, `job_id`, `status`, `limit`, `cursor`.
 
@@ -1103,7 +1103,7 @@ Query fields: `destination`, `job_id`, `status`, `limit`, `cursor`.
 
 List destinations
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / List Jobs
 
@@ -1111,7 +1111,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 List jobs
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 Query fields: `status`, `limit`, `cursor`.
 
@@ -1121,7 +1121,7 @@ Query fields: `status`, `limit`, `cursor`.
 
 Request history
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 Query fields: `since`, `until`, `outcome`, `kind`, `cache`, `key`, `error`, `id`, `limit`, `offset`.
 
@@ -1131,7 +1131,7 @@ Query fields: `since`, `until`, `outcome`, `kind`, `cache`, `key`, `error`, `id`
 
 List templates
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 Query fields: `cursor`, `limit`, `summary`.
 
@@ -1141,7 +1141,7 @@ Query fields: `cursor`, `limit`, `summary`.
 
 Render a QR code
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {
@@ -1155,7 +1155,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Send a delivery again
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Site Preview
 
@@ -1163,7 +1163,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Render a scrolling website preview
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {
@@ -1180,7 +1180,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Submit up to 100 jobs together
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {
@@ -1201,7 +1201,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Submit a durable render job
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {
@@ -1218,7 +1218,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Test a destination now
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Update Destination
 
@@ -1226,7 +1226,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Rename or enable a destination
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {}
@@ -1238,7 +1238,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Replace a template
 
-Full request contract: https://api.ironfang.uk/render/openapi.yaml
+Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ```json
 {
@@ -1255,7 +1255,7 @@ Full request contract: https://api.ironfang.uk/render/openapi.yaml
 
 Arm a fault
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1271,7 +1271,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Cancel a run
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1285,7 +1285,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Mint a connector and its bootstrap token
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1299,7 +1299,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Create a project
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1314,7 +1314,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Allocate a resource
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1329,7 +1329,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Start a run
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1344,7 +1344,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 A signed receipt for the run
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Create Suite
 
@@ -1352,7 +1352,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Create a suite
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1385,7 +1385,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Download an event's payload
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Export Run Evidence
 
@@ -1393,7 +1393,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Export the run's evidence bundle
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Finish Run
 
@@ -1401,7 +1401,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Finish a run
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1415,7 +1415,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 The hosts, bounds and retention a client builds against
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Get Event
 
@@ -1423,7 +1423,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Get an event
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Get Project
 
@@ -1431,7 +1431,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Get a project
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Get Run
 
@@ -1439,7 +1439,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Get a run
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Get Suite
 
@@ -1447,7 +1447,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Get a suite
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Hold Run
 
@@ -1455,7 +1455,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Keep the run from retention until a date
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1469,7 +1469,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Tenant-scoped setup facts and recent activity for the portal
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / List Connectors
 
@@ -1477,7 +1477,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 List a run's connectors
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / List Events
 
@@ -1485,7 +1485,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Read the timeline
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 Query fields: `since`, `limit`.
 
@@ -1495,7 +1495,7 @@ Query fields: `since`, `limit`.
 
 The keys evidence is signed with
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / List Faults
 
@@ -1503,7 +1503,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 List a run's faults
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / List Projects
 
@@ -1511,7 +1511,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 List projects
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 Query fields: `cursor`, `limit`.
 
@@ -1521,7 +1521,7 @@ Query fields: `cursor`, `limit`.
 
 List a run's resources
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / List Runs
 
@@ -1529,7 +1529,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 List runs
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 Query fields: `project`, `suite`, `status`, `cursor`, `limit`.
 
@@ -1539,7 +1539,7 @@ Query fields: `project`, `suite`, `status`, `cursor`, `limit`.
 
 List a suite's versions
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / List Suites
 
@@ -1547,7 +1547,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 List suites
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 Query fields: `project`, `cursor`, `limit`.
 
@@ -1557,7 +1557,7 @@ Query fields: `project`, `cursor`, `limit`.
 
 Lift a retention hold
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Remove Fault
 
@@ -1565,7 +1565,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Disarm a fault
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Replay Callback
 
@@ -1573,7 +1573,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Replay a recorded callback
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ## rig / Revise Suite
 
@@ -1581,7 +1581,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Revise a suite
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1611,7 +1611,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Replace a mock's rules
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {
@@ -1638,7 +1638,7 @@ Full request contract: https://api.ironfang.uk/rig/openapi.yaml
 
 Runs and events in a window
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 Query fields: `since`, `until`.
 
@@ -1648,7 +1648,7 @@ Query fields: `since`, `until`.
 
 Wait for an event
 
-Full request contract: https://api.ironfang.uk/rig/openapi.yaml
+Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 ```json
 {

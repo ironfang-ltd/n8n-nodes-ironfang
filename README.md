@@ -27,7 +27,7 @@ node's newest version as an integer and these packages' newest node version was
 1.1 or 1.2. Install 0.4.1 or later, or upgrade n8n. n8n Cloud installation requires n8n's manual package verification;
 npm publishing and automated checks do not establish that approval.
 
-Create an `if_live_` platform API key at [portal.ironfang.uk](https://portal.ironfang.uk)
+Create an `if_live_` platform API key at [portal.ironfang.com](https://portal.ironfang.com)
 with the scopes your workflow needs, then select an Ironfang API credential.
 Existing `rw_live_` Render keys and both origin-only and `/renderwolf` base
 URLs remain supported. Other product bases and custom gateway prefixes work too.
@@ -54,10 +54,10 @@ The [operation reference](docs/operations.md) lists each action's endpoint,
 permission, query fields and request example. Complex API bodies use a JSON
 editor so nested fields remain available. Replace the example values before
 running a write operation. Request definitions are available in the product
-specifications: [Render](https://api.ironfang.uk/render/openapi.yaml),
-[Finance](https://api.ironfang.uk/finance/openapi.yaml),
-[Audit](https://api.ironfang.uk/audit/openapi.yaml),
-[Rig](https://api.ironfang.uk/rig/openapi.yaml).
+specifications: [Render](https://api.ironfang.com/render/openapi.yaml),
+[Finance](https://api.ironfang.com/finance/openapi.yaml),
+[Audit](https://api.ironfang.com/audit/openapi.yaml),
+[Rig](https://api.ironfang.com/rig/openapi.yaml).
 
 Screenshots support PNG/JPEG/WebP and phone/tablet device presets. Advanced
 Render Options accepts custom `css`, a page `script`, ordered `actions` (click,

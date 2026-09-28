@@ -12,7 +12,7 @@ export class IronfangApi implements ICredentialType {
 
     displayName = 'Ironfang API';
 
-    documentationUrl = 'https://ironfang.uk/render/docs';
+    documentationUrl = 'https://ironfang.com/render/docs';
 
     properties: INodeProperties[] = [
         {
@@ -28,7 +28,7 @@ export class IronfangApi implements ICredentialType {
             displayName: 'Base URL',
             name: 'baseUrl',
             type: 'string',
-            default: 'https://api.ironfang.uk/render',
+            default: 'https://api.ironfang.com/render',
             description:
                 'API origin or product base URL. Origin-only and /renderwolf values saved by earlier versions remain valid; the node selects the requested product path.',
         },

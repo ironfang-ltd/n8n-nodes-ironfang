@@ -29,7 +29,7 @@ test('each product exposes one operation selector with its existing default and 
 function setup(params, reply, settings = {}) {
   const requests = [], credentials = [], binaryReads = [];
   const rows = Array.isArray(params) ? params : [params];
-  const base = settings.base || 'https://api.ironfang.uk/renderwolf';
+  const base = settings.base || 'https://api.ironfang.com/renderwolf';
   const receive = async (authenticated, options) => { requests.push({ authenticated, ...options }); return reply ? reply(options, requests.length - 1, authenticated) : { statusCode: 200, headers: {}, body: {} }; };
   const context = {
     getInputData: () => rows.map(() => ({ json: {}, binary: { data: { data: 'filesystem-v2', id: 'stored-binary' } } })),
@@ -64,12 +64,12 @@ for (const op of operations) test(`${op.product}: ${op.name} executes`, async ()
     return { body, headers, statusCode };
   });
   const output = await ctx.execute(); assert.equal(output.length, 1); assert.deepEqual(output[0].pairedItem, { item: 0 });
-  assert(ctx.requests[0].url.startsWith(`https://api.ironfang.uk/${productPrefix(op.product)}/v1/`)); assert.equal(ctx.requests[0].authenticated, op.product !== 'tools');
+  assert(ctx.requests[0].url.startsWith(`https://api.ironfang.com/${productPrefix(op.product)}/v1/`)); assert.equal(ctx.requests[0].authenticated, op.product !== 'tools');
 });
 test('routing accepts origin, product and custom gateway prefix bases', () => {
-  for (const base of ['https://api.ironfang.uk', 'https://api.ironfang.uk/renderwolf/', 'https://api.ironfang.uk/auditwolf', 'https://api.ironfang.uk/render', 'https://api.ironfang.uk/rig/']) assert.equal(productBase(base, 'financewolf'), 'https://api.ironfang.uk/finance');
+  for (const base of ['https://api.ironfang.com', 'https://api.ironfang.com/renderwolf/', 'https://api.ironfang.com/auditwolf', 'https://api.ironfang.com/render', 'https://api.ironfang.com/rig/']) assert.equal(productBase(base, 'financewolf'), 'https://api.ironfang.com/finance');
   assert.equal(productBase('https://local.example/gateway/renderwolf', 'tools'), 'https://local.example/gateway/tools');
-  for (const [product, prefix] of [['renderwolf', 'render'], ['auditwolf', 'audit'], ['financewolf', 'finance'], ['rig', 'rig'], ['tools', 'tools']]) assert.equal(productBase('https://api.ironfang.uk/renderwolf', product), 'https://api.ironfang.uk/' + prefix);
+  for (const [product, prefix] of [['renderwolf', 'render'], ['auditwolf', 'audit'], ['financewolf', 'finance'], ['rig', 'rig'], ['tools', 'tools']]) assert.equal(productBase('https://api.ironfang.com/renderwolf', product), 'https://api.ironfang.com/' + prefix);
   assert.throws(() => productBase('https://user:secret@local.example', 'tools'));
 });
 test('public tools and explicit public Financewolf calls never read credentials', async () => {
@@ -138,11 +138,11 @@ test('multi-item continued errors keep problem metadata and item linking', async
 });
 test('credential auto-discovery checks each product without durable calls', async () => {
   const requests = [];
-  const result = await credentialTest.call({ helpers: { request: async options => { requests.push(options); return options.uri.includes('/audit/') ? { statusCode: 200, body: { sites: [] } } : { statusCode: 401 }; } } }, { data: { apiKey: 'fixture-key', baseUrl: 'https://api.ironfang.uk/renderwolf' } });
-  assert.equal(result.status, 'OK'); assert.equal(requests.length, 3); assert(requests.every(r => r.method === 'GET')); assert.match(requests[1].uri, /\.uk\/finance\/v1\/einvoices\/results$/); assert.match(result.message, /Ironfang audit/);
+  const result = await credentialTest.call({ helpers: { request: async options => { requests.push(options); return options.uri.includes('/audit/') ? { statusCode: 200, body: { sites: [] } } : { statusCode: 401 }; } } }, { data: { apiKey: 'fixture-key', baseUrl: 'https://api.ironfang.com/renderwolf' } });
+  assert.equal(result.status, 'OK'); assert.equal(requests.length, 3); assert(requests.every(r => r.method === 'GET')); assert.match(requests[1].uri, /\.com\/finance\/v1\/einvoices\/results$/); assert.match(result.message, /Ironfang audit/);
 });
 test('template picker requests HTML-free pages and returns the next cursor', async () => {
-  let options; const result = await searchTemplates.call({ getCredentials: async () => ({ baseUrl: 'https://api.ironfang.uk' }), helpers: { httpRequestWithAuthentication: async (_, request) => { options = request; return { templates: [{ id: 'template', name: 'Card' }], next_cursor: 'next' }; } } }, undefined, 'previous');
+  let options; const result = await searchTemplates.call({ getCredentials: async () => ({ baseUrl: 'https://api.ironfang.com' }), helpers: { httpRequestWithAuthentication: async (_, request) => { options = request; return { templates: [{ id: 'template', name: 'Card' }], next_cursor: 'next' }; } } }, undefined, 'previous');
   assert.deepEqual(options.qs, { summary: true, limit: 50, cursor: 'previous' }); assert.equal(result.paginationToken, 'next'); assert.deepEqual(result.results, [{ name: 'Card', value: 'template' }]);
 });
 test('examples import inactive, contain no credentials, and reference existing nodes/actions', () => {
@@ -216,7 +216,7 @@ test('Finance S3 destinations take nested keys from the n8n credential only', as
 });
 test('signed report verification sends the ZIP bytes and needs no key', async () => {
  const ctx = setup({ resource: 'financewolf', operation: 'verifyEinvoiceReport', authentication: 'public', inputBinaryField: 'report' }, () => ({ body: { verified: true }, headers: {}, statusCode: 200 }), { noCredentials: true });
- const [out] = await ctx.execute(); assert.equal(out.json.verified, true); assert.deepEqual(ctx.requests[0].body, payload); assert.equal(ctx.requests[0].headers['Content-Type'], 'application/zip'); assert.equal(ctx.requests[0].url, 'https://api.ironfang.uk/finance/v1/einvoices/reports/verify'); assert.deepEqual(ctx.binaryReads, [{ item: 0, field: 'report' }]);
+ const [out] = await ctx.execute(); assert.equal(out.json.verified, true); assert.deepEqual(ctx.requests[0].body, payload); assert.equal(ctx.requests[0].headers['Content-Type'], 'application/zip'); assert.equal(ctx.requests[0].url, 'https://api.ironfang.com/finance/v1/einvoices/reports/verify'); assert.deepEqual(ctx.binaryReads, [{ item: 0, field: 'report' }]);
 });
 test('catalogue scopes and visible names use the current product names', () => {
  for (const op of operations) assert.doesNotMatch(op.scope, /wolf/, op.id);

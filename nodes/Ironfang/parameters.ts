@@ -17,7 +17,7 @@ function queryField(field: QueryField): INodeProperties {
 
 export const productParameters: INodeProperties[] = [
     { displayName: 'Authentication', name: 'authentication', type: 'options', noDataExpression: true, default: 'apiKey', displayOptions: { show: { resource: ['financewolf'] } }, options: [{ name: 'API Key', value: 'apiKey' }, { name: 'Public (No Saved Results)', value: 'public' }], description: 'Public validation, generation, ruleset reads and report verification only. An invalid key never falls back to public access.' },
-    { displayName: 'Public API Base URL', name: 'publicBaseUrl', type: 'string', default: 'https://api.ironfang.uk', displayOptions: { show: { resource: ['tools', 'financewolf'] } }, description: 'Used by public requests only; authenticated requests use the credential base URL' },
+    { displayName: 'Public API Base URL', name: 'publicBaseUrl', type: 'string', default: 'https://api.ironfang.com', displayOptions: { show: { resource: ['tools', 'financewolf'] } }, description: 'Used by public requests only; authenticated requests use the credential base URL' },
     { displayName: 'Public tools share per-address limits. Screenshot is limited to 20/hour/address and a shared daily ceiling. Render Screenshot is the account-based automation service.', name: 'toolsNotice', type: 'notice', default: '', displayOptions: { show: { resource: ['tools'] } } },
     ...operations.flatMap((op): INodeProperties[] => {
         const fields: INodeProperties[] = [{ displayName: `Permission: ${op.scope}. ${op.description}.`, name: 'operationNotice', type: 'notice', default: '', displayOptions: show(op) }];

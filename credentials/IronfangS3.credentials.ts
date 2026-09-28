@@ -3,7 +3,7 @@ export class IronfangS3 implements ICredentialType {
     name = 'ironfangS3';
     displayName = 'Ironfang S3 Destination';
     icon: Icon = { light: 'file:ironfang.svg', dark: 'file:ironfang.dark.svg' };
-    documentationUrl = 'https://ironfang.uk/renderwolf/docs';
+    documentationUrl = 'https://ironfang.com/renderwolf/docs';
     properties: INodeProperties[] = [
         { displayName: 'Access Key', name: 'accessKey', type: 'string', default: '', required: true },
         { displayName: 'Secret Key', name: 'secretKey', type: 'string', typeOptions: { password: true }, default: '', required: true },

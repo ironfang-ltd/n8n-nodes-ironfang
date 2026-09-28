@@ -179,7 +179,7 @@ operations.sort(key=lambda o:(o['product'],o['name']))
 commit=sys.argv[2] if len(sys.argv)>2 else subprocess.run(['git','-C',str(root),'rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip() or 'unknown'
 lines=['# Operation reference','',f'Generated from Ironfang main `{commit}`. Runtime endpoint selection is fixed by this catalogue.','Complex request bodies use JSON so all supported schema fields remain available. Replace placeholders with your own values.','']
 for o in operations:
- lines.extend(['## '+PREFIX[o['product']]+' / '+o['name'],'',f"`{o['method']} /{PREFIX[o['product']]}{o['path']}`. Scope: `{o['scope']}`.",'',o['description'],'',('Full request contract: https://api.ironfang.uk/'+PREFIX[o['product']]+'/openapi.yaml' if o['product'] != 'tools' else 'Public tool input: use the form options and binary image field, or the JSON example below.'),''])
+ lines.extend(['## '+PREFIX[o['product']]+' / '+o['name'],'',f"`{o['method']} /{PREFIX[o['product']]}{o['path']}`. Scope: `{o['scope']}`.",'',o['description'],'',('Full request contract: https://api.ironfang.com/'+PREFIX[o['product']]+'/openapi.yaml' if o['product'] != 'tools' else 'Public tool input: use the form options and binary image field, or the JSON example below.'),''])
  if o.get('example') is not None:lines.extend(['```json',json.dumps(o['example'],indent=2),'```',''])
  if o['query']:lines.extend(['Query fields: '+', '.join('`'+p['name']+'`'+(' (required)' if p.get('required') else '') for p in o['query'])+'.',''])
 (output/'docs/operations.md').write_text('\n'.join(lines))

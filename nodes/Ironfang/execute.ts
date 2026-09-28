@@ -36,7 +36,7 @@ const destinationOperations = ['createDestination', 'createExportDestinations', 
 async function runOperation(context: IExecuteFunctions, item: number, op: Operation): Promise<INodeExecutionData[]> {
     const publicMode = op.product === 'tools' || (op.product === 'financewolf' && parameter(context, 'authentication', item, 'apiKey') === 'public');
     if (publicMode && !op.public) throw new Error('This operation requires an API key; public mode cannot access saved results');
-    const base = publicMode ? parameter(context, 'publicBaseUrl', item, 'https://api.ironfang.uk') : (await context.getCredentials('ironfangApi')).baseUrl;
+    const base = publicMode ? parameter(context, 'publicBaseUrl', item, 'https://api.ironfang.com') : (await context.getCredentials('ironfangApi')).baseUrl;
     const path = op.path.replace(/\{(\w+)\}/g, (_, name: string) => identifier(context, parameter(context, name, item), item));
     const url = productBase(base, op.product) + path;
     const qs: IDataObject = { ...parameter(context, 'query', item, {}) as IDataObject };

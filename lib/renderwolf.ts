@@ -12,7 +12,7 @@ import { credentialTest } from '../nodes/Ironfang/credentialTest';
 
 /**
  * Ironfang node. One node per vendor: pick a product with Resource, then an
- * operation within it. Ironfang Render (https://ironfang.uk/render/docs) was the
+ * operation within it. Ironfang Render (https://ironfang.com/render/docs) was the
  * first product, and its saved resource value keeps the name it launched under; later ones are added as further resources rather than as
  * separate nodes.
  *
