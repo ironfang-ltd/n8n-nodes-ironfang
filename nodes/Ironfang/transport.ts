@@ -13,6 +13,12 @@ export function apiBase(value: unknown): string {
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
         throw new Error('Base URL must be an HTTP(S) URL without credentials, a query or fragment');
     }
+    // The API moved from ironfang.uk to ironfang.com on 28 Sep 2026. The old
+    // names redirect, but a redirect to another domain drops the API key, so
+    // credentials saved with an ironfang.uk address are sent to .com directly.
+    if (url.hostname === 'ironfang.uk' || url.hostname.endsWith('.ironfang.uk')) {
+        url.hostname = url.hostname.slice(0, -'uk'.length) + 'com';
+    }
     return url.toString().replace(/\/+$/, '');
 }
 

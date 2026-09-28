@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.2 — 2026-09-28
+
+- The Ironfang API moved from `api.ironfang.uk` to `api.ironfang.com`. New
+  credentials and the public base URL default to `.com`, and credentials saved
+  with an `ironfang.uk` address are sent to the matching `ironfang.com` address
+  directly: the old names redirect, but a redirect to another domain drops the
+  API key. No workflow or credential needs editing.
+
 ## 0.4.1 — 2026-09-21
 
 - Make the package installable on n8n releases before 2.33 that use PostgreSQL.

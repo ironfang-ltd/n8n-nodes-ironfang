@@ -238,3 +238,12 @@ test('version 2 pages the same lists as version 1.2', async () => {
  const ctx = setup({ resource: 'auditwolf', operation: 'listAudits', returnAll: true }, (_, i) => ({ body: { audits: [{ id: 'audit-' + i }], ...(i === 0 ? { next_cursor: 'next' } : {}) }, headers: {}, statusCode: 200 }), { version: 2 });
  assert.equal((await ctx.execute()).length, 2);
 });
+
+test('credentials saved with an ironfang.uk address go to ironfang.com directly', () => {
+  // A cross-domain redirect drops the API key, so the node must not rely on it.
+  assert.equal(productBase('https://api.ironfang.uk', 'renderwolf'), 'https://api.ironfang.com/render');
+  assert.equal(productBase('https://api.ironfang.uk/render', 'financewolf'), 'https://api.ironfang.com/finance');
+  assert.equal(productBase('https://api.ironfang.com/audit', 'rig'), 'https://api.ironfang.com/rig');
+  assert.equal(productBase('https://api.example.test', 'renderwolf'), 'https://api.example.test/render');
+  assert.equal(productBase('https://notironfang.uk', 'renderwolf'), 'https://notironfang.uk/render');
+});

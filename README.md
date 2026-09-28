@@ -6,7 +6,7 @@ Use Ironfang Render, Finance, Audit and Rig, and Ironfang's public developer
 tools, in n8n. The Ironfang action node has **162 operations**, grouped by
 product. Ironfang Trigger receives signed Audit, Finance and Render events.
 
-**Release: 0.4.1.** This patch makes the package installable on n8n releases
+**Release: 0.4.2.** The API is now at `api.ironfang.com`; credentials saved with the old `api.ironfang.uk` address keep working unchanged. 0.4.1 made the package installable on n8n releases
 before 2.33 that use PostgreSQL; see [Installation](#installation-and-credentials).
 It includes 0.4.0, in which the products are named Ironfang Render, Finance and Audit
 (formerly Renderwolf, Financewolf and Auditwolf), and the node follows: requests
