@@ -53,7 +53,8 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
    if method not in ['get','post','put','patch','delete']:continue
    ident=op['operationId']
    if product=='renderwolf' and ident in ['createScreenshot','createPdf','createClip','renderTemplate','createSignedUrl','renderSignedUrl','getSignedResult','getUsage']:continue
-   if product=='auditwolf' and ('/billing' in path or path=='/v1/plans' or '/notification' in path or path.startswith('/verify')):continue
+   # Buying a retention extension is a billing change, which stays outside the node.
+   if product=='auditwolf' and ('/billing' in path or path=='/v1/plans' or '/notification' in path or path.startswith('/verify') or path.startswith('/v1/retention')):continue
    if product=='financewolf' and path.endswith('/billing'):continue
    name=title(re.sub(r'([a-z])([A-Z])',r'\1 \2',ident).replace('By ','').replace('Site Id','Site').replace('Audit Id','Audit').replace('Monitor Id','Monitor').replace('Finding Id','Finding').replace('Lineage Id','Rule').replace('Endpoint Id','Endpoint').replace('Destination Id','Destination').replace('Installation Id','Installation').replace('Observation Id','Observation').replace('Artifact Id','Artifact').replace('Delivery Id','Delivery'))
    override={'createQr':'QR Code','createSitePreview':'Site Preview','submitJob':'Submit Job','getJobResult':'Download Job Result','getCapabilities':'Capabilities','generateEInvoice':'Generate E-Invoice','validateEInvoice':'Validate E-Invoice','listEInvoiceRulesets':'List Rulesets','getEInvoiceRuleset':'Get Ruleset','listValidationResults':'List Results','getValidationResult':'Get Result','deleteValidationResult':'Delete Result','createSitesBySiteIdAudits':'Run Site Audit','getAuditsByAuditId':'Get Audit','listSitesBySiteIdAudits':'List Site Audits','listAuditsByAuditIdEvidence':'Download Audit Evidence','getArtifactsByArtifactId':'Download Artifact','getProductHome':'Home','getUsage':'Usage','getEinvoiceUsage':'Usage'}
@@ -135,9 +136,10 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
     if ident=='listRequests':scope='render:usage:read'
     if ident=='getCapabilities':scope='none'
    elif product=='financewolf':
-    # The Finance contract states each operation's scope, except for retained
+    # The Finance contract states each operation's scope in x-ironfang-scopes
+    # (earlier contracts listed it under platformKey), except for retained
     # results, whose handler requires einvoices:read, and einvoices:write to delete.
-    required=[s for entry in op.get('security',doc.get('security',[])) for s in entry.get('platformKey',[])]
+    required=list(op.get('x-ironfang-scopes',[])) or [s for entry in op.get('security',doc.get('security',[])) for s in entry.get('platformKey',[])]
     scope=required[0] if required else ('none' if op.get('security')==[] else 'finance:einvoices:'+('write' if method=='delete' else 'read'))
    else:scope=scopes.get((method.upper(),normal(path)))
    assert scope,(ident,path)

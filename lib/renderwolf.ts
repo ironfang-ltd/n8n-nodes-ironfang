@@ -86,7 +86,7 @@ export const renderwolf = {
                     {
                         name: 'Usage',
                         value: 'usage',
-                        description: 'Current period usage against your plan cap',
+                        description: "This month's usage of each Render meter, from your billing account",
                         action: 'Get usage',
                     },                    {
                         name: 'Video Clip',
@@ -178,7 +178,7 @@ export const renderwolf = {
                         type: 'boolean',
                         default: false,
                         description:
-                            'Whether to force a live capture instead of reusing an identical recent render. Use when the page must be captured exactly as it is right now, such as evidence or change detection. Counts against your quota.',
+                            'Whether to force a live capture instead of reusing an identical recent render. Use when the page must be captured exactly as it is right now, such as evidence or change detection. A fresh render is always counted.',
                     },
                     {
                         displayName: 'Quality',
@@ -217,7 +217,7 @@ export const renderwolf = {
                         type: 'boolean',
                         default: false,
                         description:
-                            'Whether to force a live capture instead of reusing an identical recent render. Use when the page must be captured exactly as it is right now, such as evidence or change detection. Counts against your quota.',
+                            'Whether to force a live capture instead of reusing an identical recent render. Use when the page must be captured exactly as it is right now, such as evidence or change detection. A fresh render is always counted.',
                     },
                     {
                         displayName: 'Print Background',
@@ -347,7 +347,7 @@ export const renderwolf = {
                 default: 'vertical',
                 displayOptions: { show: { operation: ['video'] } },
                 description:
-                    'Credits scale with pixels and seconds, so the smaller sizes cost less per second',
+                    'Counted in output seconds: vertical and landscape as 1080p, square and 720p as HD',
                 options: [
                     { name: '720p 1280x720', value: '720p' },
                     { name: 'Landscape 1920x1080', value: 'landscape' },

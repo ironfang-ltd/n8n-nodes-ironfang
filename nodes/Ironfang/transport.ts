@@ -30,12 +30,16 @@ export function identifier(context: IExecuteFunctions, value: unknown, itemIndex
     return encodeURIComponent(id);
 }
 
+// A billable response names the billing meter it counted against and the
+// quantity it counted there: 1 for most renders, output seconds for video,
+// 0 for a cache hit or an unmetered key.
 export function responseMetadata(headers: Record<string, string>, statusCode: number): IDataObject {
     const result: IDataObject = { statusCode };
     if (headers['x-ironfang-request-id']) result.requestId = headers['x-ironfang-request-id'];
     if (headers['x-ironfang-cache']) result.cacheStatus = headers['x-ironfang-cache'];
-    const credits = headers['x-ironfang-credits'];
-    if (credits !== undefined && credits !== '' && Number.isFinite(Number(credits))) result.creditsCharged = Number(credits);
+    if (headers['x-ironfang-meter']) result.meter = headers['x-ironfang-meter'];
+    const quantity = headers['x-ironfang-quantity'];
+    if (quantity !== undefined && /^\d+$/.test(quantity)) result.quantity = Number(quantity);
     return result;
 }
 
@@ -88,6 +92,13 @@ export function errorDetails(error: unknown, itemIndex: number): IDataObject {
     if (typeof headers['x-ironfang-request-id'] === 'string') details.requestId = headers['x-ironfang-request-id'];
     const retry = headers['retry-after'];
     if (typeof retry === 'string' && /^\d+$/.test(retry)) details.retryAfterSeconds = Number(retry);
+    // A billing refusal names the product and meter it refused and, for an
+    // exhausted free allowance, when the allowance renews. Render and Audit put
+    // them in the error object; Finance problems carry them in `billing`.
+    const billing = Object.keys(object(problem.billing)).length ? object(problem.billing) : problem;
+    if (typeof billing.product === 'string' && /^[a-z]{1,32}$/.test(billing.product)) details.product = billing.product;
+    if (typeof billing.meter === 'string' && /^[a-z0-9_.]{1,64}$/.test(billing.meter)) details.meter = billing.meter;
+    if (typeof billing.reset_at === 'string' && !Number.isNaN(Date.parse(billing.reset_at))) details.resetAt = billing.reset_at;
     return details;
 }
 

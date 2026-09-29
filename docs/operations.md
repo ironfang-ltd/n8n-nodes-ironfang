@@ -1,6 +1,6 @@
 # Operation reference
 
-Generated from Ironfang main `de1547b`. Runtime endpoint selection is fixed by this catalogue.
+Generated from Ironfang main `8ec778a0`. Runtime endpoint selection is fixed by this catalogue.
 Complex request bodies use JSON so all supported schema fields remain available. Replace placeholders with your own values.
 
 ## audit / Archive Monitor
@@ -608,7 +608,7 @@ Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
 `GET /audit/v1/usage`. Scope: `audit:read`.
 
-Credits, quota position, projection and hosted evidence
+This month's metered use, capacity and hosted evidence
 
 Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
@@ -941,11 +941,11 @@ Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
 `GET /finance/v1/einvoices/usage`. Scope: `finance:billing:manage`.
 
-Reconcile Ironfang Finance document usage
+Read Ironfang Finance usage for a month
 
 Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
-Query fields: `start` (required), `end` (required).
+Query fields: `period`.
 
 ## finance / Validate E-Invoice
 
@@ -1636,7 +1636,7 @@ Full request contract: https://api.ironfang.com/rig/openapi.yaml
 
 `GET /rig/v1/usage`. Scope: `rig:read`.
 
-Runs and events in a window
+Runs, events and metered interactions
 
 Full request contract: https://api.ironfang.com/rig/openapi.yaml
 

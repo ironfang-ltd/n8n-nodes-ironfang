@@ -6,7 +6,13 @@ Use Ironfang Render, Finance, Audit and Rig, and Ironfang's public developer
 tools, in n8n. The Ironfang action node has **162 operations**, grouped by
 product. Ironfang Trigger receives signed Audit, Finance and Render events.
 
-**Release: 0.4.3.** Credits, cache status and webhook signatures are read from the `X-Ironfang-*` and `Ironfang-*` headers; update before the API stops sending the launch-era ones. 0.4.2 moved the API to `api.ironfang.com` (credentials saved with the old `api.ironfang.uk` address keep working unchanged), and 0.4.1 made the package installable on n8n releases
+**Release: 0.5.0.** Ironfang billing moved from credits to metered usage, and
+the node follows: a render reports the billing meter and quantity it counted
+instead of credits, Render Usage returns the month per meter, and a billing
+refusal keeps its code, product, meter and renewal date. Workflows that read
+`_ironfang.creditsCharged` need changing; see
+[Permissions and usage](#permissions-and-usage). 0.4.3 reads cache status and
+webhook signatures from the `X-Ironfang-*` and `Ironfang-*` headers. 0.4.2 moved the API to `api.ironfang.com` (credentials saved with the old `api.ironfang.uk` address keep working unchanged), and 0.4.1 made the package installable on n8n releases
 before 2.33 that use PostgreSQL; see [Installation](#installation-and-credentials).
 It includes 0.4.0, in which the products are named Ironfang Render, Finance and Audit
 (formerly Renderwolf, Financewolf and Auditwolf), and the node follows: requests
@@ -137,13 +143,17 @@ also applies to these outputs.
 Keys created with the earlier `renderwolf:*`, `financewolf:*` and `auditwolf:*`
 scopes keep working: the platform treats them as the scopes above.
 
-Render includes **250 free credits each month**, with no card required.
-A screenshot or template image costs 1 credit, a PDF 2, and QR codes 0. Clip
-costs depend on duration and output size. Cache hits consume no credits.
-Free renders can carry an Ironfang Render badge; QR codes never carry one. This
-allowance belongs to Render; other products have their own usage policies.
+Usage is billed to your organisation's Ironfang billing account, which every
+Ironfang product shares. There are no plans or credits: each kind of work counts
+against a meter with a monthly free allowance, and usage beyond it is billed
+monthly once paid usage is switched on in Billing in the
+[Ironfang portal](https://portal.ironfang.com). A Render screenshot, PDF or
+template image counts 1 on its own meter, clips and site previews count output
+seconds, and QR codes are counted but never charged. Cache hits count nothing.
+Render Usage returns the month for each meter; limits, payment and statements
+are managed in the portal.
 
-Public tools use no account credits and share a 60/minute/address limit. The
+Public tools are not billed to an account and share a 60/minute/address limit. The
 public screenshot service also has a 20/hour/address limit and a shared daily
 ceiling. Shared n8n egress addresses share these limits. Use authenticated
 Render rendering for account-based automation.
@@ -202,8 +212,10 @@ fields. Version 1.1 uses numeric `bytes` and structured errors; version 1.2 adds
 paging to the Audit lists named above and is otherwise identical. Version 2,
 which new nodes use, behaves as 1.2 does. All expose exact
 `byteLength`, item links and `_ironfang` response metadata when available:
-request ID, HTTP status, cache status and charged credits. Continued errors
-include available problem codes and retry information. New file operations use
+request ID, HTTP status, cache status, and the billing `meter` and `quantity`
+the request counted (0 for a cache hit). Continued errors include available
+problem codes and retry information; a billing refusal also carries `product`,
+`meter` and `resetAt` (when the free allowance renews) when the API states them. New file operations use
 numeric sizes; the output binary field defaults to `data`.
 
 Requests have explicit timeouts: 30 seconds for JSON (100 for a Rig wait) and

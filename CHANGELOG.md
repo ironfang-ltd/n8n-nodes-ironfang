@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.5.0 - unreleased
+
+- Follow Ironfang's unified billing, in which Render has no plans or credits.
+  Each kind of work counts against a billing meter with a monthly free
+  allowance, and paid usage beyond it is billed monthly to the organisation's
+  billing account. Requires the API with unified billing.
+- `_ironfang` metadata reports `meter` and `quantity` from the
+  `X-Ironfang-Meter` and `X-Ironfang-Quantity` headers: the meter a request
+  counted against and what it counted there, 0 for a cache hit.
+  `creditsCharged` is removed, as the API no longer sends a credits header;
+  workflows that read it need changing.
+- Render Usage returns the API's report for the month per meter (free
+  allowance, used, billable, reserved and remaining free), or
+  `{"unmetered": true}`. The credential test accepts that report rather than
+  looking for `limit`, and says when a key's account belongs to no
+  organisation.
+- A billing refusal (`free_allowance_exhausted`, `account_budget_exhausted`,
+  `product_budget_exhausted`, `payment_required`,
+  `billing_temporarily_unavailable` and the others) keeps the API's code and
+  message, and adds `product`, `meter` and `resetAt` when the API states them,
+  from the Render and Audit error object or the Finance problem.
+  `retryAfterSeconds` is set as before.
+- Finance Usage takes an optional `period` (a UTC month as `YYYY-MM`) instead
+  of the retired `start` and `end`. Audit and Rig Usage describe their metered
+  usage.
+- Labels no longer mention credits, quotas or plans. Video Clip sizes say how
+  they are counted.
+- The catalogue script reads Finance scopes from `x-ironfang-scopes` and leaves
+  out Audit retention purchases, which are billing changes.
+
 ## 0.4.3 — 2026-09-28
 
 - Responses report credits and cache status from the `X-Ironfang-Credits` and
