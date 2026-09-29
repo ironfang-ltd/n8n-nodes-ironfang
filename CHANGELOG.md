@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0 - unreleased
+## 0.5.0 - 2026-09-29
 
 - Follow Ironfang's unified billing, in which Render has no plans or credits.
   Each kind of work counts against a billing meter with a monthly free

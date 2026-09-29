@@ -45,6 +45,15 @@ SQLite, which records nothing. `scripts/check-postgres-install.sh` now runs in
 CI before release. 224 tests and all three Docker checks passed locally on
 21 September.
 
+The 0.5.0 release follows Ironfang main `8ec778a0` (29 September 2026), where
+Render bills by meter rather than credits. `_ironfang` reports `meter` and
+`quantity` from the `X-Ironfang-Meter` and `X-Ironfang-Quantity` headers,
+billing refusals carry the product, meter and allowance renewal alongside the
+code, and the credential test accepts the per-meter usage report. These were
+checked against the API source and the unit tests, not against a live paid
+render. `npm run check` (229 tests), all three Docker checks and `npm audit`
+(zero reported vulnerabilities) passed locally on 29 September.
+
 ## Automated coverage
 
 - 0.4.0 adds cases for routing saved `/renderwolf` and origin bases to the
