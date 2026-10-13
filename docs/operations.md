@@ -1,6 +1,6 @@
 # Operation reference
 
-Generated from Ironfang main `8ec778a0`. Runtime endpoint selection is fixed by this catalogue.
+Generated from Ironfang main `2fe3fb42`. Runtime endpoint selection is fixed by this catalogue.
 Complex request bodies use JSON so all supported schema fields remain available. Replace placeholders with your own values.
 
 ## audit / Archive Monitor
@@ -965,6 +965,14 @@ Verify report integrity without an account
 
 Full request contract: https://api.ironfang.com/finance/openapi.yaml
 
+## render / Archive Document Template
+
+`DELETE /render/v1/document-templates/{id}`. Scope: `render:templates:write`.
+
+Archive a document template
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
 ## render / Cancel Job
 
 `DELETE /render/v1/jobs/{id}`. Scope: `render:render`.
@@ -981,6 +989,28 @@ What Ironfang Render does, is building and does not offer
 
 Full request contract: https://api.ironfang.com/render/openapi.yaml
 
+## render / Create Bundle
+
+`POST /render/v1/bundle`. Scope: `render:render`.
+
+Capture a bundle from one navigation
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+```json
+{
+  "url": "https://example.com",
+  "full_page": true,
+  "outputs": [
+    "screenshot",
+    "rendered_html",
+    "text",
+    "markdown",
+    "metadata"
+  ]
+}
+```
+
 ## render / Create Destination
 
 `POST /render/v1/destinations`. Scope: `render:destinations`.
@@ -993,6 +1023,21 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 {
   "name": "n8n delivery",
   "url": "https://example.com/webhook"
+}
+```
+
+## render / Create Document Template
+
+`POST /render/v1/document-templates`. Scope: `render:templates:write`.
+
+Create a document template
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+```json
+{
+  "name": "",
+  "source": ""
 }
 ```
 
@@ -1037,6 +1082,8 @@ Collect a job's result
 
 Full request contract: https://api.ironfang.com/render/openapi.yaml
 
+Query fields: `redirect`.
+
 ## render / Get Batch
 
 `GET /render/v1/batches/{id}`. Scope: `render:render`.
@@ -1058,6 +1105,22 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 `GET /render/v1/destinations/{id}`. Scope: `render:destinations`.
 
 Get a destination
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+## render / Get Document Revision
+
+`GET /render/v1/document-templates/{id}/revisions/{n}`. Scope: `render:render`.
+
+Fetch a revision
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+## render / Get Document Template
+
+`GET /render/v1/document-templates/{id}`. Scope: `render:templates:read`.
+
+Fetch a document template
 
 Full request contract: https://api.ironfang.com/render/openapi.yaml
 
@@ -1105,6 +1168,24 @@ List destinations
 
 Full request contract: https://api.ironfang.com/render/openapi.yaml
 
+## render / List Document Revisions
+
+`GET /render/v1/document-templates/{id}/revisions`. Scope: `render:render`.
+
+List revisions
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+## render / List Document Templates
+
+`GET /render/v1/document-templates`. Scope: `render:templates:read`.
+
+List document templates
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+Query fields: `archived`.
+
 ## render / List Jobs
 
 `GET /render/v1/jobs`. Scope: `render:render`.
@@ -1135,6 +1216,34 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 Query fields: `cursor`, `limit`, `summary`.
 
+## render / Preview Document Template
+
+`POST /render/v1/document-templates/{id}/preview`. Scope: `render:templates:write`.
+
+Preview the draft as a PDF
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+```json
+{}
+```
+
+## render / Publish Document Revision
+
+`POST /render/v1/document-templates/{id}/revisions/{n}/publish`. Scope: `render:render`.
+
+Publish an existing revision
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+## render / Publish Document Template
+
+`POST /render/v1/document-templates/{id}/publish`. Scope: `render:templates:write`.
+
+Publish the draft
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
 ## render / QR Code
 
 `POST /render/v1/qr`. Scope: `render:render`.
@@ -1156,6 +1265,18 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 Send a delivery again
 
 Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+## render / Render Document Template
+
+`POST /render/v1/document-templates/{id}/render`. Scope: `render:templates:write`.
+
+Render a document
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+```json
+{}
+```
 
 ## render / Site Preview
 
@@ -1232,6 +1353,21 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 {}
 ```
 
+## render / Update Document Template
+
+`PUT /render/v1/document-templates/{id}`. Scope: `render:templates:write`.
+
+Replace a document template's draft
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+```json
+{
+  "name": "",
+  "source": ""
+}
+```
+
 ## render / Update Template
 
 `PUT /render/v1/templates/{id}`. Scope: `render:templates:write`.
@@ -1247,6 +1383,18 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
   "width": 1200,
   "height": 630
 }
+```
+
+## render / Validate Document Template
+
+`POST /render/v1/document-templates/{id}/validate`. Scope: `render:templates:write`.
+
+Validate a draft against data
+
+Full request contract: https://api.ironfang.com/render/openapi.yaml
+
+```json
+{}
 ```
 
 ## rig / Add Fault

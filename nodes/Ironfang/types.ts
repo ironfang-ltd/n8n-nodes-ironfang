@@ -10,7 +10,7 @@ export interface Operation {
     product: Product; id: string; name: string; description: string;
     method: IHttpRequestMethods; path: string; scope: string; query: QueryField[];
     input: 'none' | 'json' | 'xml' | 'upload' | 'zip';
-    response: 'json' | 'binary' | 'multipart' | 'redirect';
+    response: 'json' | 'binary' | 'multipart' | 'bundle' | 'redirect';
     example?: IDataObject; idempotency?: boolean; public?: boolean; timeout?: number; accept?: string;
     // since: the node version from which a list released without paging is paged.
     // next: the response field carrying the next position, when not next_cursor.

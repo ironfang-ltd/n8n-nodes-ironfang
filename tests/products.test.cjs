@@ -61,6 +61,7 @@ for (const op of operations) test(`${op.product}: ${op.name} executes`, async ()
     if (op.response === 'binary' || op.response === 'redirect') { body = payload; headers['content-type'] = 'image/png'; }
     if (op.response === 'redirect' && index === 0) { statusCode = 302; headers.location = '/render/v1/results/123/signature'; }
     if (op.response === 'multipart') { body = preview; headers['content-type'] = 'multipart/form-data; boundary=fixture'; }
+    if (op.response === 'bundle') { body = bundle; headers['content-type'] = 'multipart/form-data; boundary=b'; }
     return { body, headers, statusCode };
   });
   const output = await ctx.execute(); assert.equal(output.length, 1); assert.deepEqual(output[0].pairedItem, { item: 0 });
@@ -125,6 +126,43 @@ test('signed downloads validate destination and omit credentials on the second r
 test('site preview separates exact poster and video bytes', async () => {
   const ctx = setup({ resource: 'renderwolf', operation: 'createSitePreview', requestBody: { url: 'https://example.com' }, outputBinaryField: 'clip' }, () => ({ body: preview, headers: { 'content-type': 'multipart/form-data; boundary="fixture"' }, statusCode: 200 })); const [out] = await ctx.execute();
   assert.deepEqual(Buffer.from(out.binary.clip.data, 'base64'), payload); assert.deepEqual(Buffer.from(out.binary.poster.data, 'base64'), payload);
+});
+const manifest = { version: 1, outputs: [{ name: 'screenshot', status: 'included', part: 'screenshot' }, { name: 'rendered_html', status: 'included', part: 'rendered_html' }, { name: 'markdown', status: 'truncated', reason: 'too_large', part: 'markdown' }, { name: 'metadata', status: 'included', part: 'manifest' }], metadata: { title: 'Example' }, child_frames: 0 };
+const bundle = Buffer.concat([
+  Buffer.from('--b\r\nContent-Disposition: form-data; name="manifest"; filename="manifest.json"\r\nContent-Type: application/json\r\n\r\n' + JSON.stringify(manifest) + '\r\n'),
+  Buffer.from('--b\r\nContent-Disposition: form-data; name="screenshot"; filename="screenshot.png"\r\nContent-Type: image/png\r\n\r\n'), payload,
+  Buffer.from('\r\n--b\r\nContent-Disposition: form-data; name="rendered_html"; filename="rendered.html"\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<script>alert(1)</script>\r\n'),
+  Buffer.from('--b\r\nContent-Disposition: form-data; name="markdown"; filename="page.md"\r\nContent-Type: text/markdown; charset=utf-8\r\n\r\n# Example\r\n--b--\r\n'),
+]);
+test('a capture bundle is its manifest and one binary field per output, captured HTML never as HTML', async () => {
+  const ctx = setup({ resource: 'renderwolf', operation: 'createBundle', requestBody: { url: 'https://example.com', outputs: ['screenshot', 'rendered_html', 'markdown', 'metadata'] } }, () => ({ body: bundle, headers: { 'content-type': 'multipart/form-data; boundary=b', 'x-ironfang-meter': 'render.screenshot', 'x-ironfang-quantity': '1' }, statusCode: 200 }));
+  const [out] = await ctx.execute();
+  assert.equal(ctx.requests[0].url, 'https://api.ironfang.com/render/v1/bundle');
+  assert.equal(ctx.requests[0].encoding, 'arraybuffer');
+  assert.deepEqual(out.json.metadata, { title: 'Example' });
+  assert.equal(out.json.outputs[2].status, 'truncated');
+  assert.deepEqual(Buffer.from(out.binary.screenshot.data, 'base64'), payload);
+  assert.equal(out.binary.screenshot.mimeType, 'image/png');
+  assert.equal(out.binary.rendered_html.mimeType, 'text/plain');
+  assert.equal(out.binary.rendered_html.fileName, 'rendered.html');
+  assert.equal(out.binary.markdown.mimeType, 'text/markdown');
+  assert.equal(Buffer.from(out.binary.markdown.data, 'base64').toString(), '# Example');
+});
+test('a bundle job result is read as a bundle, a site preview job result as a preview', async () => {
+  const params = { resource: 'renderwolf', operation: 'getJobResult', id: 'job-1' };
+  let ctx = setup(params, (_, i) => i === 0 ? { statusCode: 302, headers: { location: '/render/v1/results/1/sig' }, body: '' } : { statusCode: 200, headers: { 'content-type': 'multipart/form-data; boundary=b' }, body: bundle });
+  let [out] = await ctx.execute();
+  assert.equal(out.json.version, 1); assert.deepEqual(Buffer.from(out.binary.screenshot.data, 'base64'), payload);
+  ctx = setup(params, (_, i) => i === 0 ? { statusCode: 302, headers: { location: '/render/v1/results/1/sig' }, body: '' } : { statusCode: 200, headers: { 'content-type': 'multipart/form-data; boundary=fixture' }, body: preview });
+  [out] = await ctx.execute();
+  assert.deepEqual(Buffer.from(out.binary.poster.data, 'base64'), payload);
+});
+test('a document template render returns the PDF as a file', async () => {
+  const pdf = Buffer.from('%PDF-1.7 fixture');
+  const ctx = setup({ resource: 'renderwolf', operation: 'renderDocumentTemplate', id: 'tpl-1', requestBody: { data: { number: 'INV-1' } } }, () => ({ body: pdf, headers: { 'content-type': 'application/pdf', 'x-ironfang-template-revision': '3' }, statusCode: 200 }));
+  const [out] = await ctx.execute();
+  assert.equal(ctx.requests[0].url, 'https://api.ironfang.com/render/v1/document-templates/tpl-1/render');
+  assert.deepEqual(Buffer.from(out.binary.data.data, 'base64'), pdf);
 });
 test('destination secrets come from the n8n credential and never from JSON fields', async () => {
   const p = { resource: 'auditwolf', operation: 'createExportDestinations', requestBody: { bucket: 'fixture', region: 'eu-west-2' } };

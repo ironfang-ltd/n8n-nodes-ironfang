@@ -4,7 +4,7 @@ import { NodeOperationError } from 'n8n-workflow';
 import { operations } from './catalog';
 import type { Operation } from './types';
 import { apiError, errorOutput, identifier, productBase, request, type Response } from './transport';
-import { filename, multipartUpload, previewParts } from './files';
+import { bundleMime, filename, multipartParts, multipartUpload, previewParts } from './files';
 
 function jsonObject(value: unknown): IDataObject {
     const parsed = typeof value === 'string' ? JSON.parse(value) : value;
@@ -108,7 +108,21 @@ async function runOperation(context: IExecuteFunctions, item: number, op: Operat
         response = await request.call(context, { method: 'GET', url: target.toString(), encoding: 'arraybuffer' }, false);
     }
     const field = String(parameter(context, 'outputBinaryField', item, 'data'));
-    if (op.response === 'multipart' || (op.response === 'redirect' && response.headers['content-type']?.startsWith('multipart/'))) {
+    const multipartBody = response.headers['content-type']?.startsWith('multipart/');
+    // A capture bundle, or a bundle job's result: the manifest as the item's
+    // JSON and one binary field per output, named by output.
+    if (op.response === 'bundle' || (op.response === 'redirect' && multipartBody && (response.body as Buffer).includes('name="manifest"'))) {
+        const parts = multipartParts(response.body as Buffer, response.headers['content-type'], 'Capture bundle');
+        const manifest = parts.find(p => p.name === 'manifest');
+        if (!manifest) throw new Error('Capture bundle must return its manifest');
+        const out = await jsonOutput(context, item, { ...op, response: 'json' }, { ...response, body: JSON.parse(manifest.data.toString('utf8')) as IDataObject });
+        out.binary = {};
+        for (const part of parts.filter(p => p.name !== 'manifest')) {
+            out.binary[part.name] = await context.helpers.prepareBinaryData(part.data, part.filename, bundleMime(part));
+        }
+        return [out];
+    }
+    if (op.response === 'multipart' || (op.response === 'redirect' && multipartBody)) {
         if (field === 'poster') throw new Error('Use an output field other than poster for the preview video');
         const parts = previewParts(response.body as Buffer, response.headers['content-type']);
         const out = await outputFile(context, item, { ...response, body: parts.video, headers: { 'content-type': 'video/mp4' } }, field, 'preview.mp4');
