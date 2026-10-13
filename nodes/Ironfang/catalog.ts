@@ -2092,6 +2092,18 @@ export const operations: Operation[] = [
   },
   {
     "product": "renderwolf",
+    "id": "archiveDocumentTemplate",
+    "name": "Archive Document Template",
+    "description": "Archive a document template",
+    "method": "DELETE",
+    "path": "/v1/document-templates/{id}",
+    "scope": "render:templates:write",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "renderwolf",
     "id": "cancelJob",
     "name": "Cancel Job",
     "description": "Cancel a job",
@@ -2117,6 +2129,29 @@ export const operations: Operation[] = [
   },
   {
     "product": "renderwolf",
+    "id": "createBundle",
+    "name": "Create Bundle",
+    "description": "Capture a bundle from one navigation",
+    "method": "POST",
+    "path": "/v1/bundle",
+    "scope": "render:render",
+    "query": [],
+    "input": "json",
+    "response": "bundle",
+    "example": {
+      "url": "https://example.com",
+      "full_page": true,
+      "outputs": [
+        "screenshot",
+        "rendered_html",
+        "text",
+        "markdown",
+        "metadata"
+      ]
+    }
+  },
+  {
+    "product": "renderwolf",
     "id": "createDestination",
     "name": "Create Destination",
     "description": "Register a delivery destination",
@@ -2129,6 +2164,22 @@ export const operations: Operation[] = [
     "example": {
       "name": "n8n delivery",
       "url": "https://example.com/webhook"
+    }
+  },
+  {
+    "product": "renderwolf",
+    "id": "createDocumentTemplate",
+    "name": "Create Document Template",
+    "description": "Create a document template",
+    "method": "POST",
+    "path": "/v1/document-templates",
+    "scope": "render:templates:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "name": "",
+      "source": ""
     }
   },
   {
@@ -2181,7 +2232,17 @@ export const operations: Operation[] = [
     "method": "GET",
     "path": "/v1/jobs/{id}/result",
     "scope": "render:render",
-    "query": [],
+    "query": [
+      {
+        "name": "redirect",
+        "label": "Redirect",
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "`false` returns the file itself rather than a redirect to it.",
+        "enum": []
+      }
+    ],
     "input": "none",
     "response": "redirect"
   },
@@ -2217,6 +2278,30 @@ export const operations: Operation[] = [
     "method": "GET",
     "path": "/v1/destinations/{id}",
     "scope": "render:destinations",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "renderwolf",
+    "id": "getDocumentRevision",
+    "name": "Get Document Revision",
+    "description": "Fetch a revision",
+    "method": "GET",
+    "path": "/v1/document-templates/{id}/revisions/{n}",
+    "scope": "render:render",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "renderwolf",
+    "id": "getDocumentTemplate",
+    "name": "Get Document Template",
+    "description": "Fetch a document template",
+    "method": "GET",
+    "path": "/v1/document-templates/{id}",
+    "scope": "render:templates:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -2364,6 +2449,40 @@ export const operations: Operation[] = [
   },
   {
     "product": "renderwolf",
+    "id": "listDocumentRevisions",
+    "name": "List Document Revisions",
+    "description": "List revisions",
+    "method": "GET",
+    "path": "/v1/document-templates/{id}/revisions",
+    "scope": "render:render",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "renderwolf",
+    "id": "listDocumentTemplates",
+    "name": "List Document Templates",
+    "description": "List document templates",
+    "method": "GET",
+    "path": "/v1/document-templates",
+    "scope": "render:templates:read",
+    "query": [
+      {
+        "name": "archived",
+        "label": "Archived",
+        "type": "boolean",
+        "required": false,
+        "default": "",
+        "description": "",
+        "enum": []
+      }
+    ],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "renderwolf",
     "id": "listJobs",
     "name": "List Jobs",
     "description": "List jobs",
@@ -2460,7 +2579,9 @@ export const operations: Operation[] = [
           "qr",
           "image",
           "clip",
-          "site_preview"
+          "site_preview",
+          "document",
+          "bundle"
         ]
       },
       {
@@ -2576,6 +2697,43 @@ export const operations: Operation[] = [
   },
   {
     "product": "renderwolf",
+    "id": "previewDocumentTemplate",
+    "name": "Preview Document Template",
+    "description": "Preview the draft as a PDF",
+    "method": "POST",
+    "path": "/v1/document-templates/{id}/preview",
+    "scope": "render:templates:write",
+    "query": [],
+    "input": "json",
+    "response": "binary",
+    "example": {}
+  },
+  {
+    "product": "renderwolf",
+    "id": "publishDocumentRevision",
+    "name": "Publish Document Revision",
+    "description": "Publish an existing revision",
+    "method": "POST",
+    "path": "/v1/document-templates/{id}/revisions/{n}/publish",
+    "scope": "render:render",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "renderwolf",
+    "id": "publishDocumentTemplate",
+    "name": "Publish Document Template",
+    "description": "Publish the draft",
+    "method": "POST",
+    "path": "/v1/document-templates/{id}/publish",
+    "scope": "render:templates:write",
+    "query": [],
+    "input": "none",
+    "response": "json"
+  },
+  {
+    "product": "renderwolf",
     "id": "createQr",
     "name": "QR Code",
     "description": "Render a QR code",
@@ -2600,6 +2758,19 @@ export const operations: Operation[] = [
     "query": [],
     "input": "none",
     "response": "json"
+  },
+  {
+    "product": "renderwolf",
+    "id": "renderDocumentTemplate",
+    "name": "Render Document Template",
+    "description": "Render a document",
+    "method": "POST",
+    "path": "/v1/document-templates/{id}/render",
+    "scope": "render:templates:write",
+    "query": [],
+    "input": "json",
+    "response": "binary",
+    "example": {}
   },
   {
     "product": "renderwolf",
@@ -2688,6 +2859,22 @@ export const operations: Operation[] = [
   },
   {
     "product": "renderwolf",
+    "id": "updateDocumentTemplate",
+    "name": "Update Document Template",
+    "description": "Replace a document template's draft",
+    "method": "PUT",
+    "path": "/v1/document-templates/{id}",
+    "scope": "render:templates:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {
+      "name": "",
+      "source": ""
+    }
+  },
+  {
+    "product": "renderwolf",
     "id": "updateTemplate",
     "name": "Update Template",
     "description": "Replace a template",
@@ -2703,6 +2890,19 @@ export const operations: Operation[] = [
       "width": 1200,
       "height": 630
     }
+  },
+  {
+    "product": "renderwolf",
+    "id": "validateDocumentTemplate",
+    "name": "Validate Document Template",
+    "description": "Validate a draft against data",
+    "method": "POST",
+    "path": "/v1/document-templates/{id}/validate",
+    "scope": "render:templates:write",
+    "query": [],
+    "input": "json",
+    "response": "json",
+    "example": {}
   },
   {
     "product": "rig",

@@ -95,7 +95,9 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
     params.append({'name':p['name'],'label':title(p['name']),'type':s.get('type','string'),'required':p.get('required',False),'default':s.get('default',sample(s) if p.get('required') else ''),'description':p.get('description',''),'enum':s.get('enum',[])})
    response='json'
    if ident in ['createQr','listAuditsByAuditIdEvidence','getArtifactsByArtifactId','createEinvoiceReport','renderEinvoice','exportEvidence','getEventPayload']:response='binary'
+   if ident in ['previewDocumentTemplate','renderDocumentTemplate']:response='binary'
    if ident=='createSitePreview':response='multipart'
+   if ident=='createBundle':response='bundle'
    if ident=='getJobResult':response='redirect'
    body=resolve(op.get('requestBody',{})).get('content',{}).get('application/json',{})
    mode='json' if body else 'none'

@@ -3,10 +3,10 @@
 # @ironfang/n8n-nodes-ironfang
 
 Use Ironfang Render, Finance, Audit and Rig, and Ironfang's public developer
-tools, in n8n. The Ironfang action node has **162 operations**, grouped by
+tools, in n8n. The Ironfang action node has **175 operations**, grouped by
 product. Ironfang Trigger receives signed Audit, Finance and Render events.
 
-**Release: 0.5.0.** Ironfang billing moved from credits to metered usage, and
+**Release: 0.6.0.** Ironfang Render adds Capture Bundle (the outputs of one page load: screenshot, rendered HTML, text, Markdown and metadata) and document templates (stored PDF templates with structured data, validation, numbered revisions, publish and rollback). The advanced render options name the newer API fields: `locale` and `timezone`, `success_rules`, `full_page_readiness`, and the PDF size, page range and metadata controls. 0.5.0: Ironfang billing moved from credits to metered usage, and
 the node follows: a render reports the billing meter and quantity it counted
 instead of credits, Render Usage returns the month per meter, and a billing
 refusal keeps its code, product, meter and renewal date. Workflows that read
@@ -79,6 +79,13 @@ use n8n's Wait node between status checks, then Download Job Result. Signed resu
 URLs are validated against the configured Render endpoint and downloaded
 without an API key. Site Preview returns the MP4 in the selected binary field
 and a JPEG in `poster`. A result download can return this same two-file bundle.
+Capture Bundle returns its manifest as the item's JSON (each output's status,
+size and SHA-256, the page's metadata and the capture times) and each output in
+a binary field named after it: `screenshot`, `rendered_html`, `text` and
+`markdown`. Captured HTML is the page's own markup and is stored as plain text,
+so nothing previews it as a page; treat it as untrusted. A bundle job's result
+download returns the same. Render Document Template and Preview Document
+Template return the PDF in the selected binary field.
 
 Finance Validate accepts XML text or an n8n binary field, including filesystem
 and external binary storage. A standards-invalid invoice is a normal result:

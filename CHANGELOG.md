@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.0 - 2026-10-13
+
+- Ironfang Render Capture Bundle: one page load, the outputs asked for. The
+  manifest is the item's JSON; `screenshot`, `rendered_html`, `text` and
+  `markdown` are binary fields named after them. Captured HTML is stored as
+  plain text so it is never previewed as a page. Download Job Result reads a
+  bundle job's result the same way, and still splits a Site Preview's poster
+  and video.
+- Ironfang Render document templates: create, list, get, update, archive,
+  validate (prints nothing), preview, publish, list and get revisions,
+  publish an earlier revision (rollback), and render a revision with data.
+  Preview and Render return the PDF in the selected binary field.
+- Advanced render options document the newer API fields: `locale` and
+  `timezone`; `success_rules`; `full_page_readiness`; and for PDFs
+  `paper_width`/`paper_height`, `prefer_css_page_size`, `page_ranges` and
+  `metadata`.
+- The catalogue script marks the bundle, template preview and template render
+  responses, so their bytes are never parsed as JSON.
+
 ## 0.5.0 - 2026-09-29
 
 - Follow Ironfang's unified billing, in which Render has no plans or credits.
