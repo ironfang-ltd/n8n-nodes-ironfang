@@ -6,7 +6,11 @@ Use Ironfang Render, Finance, Audit and Rig, and Ironfang's public developer
 tools, in n8n. The Ironfang action node has **175 operations**, grouped by
 product. Ironfang Trigger receives signed Audit, Finance and Render events.
 
-**Release: 0.6.0.** Ironfang Render adds Capture Bundle (the outputs of one page load: screenshot, rendered HTML, text, Markdown and metadata) and document templates (stored PDF templates with structured data, validation, numbered revisions, publish and rollback). The advanced render options name the newer API fields: `locale` and `timezone`, `success_rules`, `full_page_readiness`, and the PDF size, page range and metadata controls. 0.5.0: Ironfang billing moved from credits to metered usage, and
+**Release: 0.6.1.** Six Ironfang Render document template actions show the
+permission the API checks (preview and render need `render:render`, validate
+and the revision reads need `render:templates:read`, publishing a revision
+needs `render:templates:write`), and Site Preview waits up to 180 seconds.
+0.6.0: Ironfang Render adds Capture Bundle (the outputs of one page load: screenshot, rendered HTML, text, Markdown and metadata) and document templates (stored PDF templates with structured data, validation, numbered revisions, publish and rollback). The advanced render options name the newer API fields: `locale` and `timezone`, `success_rules`, `full_page_readiness`, and the PDF size, page range and metadata controls. 0.5.0: Ironfang billing moved from credits to metered usage, and
 the node follows: a render reports the billing meter and quantity it counted
 instead of credits, Render Usage returns the month per meter, and a billing
 refusal keeps its code, product, meter and renewal date. Workflows that read
@@ -132,9 +136,9 @@ also applies to these outputs.
 
 | Actions | API key scopes |
 | --- | --- |
-| Render rendering, jobs/batches, delivery reads | `render:render` |
+| Render rendering, jobs/batches, delivery reads, document template preview and render | `render:render` |
 | Signed URL | `render:sign` |
-| Templates | `render:templates:read` / `render:templates:write` |
+| Templates: reading and validating / creating, changing and publishing | `render:templates:read` / `render:templates:write` |
 | Usage and request history | `render:usage:read` |
 | Destinations and redelivery | `render:destinations` |
 | Finance validation, generation, jobs, batches, result deletion | `finance:einvoices:write` |
@@ -207,10 +211,13 @@ Nothing saved needs editing. Workflows store the resource as `renderwolf`,
 `financewolf` or `auditwolf`, and webhook credentials store the same product
 values; these identifiers are unchanged and only their labels are new. A
 credential whose base URL is an origin, `/renderwolf` or any other product path
-is routed to the current prefix for the operation. The API still answers the
-earlier prefixes, but its own links (for example a job result's signed download
-location) use the current ones, which is why 0.3.1 and earlier fail Download Job
-Result against the current API: upgrade to fix it.
+is routed to the current prefix for the operation. The API no longer answers the
+earlier prefixes: since 28 September 2026 a request to `/renderwolf`,
+`/financewolf` or `/auditwolf` is refused with HTTP 410 and the code
+`prefix_retired`. Versions 0.3.1 and earlier send their Render, Finance and
+Audit actions there (the original Render actions too, unless the credential's
+base URL is an origin), so they no longer work against the API: upgrade to fix
+it.
 
 ## Outputs, examples and compatibility
 
@@ -226,7 +233,8 @@ problem codes and retry information; a billing refusal also carries `product`,
 numeric sizes; the output binary field defaults to `data`.
 
 Requests have explicit timeouts: 30 seconds for JSON (100 for a Rig wait) and
-120 seconds for binary rendering. The node does not automatically repeat a paid operation. Reuse the
+120 seconds for binary rendering (180 for a Site Preview, which records the page
+in real time; a `site_preview` job holds no request open while it renders). The node does not automatically repeat a paid operation. Reuse the
 same idempotency key only for an identical business operation and respect
 returned retry information when configuring n8n retries.
 

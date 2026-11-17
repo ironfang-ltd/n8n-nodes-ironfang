@@ -2289,7 +2289,7 @@ export const operations: Operation[] = [
     "description": "Fetch a revision",
     "method": "GET",
     "path": "/v1/document-templates/{id}/revisions/{n}",
-    "scope": "render:render",
+    "scope": "render:templates:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -2454,7 +2454,7 @@ export const operations: Operation[] = [
     "description": "List revisions",
     "method": "GET",
     "path": "/v1/document-templates/{id}/revisions",
-    "scope": "render:render",
+    "scope": "render:templates:read",
     "query": [],
     "input": "none",
     "response": "json"
@@ -2702,7 +2702,7 @@ export const operations: Operation[] = [
     "description": "Preview the draft as a PDF",
     "method": "POST",
     "path": "/v1/document-templates/{id}/preview",
-    "scope": "render:templates:write",
+    "scope": "render:render",
     "query": [],
     "input": "json",
     "response": "binary",
@@ -2715,7 +2715,7 @@ export const operations: Operation[] = [
     "description": "Publish an existing revision",
     "method": "POST",
     "path": "/v1/document-templates/{id}/revisions/{n}/publish",
-    "scope": "render:render",
+    "scope": "render:templates:write",
     "query": [],
     "input": "none",
     "response": "json"
@@ -2766,7 +2766,7 @@ export const operations: Operation[] = [
     "description": "Render a document",
     "method": "POST",
     "path": "/v1/document-templates/{id}/render",
-    "scope": "render:templates:write",
+    "scope": "render:render",
     "query": [],
     "input": "json",
     "response": "binary",
@@ -2788,7 +2788,8 @@ export const operations: Operation[] = [
       "width": 672,
       "height": 494,
       "motion": "per_page"
-    }
+    },
+    "timeout": 180000
   },
   {
     "product": "renderwolf",
@@ -2898,7 +2899,7 @@ export const operations: Operation[] = [
     "description": "Validate a draft against data",
     "method": "POST",
     "path": "/v1/document-templates/{id}/validate",
-    "scope": "render:templates:write",
+    "scope": "render:templates:read",
     "query": [],
     "input": "json",
     "response": "json",

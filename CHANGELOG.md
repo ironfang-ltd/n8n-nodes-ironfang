@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.1 - 2026-11-17
+
+- Six Ironfang Render document template actions named the wrong permission.
+  Preview Document Template and Render Document Template need `render:render`,
+  not `render:templates:write`; Validate Document Template, List Document
+  Revisions and Get Document Revision need `render:templates:read`; Publish
+  Document Revision needs `render:templates:write`, not `render:render`. The
+  catalogue script now reads every Render scope from the routes the API
+  registers, as it does for Audit and Rig. Requests are unchanged.
+- Site Preview waits up to 180 seconds instead of 120. The API records a
+  preview for up to 90 seconds before encoding it, and asks clients to allow
+  at least 120.
+- The README no longer says the API answers the launch-era `/renderwolf`,
+  `/financewolf` and `/auditwolf` prefixes: they have been refused with HTTP
+  410 `prefix_retired` since 28 September 2026, so 0.3.1 and earlier no longer
+  work.
+- The operation reference follows Ironfang main `ebce5abe`. The API added no
+  endpoint, field or scope to the covered products after 0.6.0.
+
 ## 0.6.0 - 2026-10-13
 
 - Ironfang Render Capture Bundle: one page load, the outputs asked for. The

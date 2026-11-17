@@ -54,6 +54,21 @@ checked against the API source and the unit tests, not against a live paid
 render. `npm run check` (229 tests), all three Docker checks and `npm audit`
 (zero reported vulnerabilities) passed locally on 29 September.
 
+The 0.6.1 candidate follows Ironfang main `ebce5abe` (17 November 2026).
+Regenerating the catalogue from that commit with the 0.6.0 script changed
+nothing: the Render, Finance, Audit and Rig contracts gained no operation,
+query field or scope after 0.6.0 (`2fe3fb42`), and the seven public tool
+routes are unchanged. Comparing every Render operation with the scope its
+route registers found six document template actions labelled with the wrong
+permission; the script now takes Render scopes from the routes, and no other
+Render scope changed. Finance scopes were compared with the portal routes'
+permissions, and Audit and Rig scopes already come from their route tables.
+`npm run check` (246 tests, under Node 22 and 24) and all three Docker checks
+passed locally on 17 November. `npm audit` reports advisories only in
+development dependencies (n8n-workflow's axios and zod, brace-expansion,
+follow-redirects, minimatch); `npm audit --omit=dev` reports none. No live
+authenticated operation was used.
+
 ## Automated coverage
 
 - 0.4.0 adds cases for routing saved `/renderwolf` and origin bases to the
