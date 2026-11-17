@@ -17,6 +17,12 @@ PAGED_SINCE_1_2={'listFindingsByFindingIdEvents','listRulesByLineageIdRevisions'
 def routes(directory, prefix):
  src=(root/f'internal/{directory}/httpapi/server.go').read_text()
  return {(method,normal(path.removeprefix('/'+prefix))):f'{prefix}:{perm.lower()}' for method,path,perm in re.findall(r'mux.Handle\("(GET|POST|PUT|PATCH|DELETE) (/'+prefix+r'/[^" ]+)", s.auth\(Perm(\w+)',src)}
+# Render names each route's scope where it registers it, under /render/v1 or the
+# loop over its two prefixes. Document template preview and render are renders,
+# and validating a template only reads it, so names alone cannot give the scope.
+def render_routes():
+ src=(root/'internal/render/httpapi/server.go').read_text()
+ return {(method,normal('/v1'+rest)):scope for method,rest,scope in re.findall(r'mux.Handle\("(GET|POST|PUT|PATCH|DELETE) (?:"\+p\+"|/render/v1)(/[^"]*)", s.scoped\("(render:[a-z:]+)"',src)}
 def title(s):
  return re.sub(r'\b(Id|Url|Qr|Pdf|Xml|Api|Uuid|S3)\b', lambda m:m[0].upper(),s.replace('_',' ').title())
 def normal(path): return re.sub(r'\{[^}]+\}', '{}',path)
@@ -47,7 +53,7 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
   if s.get('type')=='boolean':return False
   if s.get('format')=='uri':return 'https://example.com'
   return ''
- scopes=routes(directory,PREFIX[product]) if product in ['auditwolf','rig'] else {}
+ scopes=routes(directory,PREFIX[product]) if product in ['auditwolf','rig'] else render_routes() if product=='renderwolf' else {}
  for path, methods in doc['paths'].items():
   for method, op in methods.items():
    if method not in ['get','post','put','patch','delete']:continue
@@ -132,11 +138,8 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
    if ident=='createWebhooks':example={'url':'https://example.com/webhook','events':['audit.completed']}
 
    if product=='renderwolf':
-    scope='render:render'
-    if 'Template' in ident:scope='render:templates:'+('read' if method=='get' else 'write')
-    if 'Destination' in ident or ident=='redeliverDelivery':scope='render:destinations'
-    if ident=='listRequests':scope='render:usage:read'
-    if ident=='getCapabilities':scope='none'
+    # Capabilities is the one unauthenticated route in the contract.
+    scope='none' if ident=='getCapabilities' else scopes.get((method.upper(),normal(path)))
    elif product=='financewolf':
     # The Finance contract states each operation's scope in x-ironfang-scopes
     # (earlier contracts listed it under platformKey), except for retained
@@ -151,6 +154,9 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
    if ident in ['submitJob','submitBatch','generateEInvoice','validateEInvoice','createSitesBySiteIdAudits','runMonitorsByMonitorId','createEinvoiceJob','createEinvoiceBatch','createRun']:o['idempotency']=True
    # Wait For Event holds the request open for up to 90 seconds.
    if ident=='waitForEvent':o['timeout']=100000
+   # A site preview records for up to 90 seconds and is then encoded; the API
+   # asks for a client timeout of at least 120 seconds, so allow it more.
+   if ident=='createSitePreview':o['timeout']=180000
    # Evidence answers JSON-accepting clients with the manifest alone; ask for the bundle.
    if ident=='exportEvidence':o['accept']='application/zip'
    if product=='financewolf' and ident in ['generateEInvoice','validateEInvoice','listEInvoiceRulesets','getEInvoiceRuleset']:o['public']=True

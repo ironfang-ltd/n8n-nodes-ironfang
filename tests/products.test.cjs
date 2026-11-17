@@ -126,6 +126,8 @@ test('signed downloads validate destination and omit credentials on the second r
 test('site preview separates exact poster and video bytes', async () => {
   const ctx = setup({ resource: 'renderwolf', operation: 'createSitePreview', requestBody: { url: 'https://example.com' }, outputBinaryField: 'clip' }, () => ({ body: preview, headers: { 'content-type': 'multipart/form-data; boundary="fixture"' }, statusCode: 200 })); const [out] = await ctx.execute();
   assert.deepEqual(Buffer.from(out.binary.clip.data, 'base64'), payload); assert.deepEqual(Buffer.from(out.binary.poster.data, 'base64'), payload);
+  // The API records for up to 90 seconds, then encodes, and asks for at least 120.
+  assert(ctx.requests[0].timeout > 120_000);
 });
 const manifest = { version: 1, outputs: [{ name: 'screenshot', status: 'included', part: 'screenshot' }, { name: 'rendered_html', status: 'included', part: 'rendered_html' }, { name: 'markdown', status: 'truncated', reason: 'too_large', part: 'markdown' }, { name: 'metadata', status: 'included', part: 'manifest' }], metadata: { title: 'Example' }, child_frames: 0 };
 const bundle = Buffer.concat([
@@ -262,6 +264,22 @@ test('catalogue scopes and visible names use the current product names', () => {
  for (const option of description.properties.find(p => p.name === 'resource').options) assert.doesNotMatch(option.name, /wolf/i);
  assert.deepEqual(description.properties.find(p => p.name === 'resource').options.map(o => o.value), ['auditwolf', 'financewolf', 'tools', 'renderwolf', 'rig']);
  assert.deepEqual(description.version, [1, 1.1, 1.2, 2]);
+});
+test('document template actions show the scope the Render route checks', () => {
+ // Editing needs the templates scopes; previewing and rendering are renders.
+ const expected = {
+  createDocumentTemplate: 'render:templates:write', updateDocumentTemplate: 'render:templates:write', archiveDocumentTemplate: 'render:templates:write',
+  publishDocumentTemplate: 'render:templates:write', publishDocumentRevision: 'render:templates:write',
+  listDocumentTemplates: 'render:templates:read', getDocumentTemplate: 'render:templates:read', validateDocumentTemplate: 'render:templates:read',
+  listDocumentRevisions: 'render:templates:read', getDocumentRevision: 'render:templates:read',
+  previewDocumentTemplate: 'render:render', renderDocumentTemplate: 'render:render',
+ };
+ const description = new Ironfang().description;
+ for (const [id, scope] of Object.entries(expected)) {
+  assert.equal(operations.find(o => o.product === 'renderwolf' && o.id === id).scope, scope, id);
+  const notice = description.properties.find(p => p.name === 'operationNotice' && p.displayOptions?.show?.operation?.[0] === id);
+  assert.match(notice.displayName, new RegExp(`^Permission: ${scope}\\.`), id);
+ }
 });
 test('each node\'s newest version is a whole number, which n8n before 2.33 requires to install on PostgreSQL', () => {
  const { IronfangTrigger } = require('../dist/nodes/Ironfang/IronfangTrigger.node.js');

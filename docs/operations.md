@@ -1,6 +1,6 @@
 # Operation reference
 
-Generated from Ironfang main `2fe3fb42`. Runtime endpoint selection is fixed by this catalogue.
+Generated from Ironfang main `ebce5abe`. Runtime endpoint selection is fixed by this catalogue.
 Complex request bodies use JSON so all supported schema fields remain available. Replace placeholders with your own values.
 
 ## audit / Archive Monitor
@@ -1110,7 +1110,7 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Get Document Revision
 
-`GET /render/v1/document-templates/{id}/revisions/{n}`. Scope: `render:render`.
+`GET /render/v1/document-templates/{id}/revisions/{n}`. Scope: `render:templates:read`.
 
 Fetch a revision
 
@@ -1170,7 +1170,7 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / List Document Revisions
 
-`GET /render/v1/document-templates/{id}/revisions`. Scope: `render:render`.
+`GET /render/v1/document-templates/{id}/revisions`. Scope: `render:templates:read`.
 
 List revisions
 
@@ -1218,7 +1218,7 @@ Query fields: `cursor`, `limit`, `summary`.
 
 ## render / Preview Document Template
 
-`POST /render/v1/document-templates/{id}/preview`. Scope: `render:templates:write`.
+`POST /render/v1/document-templates/{id}/preview`. Scope: `render:render`.
 
 Preview the draft as a PDF
 
@@ -1230,7 +1230,7 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Publish Document Revision
 
-`POST /render/v1/document-templates/{id}/revisions/{n}/publish`. Scope: `render:render`.
+`POST /render/v1/document-templates/{id}/revisions/{n}/publish`. Scope: `render:templates:write`.
 
 Publish an existing revision
 
@@ -1268,7 +1268,7 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Render Document Template
 
-`POST /render/v1/document-templates/{id}/render`. Scope: `render:templates:write`.
+`POST /render/v1/document-templates/{id}/render`. Scope: `render:render`.
 
 Render a document
 
@@ -1387,7 +1387,7 @@ Full request contract: https://api.ironfang.com/render/openapi.yaml
 
 ## render / Validate Document Template
 
-`POST /render/v1/document-templates/{id}/validate`. Scope: `render:templates:write`.
+`POST /render/v1/document-templates/{id}/validate`. Scope: `render:templates:read`.
 
 Validate a draft against data
 
