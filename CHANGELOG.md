@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.1 - unreleased
+## 0.6.1 - 2026-11-17
 
 - Six Ironfang Render document template actions named the wrong permission.
   Preview Document Template and Render Document Template need `render:render`,
