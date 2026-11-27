@@ -35,23 +35,6 @@ What changed against the observation before it
 
 Full request contract: https://api.ironfang.com/audit/openapi.yaml
 
-## audit / Create Export Destination
-
-`POST /audit/v1/export-destinations`. Scope: `audit:integrations`.
-
-Create an encrypted S3/S3-compatible destination
-
-Full request contract: https://api.ironfang.com/audit/openapi.yaml
-
-```json
-{
-  "region": "eu-west-2",
-  "bucket": "your-bucket",
-  "prefix": "auditwolf",
-  "export_mode": "manual_only"
-}
-```
-
 ## audit / Create Monitor
 
 `POST /audit/v1/sites/{siteId}/monitors`. Scope: `audit:manage`.

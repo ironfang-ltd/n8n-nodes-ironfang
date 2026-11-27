@@ -32,7 +32,12 @@ async function jsonOutput(context: IExecuteFunctions, item: number, op: Operatio
     }
     return { json: { ...json, _ironfang: response.metadata }, pairedItem: { item } };
 }
-const destinationOperations = ['createDestination', 'createExportDestinations', 'createEinvoiceDestination', 'updateEinvoiceDestination'];
+const destinationOperations = ['createDestination', 'createEinvoiceDestination', 'updateEinvoiceDestination'];
+// n8n gives a node one credential at a time, and every Ironfang call needs the
+// API key, so the node sends no storage keys: S3 destinations are created, and
+// their keys rotated, in the portal. Workflows saved before 0.7.0 may still ask
+// for S3 or hold the removed Audit Create Export Destination operation.
+const portalDestinations = 'S3 destinations are created, and their keys rotated, on the Destinations page of the Ironfang portal. Use the destination ID from there in this workflow.';
 async function runOperation(context: IExecuteFunctions, item: number, op: Operation): Promise<INodeExecutionData[]> {
     const publicMode = op.product === 'tools' || (op.product === 'financewolf' && parameter(context, 'authentication', item, 'apiKey') === 'public');
     if (publicMode && !op.public) throw new Error('This operation requires an API key; public mode cannot access saved results');
@@ -66,17 +71,10 @@ async function runOperation(context: IExecuteFunctions, item: number, op: Operat
     if (op.input === 'json') { body = jsonObject(parameter(context, 'requestBody', item, op.example ?? {})); headers['Content-Type'] = 'application/json'; }
     if (destinationOperations.includes(op.id)) {
         const destination = body as IDataObject;
-        if (['access_key', 'secret_key', 'session_token', 'credentials'].some(key => key in destination)) throw new Error('Store destination secrets in the Ironfang S3 Destination credential');
-        const s3 = op.id === 'createExportDestinations' || parameter(context, 'destinationType', item, 'webhook') === 's3';
-        if (['createDestination', 'createEinvoiceDestination'].includes(op.id)) destination.type = s3 ? 's3' : 'webhook';
-        if (s3) {
-            const credential = await context.getCredentials('ironfangS3');
-            // Finance nests the S3 keys; Render and Audit take them beside the bucket.
-            const target: IDataObject = op.product === 'financewolf' ? {} : destination;
-            target.access_key = String(credential.accessKey || ''); target.secret_key = String(credential.secretKey || '');
-            if (credential.sessionToken) target.session_token = String(credential.sessionToken);
-            if (op.product === 'financewolf') destination.credentials = target;
-        }
+        if (['access_key', 'secret_key', 'session_token', 'credentials'].some(key => key in destination)) throw new Error('Do not put storage keys in the request body. ' + portalDestinations);
+        const config = destination.config && typeof destination.config === 'object' ? destination.config as IDataObject : {};
+        if (parameter(context, 'destinationType', item, '') === 's3' || destination.type === 's3' || 'bucket' in destination || 'bucket' in config) throw new Error(portalDestinations);
+        if (['createDestination', 'createEinvoiceDestination'].includes(op.id)) destination.type = 'webhook';
     }
     if (op.input === 'xml') {
         body = parameter(context, 'xmlSource', item, 'binary') === 'text' ? Buffer.from(String(parameter(context, 'xml', item)), 'utf8') : await context.helpers.getBinaryDataBuffer(item, String(parameter(context, 'inputBinaryField', item, 'data')));
@@ -172,6 +170,7 @@ export async function executeProducts(this: IExecuteFunctions): Promise<INodeExe
             const product = parameter(this, 'resource', item);
             const id = parameter(this, 'operation', item);
             const op = operations.find(candidate => candidate.product === product && candidate.id === id);
+            if (!op && product === 'auditwolf' && id === 'createExportDestinations') throw new NodeOperationError(this.getNode(), portalDestinations, { itemIndex: item });
             if (!op) throw new NodeOperationError(this.getNode(), 'Unknown product operation', { itemIndex: item });
             output.push(...await runOperation(this, item, op));
         } catch (error) {

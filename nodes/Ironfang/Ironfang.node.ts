@@ -5,7 +5,6 @@ import { productParameters } from './parameters';
 import { executeProducts } from './execute';
 import { renderOptions } from './renderOptions';
 import { searchTemplates } from './templates';
-import { destinationCredentialTest } from './destinationCredentialTest';
 import type { Product } from './types';
 
 const legacy = renderwolf;
@@ -49,7 +48,6 @@ export class Ironfang implements INodeType {
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"].replace("wolf", "")}}',
         description: 'Ironfang Render, Finance, Audit and Rig, and public developer tools',
         credentials: [
-            { name: 'ironfangS3', required: true, testedBy: 'ironfangS3Test', displayOptions: { show: { operation: ['createDestination', 'createExportDestinations', 'createEinvoiceDestination', 'updateEinvoiceDestination'] }, hide: { destinationType: ['webhook'] } } },
             { name: 'ironfangApi', required: true, testedBy: 'ironfangApiTest', displayOptions: { show: { resource: ['renderwolf', 'auditwolf', 'financewolf', 'rig'] }, hide: { authentication: ['public'] } } },
         ],
         properties: [
@@ -60,7 +58,7 @@ export class Ironfang implements INodeType {
             ...productParameters,
         ],
     };
-    methods = { ...legacy.methods, credentialTest: { ...legacy.methods.credentialTest, ironfangS3Test: destinationCredentialTest }, listSearch: { searchTemplates } };
+    methods = { ...legacy.methods, listSearch: { searchTemplates } };
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
         const resource = this.getNodeParameter('resource', 0) as string;
         const operation = this.getNodeParameter('operation', 0) as string;
