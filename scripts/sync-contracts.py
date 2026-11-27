@@ -11,6 +11,9 @@ operations=[]; schemas={}
 # Catalogue product values are saved in workflows and keep their launch names;
 # PREFIX is the API path and scope family each one has used since September 2026.
 PREFIX={'renderwolf':'render','financewolf':'finance','auditwolf':'audit','rig':'rig','tools':'tools'}
+# n8n gives a node one credential at a time, so the node sends no storage keys:
+# S3 destinations are created in the portal, and this S3-only operation is left out.
+PORTAL_ONLY={'createExportDestinations'}
 # List operations released before 0.4.0 without paging keep their single-response
 # shape in saved workflows; paging applies from node version 1.2.
 PAGED_SINCE_1_2={'listFindingsByFindingIdEvents','listRulesByLineageIdRevisions','listSitesBySiteIdAudits','listAudits','listAuditsByAuditIdPages','listWebhooksByEndpointIdDeliveries','listExports','listMonitorsByMonitorIdRuns'}
@@ -58,6 +61,7 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
   for method, op in methods.items():
    if method not in ['get','post','put','patch','delete']:continue
    ident=op['operationId']
+   if ident in PORTAL_ONLY:continue
    if product=='renderwolf' and ident in ['createScreenshot','createPdf','createClip','renderTemplate','createSignedUrl','renderSignedUrl','getSignedResult','getUsage']:continue
    # Buying a retention extension is a billing change, which stays outside the node.
    if product=='auditwolf' and ('/billing' in path or path=='/v1/plans' or '/notification' in path or path.startswith('/verify') or path.startswith('/v1/retention')):continue
@@ -65,7 +69,7 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
    name=title(re.sub(r'([a-z])([A-Z])',r'\1 \2',ident).replace('By ','').replace('Site Id','Site').replace('Audit Id','Audit').replace('Monitor Id','Monitor').replace('Finding Id','Finding').replace('Lineage Id','Rule').replace('Endpoint Id','Endpoint').replace('Destination Id','Destination').replace('Installation Id','Installation').replace('Observation Id','Observation').replace('Artifact Id','Artifact').replace('Delivery Id','Delivery'))
    override={'createQr':'QR Code','createSitePreview':'Site Preview','submitJob':'Submit Job','getJobResult':'Download Job Result','getCapabilities':'Capabilities','generateEInvoice':'Generate E-Invoice','validateEInvoice':'Validate E-Invoice','listEInvoiceRulesets':'List Rulesets','getEInvoiceRuleset':'Get Ruleset','listValidationResults':'List Results','getValidationResult':'Get Result','deleteValidationResult':'Delete Result','createSitesBySiteIdAudits':'Run Site Audit','getAuditsByAuditId':'Get Audit','listSitesBySiteIdAudits':'List Site Audits','listAuditsByAuditIdEvidence':'Download Audit Evidence','getArtifactsByArtifactId':'Download Artifact','getProductHome':'Home','getUsage':'Usage','getEinvoiceUsage':'Usage'}
    override.update({
-    'archiveMonitorsByMonitorId':'Archive Monitor', 'createExportDestinations':'Create Export Destination', 'createSites':'Create Site',
+    'archiveMonitorsByMonitorId':'Archive Monitor', 'createSites':'Create Site',
     'createSitesBySiteIdMonitors':'Create Monitor', 'createSitesBySiteIdRulePacks':'Install Rule Pack', 'createSitesBySiteIdRules':'Create Rule', 'createWebhooks':'Create Webhook',
     'deleteRulePacksInstalledByInstallationId':'Uninstall Rule Pack', 'deleteRulesByLineageId':'Retire Rule', 'deleteWebhooksByEndpointId':'Delete Webhook',
     'disableRulesByLineageId':'Disable Rule', 'enableRulesByLineageId':'Enable Rule', 'exportAuditsByAuditId':'Export Audit',
@@ -120,7 +124,6 @@ for product, directory in [('renderwolf','render'),('financewolf','finance/einvo
    if ident=='createSites':example={'name':'Example site','url':'https://example.com'}
    if ident=='createSitesBySiteIdAudits':example={'reason':'Scheduled n8n check','trigger_type':'api'}
    if ident=='createDestination':example={'name':'n8n delivery','url':'https://example.com/webhook'}
-   if ident=='createExportDestinations':example={'region':'eu-west-2','bucket':'your-bucket','prefix':'auditwolf','export_mode':'manual_only'}
    if ident=='createEinvoiceDestination':example={'name':'n8n delivery','config':{'url':'https://example.com/webhook'}}
    if ident=='updateEinvoiceDestination':example={'enabled':True}
    if ident=='createEinvoiceJob':example={'operation':'validate','document_base64':'PEludm9pY2UvPg==','options':{'ruleset':'latest','profile':'peppol-bis-billing-3'}}

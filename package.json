@@ -1,6 +1,6 @@
 {
   "name": "@ironfang/n8n-nodes-ironfang",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "n8n nodes for Ironfang: Render, Finance, Audit, Rig, public tools and signed events",
   "keywords": [
     "n8n-community-node-package",
@@ -47,7 +47,6 @@
     "n8nNodesApiVersion": 1,
     "credentials": [
       "dist/credentials/IronfangApi.credentials.js",
-      "dist/credentials/IronfangS3.credentials.js",
       "dist/credentials/IronfangWebhookApi.credentials.js"
     ],
     "nodes": [
@@ -56,11 +55,11 @@
     ]
   },
   "devDependencies": {
-    "@n8n/eslint-plugin-community-nodes": "0.32.0",
+    "@n8n/eslint-plugin-community-nodes": "0.42.0",
     "@types/node": "24.10.1",
     "@typescript-eslint/parser": "8.70.0",
     "eslint": "9.29.0",
-    "eslint-plugin-n8n-nodes-base": "1.16.7",
+    "eslint-plugin-n8n-nodes-base": "2.0.0",
     "n8n-workflow": "2.39.0",
     "typescript": "5.9.3"
   },

@@ -6,7 +6,7 @@ const expanded=[
  {resource:'renderwolf',operation:'submitBatch',requestBody:{items:[{kind:'screenshot',request:{url:'https://example.com'}}]},idempotencyKey:'runtime-batch'},
  {resource:'renderwolf',operation:'getJobResult',id:'fixture-job'},
  {resource:'renderwolf',operation:'createSitePreview',requestBody:{url:'https://example.com'},outputBinaryField:'clip'},
- {resource:'renderwolf',operation:'createDestination',destinationType:'s3',requestBody:{bucket:'fixture',region:'eu-west-2'}},
+ {resource:'renderwolf',operation:'createDestination',requestBody:{name:'n8n delivery',url:'https://example.com/webhook'}},
  {resource:'financewolf',operation:'validateEInvoice',xmlSource:'binary',inputBinaryField:'data'},
  {resource:'financewolf',operation:'generateEInvoice',ruleset:'latest',profile:'peppol-bis-billing-3',requestBody:{amount:'12.50'}},
  {resource:'financewolf',operation:'listValidationResults',returnAll:true},
@@ -42,11 +42,11 @@ if(process.argv[3]==='verify'){
  console.log('Real n8n runtime: saved /renderwolf credential routed to current prefixes, legacy/new Render, Finance XML and reports, Audit, Rig, versioned paging, public tools, multipart, pagination, signed downloads and filesystem binary storage passed');process.exit(0);
 }
 const credential={id:'runtime-key',name:'Fixture API',type:'ironfangApi',data:{apiKey:'synthetic-runtime-key',baseUrl:'http://fixture-api:8080/renderwolf'}};
-fs.writeFileSync(path.join(dir,'credentials.json'),JSON.stringify([credential,{id:'runtime-s3',name:'Fixture S3',type:'ironfangS3',data:{accessKey:'synthetic-access',secretKey:'synthetic-secret'}}]));
+fs.writeFileSync(path.join(dir,'credentials.json'),JSON.stringify([credential]));
 const ops=['screenshot','screenshot','pdf','image','video','sign','usage'];const nodes=[{id:'start',name:'Start',type:'n8n-nodes-base.manualTrigger',typeVersion:1,position:[0,0],parameters:{}}];const connections={};
 for(const [i,operation] of ops.entries()){const name='Operation '+i;const previous=i===0?'Start':'Operation '+(i-1);connections[previous]={main:[[{node:name,type:'main',index:0}]]};nodes.push({id:name,name,type:'CUSTOM.ironfang',typeVersion:i===0?1:1.1,position:[(i+1)*220,0],credentials:{ironfangApi:{id:'runtime-key',name:'Fixture API'}},parameters:{resource:'renderwolf',operation,source:'url',url:'https://example.com',screenshotOptions:{},pdfOptions:{},binaryProperty:'data',templateId:'fixture-template',imageFormat:'png',vars:{values:[{name:'title',value:'Fixture'}]},signKind:'screenshot',signUrl:'https://example.com',signFullPage:false,ttlHours:1,clipSize:'720p',clipDuration:3,captions:{},clipOptions:{font_size:0}}});}
 for(const [i,{typeVersion=1.1,...params}] of expanded.entries()){
  const name='Expanded '+i;connections['Operation 1'].main[0].push({node:name,type:'main',index:0});
- nodes.push({id:name,name,type:'CUSTOM.ironfang',typeVersion,position:[700,i*200+200],credentials:{ironfangApi:{id:'runtime-key',name:'Fixture API'},ironfangS3:{id:'runtime-s3',name:'Fixture S3'}},parameters:{authentication:'apiKey',publicBaseUrl:'http://fixture-api:8080',outputBinaryField:'data',inputBinaryField:'data',...params}});
+ nodes.push({id:name,name,type:'CUSTOM.ironfang',typeVersion,position:[700,i*200+200],credentials:{ironfangApi:{id:'runtime-key',name:'Fixture API'}},parameters:{authentication:'apiKey',publicBaseUrl:'http://fixture-api:8080',outputBinaryField:'data',inputBinaryField:'data',...params}});
 }
 fs.writeFileSync(path.join(dir,'workflow.json'),JSON.stringify({id:'runtime-fixture',name:'Runtime fixture',nodes,connections,active:false,settings:{executionOrder:'v1'}}));

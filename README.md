@@ -3,10 +3,18 @@
 # @ironfang/n8n-nodes-ironfang
 
 Use Ironfang Render, Finance, Audit and Rig, and Ironfang's public developer
-tools, in n8n. The Ironfang action node has **175 operations**, grouped by
+tools, in n8n. The Ironfang action node has **174 operations**, grouped by
 product. Ironfang Trigger receives signed Audit, Finance and Render events.
 
-**Release: 0.6.1.** Six Ironfang Render document template actions show the
+**Release: 0.7.0.** S3 destinations are now set up on the Destinations page
+of the Ironfang portal rather than from n8n, because n8n lets a node use only
+one credential at a time and every Ironfang action needs the API key. The
+**Ironfang S3 Destination** credential and Audit's Create Export Destination
+action are removed; Create Destination and Finance Create Destination make
+webhook destinations, and Finance Update Destination enables or disables one.
+Workflows that created S3 destinations stop with a message pointing to the
+portal; see [Products and operations](#products-and-operations).
+0.6.1: six Ironfang Render document template actions show the
 permission the API checks (preview and render need `render:render`, validate
 and the revision reads need `render:templates:read`, publishing a revision
 needs `render:templates:write`), and Site Preview waits up to 180 seconds.
@@ -55,8 +63,8 @@ retained results.
 | Resource | Operations |
 | --- | --- |
 | Render | Screenshot, PDF, template image, video clip, signed URL, usage, QR, site preview, templates, jobs, batches and their lists, capabilities, request history, destinations and deliveries |
-| Finance | Validate XML; generate a validated UBL invoice or credit note; async jobs and ordered batches; webhook and S3 destinations, deliveries and retries; signed reports and their verification; readable PDFs of saved generations; list/get rulesets; list/get/delete saved results; usage |
-| Audit | Sites, audits, pages, findings and decisions, rules and rule packs, monitors across the organisation or a site, changes and comparisons, evidence, artifacts, export destinations/jobs, webhooks and deliveries across the organisation or an endpoint, events and usage |
+| Finance | Validate XML; generate a validated UBL invoice or credit note; async jobs and ordered batches; webhook destinations, deliveries and retries; signed reports and their verification; readable PDFs of saved generations; list/get rulesets; list/get/delete saved results; usage |
+| Audit | Sites, audits, pages, findings and decisions, rules and rule packs, monitors across the organisation or a site, changes and comparisons, evidence, artifacts, export destinations (listed and tested; created in the portal), export jobs, webhooks and deliveries across the organisation or an endpoint, events and usage |
 | Rig | Projects, suites and versions; runs, holds and receipts; email, callback, mock and connector resources; mock rules; faults; the event timeline, waits, payloads and callback replay; evidence bundles; usage and environment |
 | Public Tool | Image conversion, favicon ZIP, QR generation and verification, UUID generation and inspection, free screenshot |
 
@@ -124,11 +132,13 @@ move a saved workflow to paged output. Other list actions retain the API's JSON
 envelope and API-imposed result caps. Pagination stops at 1,000 pages and
 refuses repeated cursors.
 
-S3 destination creation for Render, Finance and Audit reads secret fields from
-an **Ironfang S3 Destination** credential; Finance Update Destination replaces
-stored keys the same way. Do not put them in Request Body JSON. Its connection check validates
-that fields are present; the product's Test Destination operation verifies
-actual S3 access once the bucket/region are registered. One-time webhook secrets
+S3 destinations for Render, Finance and Audit are created, and their keys
+rotated, on the Destinations page of the
+[Ironfang portal](https://portal.ironfang.com), under each product's Account
+menu. n8n lets a node use only one credential at a time, and every Ironfang
+action needs the API key, so the node sends no storage keys: use the
+destination's ID from the portal in your workflow. The destination actions
+refuse storage keys in Request Body JSON. One-time webhook secrets
 returned by creation/rotation need to be saved securely; n8n execution retention
 also applies to these outputs.
 

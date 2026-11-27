@@ -35,7 +35,7 @@ function setup(params, reply, settings = {}) {
     getInputData: () => rows.map(() => ({ json: {}, binary: { data: { data: 'filesystem-v2', id: 'stored-binary' } } })),
     getNodeParameter: (name, i, fallback) => rows[i][name] ?? fallback,
     getNode: () => ({ name: 'Ironfang', type: 'ironfang', typeVersion: settings.version ?? 1.1, parameters: {}, position: [0, 0] }),
-    getCredentials: async name => { credentials.push(name); if (settings.noCredentials) throw new Error('Credentials must not be accessed'); return name === 'ironfangS3' ? { accessKey: 'fixture-access', secretKey: 'fixture-secret' } : { baseUrl: base, apiKey: 'fixture-key' }; },
+    getCredentials: async name => { credentials.push(name); if (settings.noCredentials) throw new Error('Credentials must not be accessed'); return { baseUrl: base, apiKey: 'fixture-key' }; },
     continueOnFail: () => !!settings.continueOnFail,
     helpers: {
       httpRequestWithAuthentication: async (_, options) => receive(true, options),
@@ -47,7 +47,7 @@ function setup(params, reply, settings = {}) {
   return { context, requests, credentials, binaryReads, execute: async () => (await new Ironfang().execute.call(context))[0] };
 }
 function parameters(op) {
-  const result = { resource: op.product, operation: op.id, requestBody: op.example || {}, xmlSource: 'text', xml: xml.toString(), idempotencyKey: 'fixture-operation-key', destinationType: 'webhook' };
+  const result = { resource: op.product, operation: op.id, requestBody: op.example || {}, xmlSource: 'text', xml: xml.toString(), idempotencyKey: 'fixture-operation-key' };
   for (const id of op.path.matchAll(/\{(\w+)\}/g)) result[id[1]] = 'fixture-id';
   for (const query of op.query) if (query.required) result[query.name] = query.default || '2026-01-01T00:00:00Z';
   return result;
@@ -166,10 +166,19 @@ test('a document template render returns the PDF as a file', async () => {
   assert.equal(ctx.requests[0].url, 'https://api.ironfang.com/render/v1/document-templates/tpl-1/render');
   assert.deepEqual(Buffer.from(out.binary.data.data, 'base64'), pdf);
 });
-test('destination secrets come from the n8n credential and never from JSON fields', async () => {
-  const p = { resource: 'auditwolf', operation: 'createExportDestinations', requestBody: { bucket: 'fixture', region: 'eu-west-2' } };
-  const ctx = setup(p); await ctx.execute(); assert.equal(ctx.requests[0].body.secret_key, 'fixture-secret'); assert.deepEqual(ctx.credentials, ['ironfangApi', 'ironfangS3']);
-  const bad = setup({ ...p, requestBody: { secret_key: 'do-not-store-in-workflow' } }); await assert.rejects(bad.execute(), /credential/); assert.equal(bad.requests.length, 0);
+test('the node sends no storage keys and points S3 setup to the portal', async () => {
+  const keys = setup({ resource: 'renderwolf', operation: 'createDestination', requestBody: { name: 'hook', url: 'https://example.com/webhook', secret_key: 'do-not-store-in-workflow' } });
+  await assert.rejects(keys.execute(), /storage keys.*Destinations page/); assert.equal(keys.requests.length, 0);
+  for (const p of [
+    { resource: 'renderwolf', operation: 'createDestination', destinationType: 's3', requestBody: { name: 'hook', url: 'https://example.com/webhook' } },
+    { resource: 'renderwolf', operation: 'createDestination', requestBody: { bucket: 'fixture', region: 'eu-west-2' } },
+    { resource: 'renderwolf', operation: 'createDestination', requestBody: { type: 's3', name: 'archive' } },
+    { resource: 'auditwolf', operation: 'createExportDestinations', requestBody: { bucket: 'fixture', region: 'eu-west-2' } },
+  ]) {
+    const ctx = setup(p); await assert.rejects(ctx.execute(), /Destinations page of the Ironfang portal/); assert.equal(ctx.requests.length, 0);
+  }
+  const hook = setup({ resource: 'renderwolf', operation: 'createDestination', requestBody: { name: 'hook', url: 'https://example.com/webhook' } }); await hook.execute();
+  assert.equal(hook.requests[0].body.type, 'webhook'); assert.deepEqual(hook.credentials, ['ironfangApi']);
 });
 test('multi-item continued errors keep problem metadata and item linking', async () => {
   const p = { resource: 'financewolf', operation: 'getValidationResult', id: 'fixture' };
@@ -245,14 +254,14 @@ test('Rig waits outlast the API maximum and evidence asks for the bundle', async
  const evidence = setup({ resource: 'rig', operation: 'exportEvidence', runId: 'run-1' }, () => ({ body: payload, headers: { 'content-type': 'application/zip' }, statusCode: 200 }));
  const [bundle] = await evidence.execute(); assert.equal(evidence.requests[0].headers.Accept, 'application/zip'); assert.equal(bundle.binary.data.fileName, 'result.zip');
 });
-test('Finance S3 destinations take nested keys from the n8n credential only', async () => {
- const create = setup({ resource: 'financewolf', operation: 'createEinvoiceDestination', destinationType: 's3', requestBody: { name: 'archive', config: { bucket: 'fixture', region: 'eu-west-2' } } }); await create.execute();
- assert.equal(create.requests[0].body.type, 's3'); assert.deepEqual(create.requests[0].body.credentials, { access_key: 'fixture-access', secret_key: 'fixture-secret' }); assert(!('secret_key' in create.requests[0].body));
- const webhook = setup({ resource: 'financewolf', operation: 'createEinvoiceDestination', destinationType: 'webhook', requestBody: { name: 'hook', config: { url: 'https://example.com/webhook' } } }); await webhook.execute();
+test('Finance destinations are webhooks from n8n; S3 setup and key rotation stay in the portal', async () => {
+ const webhook = setup({ resource: 'financewolf', operation: 'createEinvoiceDestination', requestBody: { name: 'hook', config: { url: 'https://example.com/webhook' } } }); await webhook.execute();
  assert.equal(webhook.requests[0].body.type, 'webhook'); assert(!('credentials' in webhook.requests[0].body)); assert.deepEqual(webhook.credentials, ['ironfangApi']);
- const rotate = setup({ resource: 'financewolf', operation: 'updateEinvoiceDestination', id: 'destination-1', destinationType: 's3', requestBody: {} }); await rotate.execute();
- assert.equal(rotate.requests[0].method, 'PATCH'); assert.equal(rotate.requests[0].body.credentials.secret_key, 'fixture-secret'); assert(!('type' in rotate.requests[0].body));
- const bad = setup({ resource: 'financewolf', operation: 'updateEinvoiceDestination', id: 'destination-1', requestBody: { credentials: { secret_key: 'do-not-store-in-workflow' } } }); await assert.rejects(bad.execute(), /credential/); assert.equal(bad.requests.length, 0);
+ const s3 = setup({ resource: 'financewolf', operation: 'createEinvoiceDestination', requestBody: { name: 'archive', config: { bucket: 'fixture', region: 'eu-west-2' } } }); await assert.rejects(s3.execute(), /Destinations page/); assert.equal(s3.requests.length, 0);
+ const toggle = setup({ resource: 'financewolf', operation: 'updateEinvoiceDestination', id: 'destination-1', requestBody: { enabled: false } }); await toggle.execute();
+ assert.equal(toggle.requests[0].method, 'PATCH'); assert.deepEqual(toggle.requests[0].body, { enabled: false });
+ const rotate = setup({ resource: 'financewolf', operation: 'updateEinvoiceDestination', id: 'destination-1', destinationType: 's3', requestBody: {} }); await assert.rejects(rotate.execute(), /Destinations page/); assert.equal(rotate.requests.length, 0);
+ const bad = setup({ resource: 'financewolf', operation: 'updateEinvoiceDestination', id: 'destination-1', requestBody: { credentials: { secret_key: 'do-not-store-in-workflow' } } }); await assert.rejects(bad.execute(), /storage keys/); assert.equal(bad.requests.length, 0);
 });
 test('signed report verification sends the ZIP bytes and needs no key', async () => {
  const ctx = setup({ resource: 'financewolf', operation: 'verifyEinvoiceReport', authentication: 'public', inputBinaryField: 'report' }, () => ({ body: { verified: true }, headers: {}, statusCode: 200 }), { noCredentials: true });

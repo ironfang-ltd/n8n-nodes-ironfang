@@ -45,24 +45,6 @@ export const operations: Operation[] = [
   },
   {
     "product": "auditwolf",
-    "id": "createExportDestinations",
-    "name": "Create Export Destination",
-    "description": "Create an encrypted S3/S3-compatible destination",
-    "method": "POST",
-    "path": "/v1/export-destinations",
-    "scope": "audit:integrations",
-    "query": [],
-    "input": "json",
-    "response": "json",
-    "example": {
-      "region": "eu-west-2",
-      "bucket": "your-bucket",
-      "prefix": "auditwolf",
-      "export_mode": "manual_only"
-    }
-  },
-  {
-    "product": "auditwolf",
     "id": "createSitesBySiteIdMonitors",
     "name": "Create Monitor",
     "description": "Create a monitor",

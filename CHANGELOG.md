@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.7.0 - 2026-11-27
+
+- S3 destinations are set up in the Ironfang portal, not from n8n. n8n's
+  community node checks now allow a node only one credential at a time, and
+  every Ironfang action needs the API key, so the node no longer sends storage
+  keys. The **Ironfang S3 Destination** credential is removed.
+- Render Create Destination and Finance Create Destination make webhook
+  destinations; the Destination Type field is gone. Finance Update Destination
+  enables or disables a destination; rotate S3 keys in the portal.
+- Audit Create Export Destination, which made only S3 destinations, is
+  removed. List Export Destinations and Test Export Destination remain.
+- A workflow saved with an S3 destination, S3 fields in its request body, or
+  Create Export Destination stops before any request with a message pointing
+  to the portal's Destinations page. Delete the unused S3 credential in n8n
+  after upgrading.
+
 ## 0.6.1 - 2026-11-17
 
 - Six Ironfang Render document template actions named the wrong permission.
